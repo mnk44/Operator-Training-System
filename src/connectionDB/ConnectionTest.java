@@ -10,6 +10,7 @@ import java.sql.SQLException;
  * @author HP
  *
  */
+
 public class ConnectionTest {
 	
 	@SuppressWarnings("unused")
@@ -18,7 +19,7 @@ public class ConnectionTest {
 			try {
 				ConnectionClass conect = new ConnectionClass("localhost", "5432", "Sistema SECPROIT", "postgres", "postgres");
 				Connection connection = conect.crateConnection();
-				System.out.println("Conexión establecida...");
+				System.out.println("Conexión establecida..."); 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
