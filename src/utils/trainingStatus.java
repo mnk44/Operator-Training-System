@@ -1,6 +1,6 @@
 package utils;
 
-public enum trainingStatus {
+public enum TrainingStatus {
 	NO_INICIADO,
 	INICIADO,
 	TERMINADO
