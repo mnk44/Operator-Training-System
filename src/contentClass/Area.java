@@ -1,4 +1,4 @@
-package logic;
+package contentClass;
 
 public class Area {
 	private int id_area;
