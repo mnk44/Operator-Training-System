@@ -12,7 +12,7 @@ import connectionDB.ReadConnectionFile;
  * Permite establecer la conexion directa con la base de datos 
  * para el trabajo con la misma
  * 
- * @author HP
+ * @author Mnk
  *
  */
 

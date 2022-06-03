@@ -7,7 +7,7 @@ import java.sql.SQLException;
 /**
  * Esta clase permite probar la conexion con la base de datos
  * 
- * @author HP
+ * @author Mnk
  *
  */
 

@@ -12,7 +12,7 @@ import contentClass.Area;
  * Permite establecer la conexion directa con la base de datos 
  * para el trabajo de las areas
  * 
- * @author HP
+ * @author Mnk
  *
  */
 

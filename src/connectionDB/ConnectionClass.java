@@ -8,7 +8,7 @@ import java.sql.SQLException;
 /**
  * Es la clase que permite la conexion con la base de datos
  * 
- * @author HP
+ * @author Mnk
  *
  */
 

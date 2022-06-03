@@ -7,7 +7,7 @@ import java.util.LinkedList;
  * Con esta clase se lee el archivo de conexion para obtener las propiedades
  * dela conexion con la base de datos
  * 
- * @author HP
+ * @author Mnk
  *
  */
 
