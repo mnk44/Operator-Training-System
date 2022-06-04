@@ -114,47 +114,47 @@ public class AreaManagement extends JFrame {
 				newArea.setBackground(new Color(255, 255, 201));
 			}
 		});
-		
-				JScrollPane scrollPane = new JScrollPane();
-				scrollPane.setBorder(null);
-				scrollPane.setAutoscrolls(true);
-				scrollPane.setBackground(Color.WHITE);
-				scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-				scrollPane.setBounds(15, 73, 405, 412);
-				contentPane.add(scrollPane);
-				
-						table = new JTable();
-						table.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mousePressed(MouseEvent arg0) {
-								if(selected == table.getSelectedRow()){
-									table.clearSelection();
-									selected = -1;
-								}else{
-									selected = table.getSelectedRow();
-								}
-								
-								if (selected != -1) {
-									updateArea.setEnabled(true);
-									deleteArea.setEnabled(true);
-								}else{
-									updateArea.setEnabled(false);
-									deleteArea.setEnabled(false);
-								}
-							}
-						});
-						table.setBorder(null);
-						table.setFillsViewportHeight(true);
-						table.setBackground(Color.WHITE);
-						table.setRowHeight(24);
-						table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
-						table.setIntercellSpacing(new Dimension(2, 2));
-						table.setFont(new Font("Arial", Font.PLAIN, 16));
-						table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-						table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-						table.setAutoCreateRowSorter(true);
-						scrollPane.setColumnHeaderView(table);
-						scrollPane.setViewportView(this.table);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBorder(null);
+		scrollPane.setAutoscrolls(true);
+		scrollPane.setBackground(Color.WHITE);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(15, 73, 405, 412);
+		contentPane.add(scrollPane);
+
+		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if(selected == table.getSelectedRow()){
+					table.clearSelection();
+					selected = -1;
+				}else{
+					selected = table.getSelectedRow();
+				}
+
+				if (selected != -1) {
+					updateArea.setEnabled(true);
+					deleteArea.setEnabled(true);
+				}else{
+					updateArea.setEnabled(false);
+					deleteArea.setEnabled(false);
+				}
+			}
+		});
+		table.setBorder(null);
+		table.setFillsViewportHeight(true);
+		table.setBackground(Color.WHITE);
+		table.setRowHeight(24);
+		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
+		table.setIntercellSpacing(new Dimension(2, 2));
+		table.setFont(new Font("Arial", Font.PLAIN, 16));
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		table.setAutoCreateRowSorter(true);
+		scrollPane.setColumnHeaderView(table);
+		scrollPane.setViewportView(this.table);
 		newArea.setBorder(new LineBorder(new Color(255, 186, 74), 2));
 		newArea.setBackground(new Color(255, 255, 201));
 		newArea.setIcon(new ImageIcon(AreaManagement.class.getResource("/img/icons8_Plus_Math_16.png")));
@@ -262,10 +262,10 @@ public class AreaManagement extends JFrame {
 		image.setIcon(new ImageIcon(AreaManagement.class.getResource("/img/undraw_logistics_x-4-dc.png")));
 		image.setBounds(435, 329, 230, 143);
 		contentPane.add(image);
-		
+
 		reloadTable();
 	}
-	
+
 	public void reloadTable() throws SQLException{
 		FillTables.fillArea(date, table);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();

@@ -23,7 +23,7 @@ public class UserService {
 	//introducir nuevo usuario en el sistema
 	public static String createUser(User user) throws SQLException{
 		try{
-			String sqlSentenc = "INSERT INTO user_table VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?,DEFAULT)";
+			String sqlSentenc = "INSERT INTO user_table VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?)";
 			CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1,user.getName_user());
 			cs.setString(2,user.getIdentity_card());
@@ -34,6 +34,7 @@ public class UserService {
 			cs.setString(7,user.getPassword());
 			cs.setInt(8,user.getArea());
 			cs.setInt(9,user.getRol().ordinal()+1);
+			cs.setBoolean(10,user.getSleep());
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
@@ -94,20 +95,20 @@ public class UserService {
 		}
 		return null;
 	}
-	
+
 	//despertar usuario a partir de su id
-		public static String awakeUser(int id_user) throws SQLException{
-			try{
-				String sqlSentenc = "UPDATE user_table SET sleep = false WHERE id_user = ?";
-				CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
-				cs.setInt(1, id_user);
-				cs.execute();
-				cs.close();
-			}catch(Exception e){
-				return e.getMessage();
-			}
-			return null;
+	public static String awakeUser(int id_user) throws SQLException{
+		try{
+			String sqlSentenc = "UPDATE user_table SET sleep = false WHERE id_user = ?";
+			CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, id_user);
+			cs.execute();
+			cs.close();
+		}catch(Exception e){
+			return e.getMessage();
 		}
+		return null;
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -131,23 +132,61 @@ public class UserService {
 	}
 
 	//encontrar un usuario por su nombre
-		public static User findByName(String name_user) throws SQLException {
-			User user = null;
-			try{
-				String sqlSentenc = "SELECT * FROM user_table WHERE name_user = ?";
-				CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
-				cs.setString(1, name_user);
-				ResultSet rs = cs.executeQuery();
-				if(rs.next()){
-					user = new User(rs.getInt("id_user"),rs.getString("name_user"),rs.getString("identity_card"),
-							findSchoolLevel(rs.getString("school_level")), rs.getInt("experience"), rs.getInt("position_years"),
-							rs.getString("nick_name"), rs.getString("password"), rs.getInt("area"), findRol(rs.getInt("rol")), rs.getBoolean("sleep"));
-				}
-			}catch (Exception e){
-				System.out.println("Error: " + e.getMessage());
+	public static User findByName(String name_user) throws SQLException {
+		User user = null;
+		try{
+			String sqlSentenc = "SELECT * FROM user_table WHERE name_user = ?";
+			CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
+			cs.setString(1, name_user);
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				user = new User(rs.getInt("id_user"),rs.getString("name_user"),rs.getString("identity_card"),
+						findSchoolLevel(rs.getString("school_level")), rs.getInt("experience"), rs.getInt("position_years"),
+						rs.getString("nick_name"), rs.getString("password"), rs.getInt("area"), findRol(rs.getInt("rol")), rs.getBoolean("sleep"));
 			}
-			return user;
+		}catch (Exception e){
+			System.out.println("Error: " + e.getMessage());
 		}
+		return user;
+	}
+
+	//encontrar un usuario por su nombre
+	public static User findByCard(String identity_card) throws SQLException {
+		User user = null;
+		try{
+			String sqlSentenc = "SELECT * FROM user_table WHERE identity_card = ?";
+			CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
+			cs.setString(1, identity_card);
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				user = new User(rs.getInt("id_user"),rs.getString("name_user"),rs.getString("identity_card"),
+						findSchoolLevel(rs.getString("school_level")), rs.getInt("experience"), rs.getInt("position_years"),
+						rs.getString("nick_name"), rs.getString("password"), rs.getInt("area"), findRol(rs.getInt("rol")), rs.getBoolean("sleep"));
+			}
+		}catch (Exception e){
+			System.out.println("Error: " + e.getMessage());
+		}
+		return user;
+	}
+
+	//encontrar un usuario por su nombre
+	public static User findByNick(String nick_name) throws SQLException {
+		User user = null;
+		try{
+			String sqlSentenc = "SELECT * FROM user_table WHERE nick_name = ?";
+			CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
+			cs.setString(1, nick_name);
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				user = new User(rs.getInt("id_user"),rs.getString("name_user"),rs.getString("identity_card"),
+						findSchoolLevel(rs.getString("school_level")), rs.getInt("experience"), rs.getInt("position_years"),
+						rs.getString("nick_name"), rs.getString("password"), rs.getInt("area"), findRol(rs.getInt("rol")), rs.getBoolean("sleep"));
+			}
+		}catch (Exception e){
+			System.out.println("Error: " + e.getMessage());
+		}
+		return user;
+	}
 
 	//obtener todos los usuarios
 	public static ArrayList<User> getUsers() throws SQLException{
@@ -165,14 +204,14 @@ public class UserService {
 		}
 		return users;
 	}
-	
+
 	////////////////////////////////////////////////////////////////////
 	public static SchoolLevel findSchoolLevel(String schoolLevel){
 		switch (schoolLevel) {
 		case "PRIMARIO":
-			return SchoolLevel.PRIMARIO;
+			return SchoolLevel.PRIMARIA;
 		case "SECUNDARIO":
-			return SchoolLevel.SECUNDARIO;
+			return SchoolLevel.SECUNDARIA;
 		case "PREUNIVERSITARIO":
 			return SchoolLevel.PREUNIVERSITARIO;
 		case "UNIVERSITARIO":
@@ -182,10 +221,10 @@ public class UserService {
 		case "DOCTOR":
 			return SchoolLevel.DOCTOR;
 		default:
-			return SchoolLevel.PRIMARIO;
+			return SchoolLevel.PRIMARIA;
 		}
 	}
-	
+
 	public static Rol findRol(int rol){
 		switch (rol) {
 		case 1:

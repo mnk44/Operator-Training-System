@@ -1,8 +1,8 @@
 package utils;
 
 public enum SchoolLevel {
-	PRIMARIO,
-	SECUNDARIO,
+	PRIMARIA,
+	SECUNDARIA,
 	PREUNIVERSITARIO,
 	UNIVERSITARIO,
 	MÁSTER,

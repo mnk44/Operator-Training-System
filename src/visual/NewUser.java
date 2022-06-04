@@ -2,12 +2,12 @@ package visual;
 
 import java.awt.BorderLayout;
 
-import javafx.scene.control.Alert.AlertType;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.Color;
 
@@ -21,7 +21,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JComboBox;
 
 import contentClass.Area;
+import contentClass.User;
 import services.AreaService;
+import services.UserService;
 import utils.Rol;
 import utils.SchoolLevel;
 
@@ -40,6 +42,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import logic.Encrypting;
+
 public class NewUser extends JDialog {
 
 	private static final long serialVersionUID = 4793501210293845117L;
@@ -55,13 +59,17 @@ public class NewUser extends JDialog {
 	private JButton cancel;
 	private JLabel importantLabel;
 	private JSpinner position_years;
+	private JSpinner years;
+	@SuppressWarnings("rawtypes")
+	private JComboBox area;
+	private JRadioButton active;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			NewUser dialog = new NewUser(0);
+			NewUser dialog = new NewUser(-1);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -74,13 +82,7 @@ public class NewUser extends JDialog {
 	 * @throws SQLException 
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public NewUser(int option) throws SQLException {
-		setAlwaysOnTop(true);
-		if(option == 0){
-			setTitle("Nuevo Usuario");
-		}else{
-			setTitle("Modificar Usuario");
-		}
+	public NewUser(final int option) throws SQLException {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(NewUser.class.getResource("/img/Captura de pantalla (133).png")));
 		setResizable(false);
 		setBounds(100, 100, 691, 526);
@@ -118,7 +120,7 @@ public class NewUser extends JDialog {
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 16));
 		contentPanel.add(lblNewLabel);
 
-		JRadioButton active = new JRadioButton("Activo");
+		active = new JRadioButton("Activo");
 		active.setBounds(587, 28, 87, 29);
 		active.setSelected(true);
 		active.setFont(new Font("Arial", Font.BOLD, 17));
@@ -159,10 +161,12 @@ public class NewUser extends JDialog {
 			public void keyTyped(KeyEvent e) {
 				int key = e.getKeyChar();
 				boolean numbers = key >= 48 && key <= 57;
-				if (!numbers)
+				if (!numbers || Character.isWhitespace(key))
 				{
 					e.consume();
-					getToolkit().beep();
+					if(key != KeyEvent.VK_BACK_SPACE){
+						getToolkit().beep();
+					}
 				}
 				if (identity_card.getText().trim().length() < 11) {
 					identity_card.setForeground(Color.RED);
@@ -200,7 +204,7 @@ public class NewUser extends JDialog {
 		lblreaLaboral.setFont(new Font("Arial", Font.BOLD, 16));
 		contentPanel.add(lblreaLaboral);
 
-		JComboBox area = new JComboBox();
+		area = new JComboBox();
 		area.setBounds(195, 274, 205, 26);
 		ArrayList<Area> areas = AreaService.getAreas();
 		for(int i=0; i < areas.size(); i++){
@@ -242,7 +246,34 @@ public class NewUser extends JDialog {
 		acept = new JButton("Aceptar");
 		acept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				try {
+					if(validate_view()){
+						if(option == -1){
+							try {
+								User user = new User(name_user.getText(), identity_card.getText(), SchoolLevel.valueOf(school_level.getSelectedItem().toString()), (int)years.getValue(),
+										(int)position_years.getValue(), nick_name.getText(), Encrypting.getMd5("se" + identity_card.getText() + "*"),
+										AreaService.findByName(area.getSelectedItem().toString()).getId_area(), Rol.valueOf(rol.getSelectedItem().toString()), !active.isSelected());
+								String result = UserService.createUser(user);
+								if(result == null){
+									JOptionPane.showMessageDialog(null, "Nuevo Usuario añadido satisfactoriamente", "Acción Completada", JOptionPane.INFORMATION_MESSAGE);
+									UserMangement.reloadTable();
+									dispose();
+								}else{
+									JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+								}
+							} catch (SQLException e) {
+								e.printStackTrace();
+								JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						}
+					}
+				} catch (HeadlessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		acept.addMouseListener(new MouseAdapter() {
@@ -290,10 +321,10 @@ public class NewUser extends JDialog {
 		separator.setBounds(0, 79, 685, 9);
 		contentPanel.add(separator);
 
-		JSpinner spinner = new JSpinner();
-		spinner.setFont(new Font("Arial", Font.PLAIN, 16));
-		spinner.setBounds(255, 355, 59, 26);
-		contentPanel.add(spinner);
+		years = new JSpinner();
+		years.setFont(new Font("Arial", Font.PLAIN, 16));
+		years.setBounds(255, 355, 59, 26);
+		contentPanel.add(years);
 
 		importantLabel = new JLabel("A\u00F1os como Jefe:");
 		importantLabel.setEnabled(false);
@@ -318,5 +349,47 @@ public class NewUser extends JDialog {
 				}
 			}
 		});
+		
+		if(option == -1){
+			setTitle("Nuevo Usuario");
+		}else{
+			setTitle("Modificar Usuario");
+			fillView(option);
+		}
+	}
+	
+	public void fillView(int option) throws SQLException{
+		User user = UserService.findById(option);
+		name_user.setText(user.getName_user());
+		nick_name.setText(user.getNick_name());
+		identity_card.setText(user.getIdentity_card());
+		active.setSelected(!user.getSleep());
+		years.setValue(user.getExperience());
+		position_years.setValue(user.getPosition_years());
+		area.setSelectedItem(AreaService.findById(user.getArea()).getName_area());
+		rol.setSelectedItem(user.getRol());
+		school_level.setSelectedItem(user.getSchool_level());
+	}
+	
+	public boolean validate_view() throws HeadlessException, SQLException{
+		if(name_user.getText().isEmpty() || name_user.getText().replaceAll(" ", "").isEmpty() ||
+				nick_name.getText().isEmpty() || identity_card.getText().isEmpty()){
+			JOptionPane.showMessageDialog(null, "No pueden haber campos vacíos", "Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}else if(identity_card.getForeground() == Color.RED){
+			JOptionPane.showMessageDialog(null, "Error al rellenar el carnet de identidad", "Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}else if(((int)years.getValue() < (int)position_years.getValue()) && position_years.isEnabled()){
+			JOptionPane.showMessageDialog(null, "La cantidad de años como jefe no puede ser mayor a la cantidad de años de trabajo", "Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}else if(UserService.findByNick(nick_name.getText())!= null){
+			JOptionPane.showMessageDialog(null, "El nick del usuario ya existe en la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}else if(UserService.findByCard(identity_card.getText())!= null){
+			JOptionPane.showMessageDialog(null, "El carnet de identidad ya existe en la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}else{
+			return true;
+		}
 	}
 }

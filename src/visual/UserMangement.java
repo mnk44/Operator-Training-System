@@ -36,15 +36,14 @@ public class UserMangement extends JFrame {
 
 	private static final long serialVersionUID = -3283975538421886447L;
 	private JPanel contentPane;
-	private JTable table;
-	private DefaultTableModel date;
+	private static JTable table;
+	private static DefaultTableModel date;
 	private JButton newUser;
-	private JButton updateUser;
-	private JButton sleepUser;
+	private static JButton updateUser;
+	private static JButton sleepUser;
 	private int selected = -1;
-	private JButton moreInfo;
+	private static JButton moreInfo;
 	private JLabel image;
-	private JButton actions;
 
 	/**
 	 * Launch the application.
@@ -66,6 +65,7 @@ public class UserMangement extends JFrame {
 	 * Create the frame.
 	 * @throws SQLException 
 	 */
+	@SuppressWarnings("static-access")
 	public UserMangement() throws SQLException {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(UserMangement.class.getResource("/img/Captura de pantalla (133).png")));
 		setAutoRequestFocus(false);
@@ -126,7 +126,7 @@ public class UserMangement extends JFrame {
 		newUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					NewUser newUserView = new NewUser(0);
+					NewUser newUserView = new NewUser(-1);
 					newUserView.setVisible(true);
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -147,10 +147,20 @@ public class UserMangement extends JFrame {
 		newUser.setBackground(new Color(255, 255, 201));
 		newUser.setIcon(new ImageIcon(UserMangement.class.getResource("/img/icons8_Plus_Math_16.png")));
 		newUser.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		newUser.setBounds(25, 343, 187, 38);
+		newUser.setBounds(25, 373, 187, 38);
 		contentPane.add(newUser);
 
 		updateUser = new JButton("Modificar Usuario");
+		updateUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					NewUser newUserView = new NewUser((Integer) table.getValueAt(table.getSelectedRow(), 0));
+					newUserView.setVisible(true);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		updateUser.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -170,7 +180,7 @@ public class UserMangement extends JFrame {
 		updateUser.setFont(new Font("Segoe UI", Font.BOLD, 17));
 		updateUser.setBorder(new LineBorder(new Color(255, 186, 74), 2));
 		updateUser.setBackground(new Color(255, 255, 201));
-		updateUser.setBounds(25, 397, 187, 38);
+		updateUser.setBounds(230, 373, 187, 38);
 		contentPane.add(updateUser);
 
 		sleepUser = new JButton("Desactivar Usuario");
@@ -193,7 +203,7 @@ public class UserMangement extends JFrame {
 		sleepUser.setBorder(new LineBorder(new Color(255, 186, 74), 2));
 		sleepUser.setFont(new Font("Segoe UI", Font.BOLD, 17));
 		sleepUser.setIcon(new ImageIcon(UserMangement.class.getResource("/img/icons8_Sleep_16.png")));
-		sleepUser.setBounds(110, 449, 222, 38);
+		sleepUser.setBounds(230, 427, 187, 38);
 		contentPane.add(sleepUser);
 		
 		moreInfo = new JButton("Ver Detalles");
@@ -216,7 +226,7 @@ public class UserMangement extends JFrame {
 		moreInfo.setEnabled(false);
 		moreInfo.setBorder(new LineBorder(new Color(255, 186, 74), 2));
 		moreInfo.setBackground(new Color(255, 255, 201));
-		moreInfo.setBounds(227, 343, 187, 38);
+		moreInfo.setBounds(25, 427, 187, 38);
 		contentPane.add(moreInfo);
 		
 		image = new JLabel("");
@@ -224,24 +234,21 @@ public class UserMangement extends JFrame {
 		image.setBounds(429, 342, 222, 157);
 		contentPane.add(image);
 		
-		actions = new JButton("Ver Acciones");
-		actions.setIcon(new ImageIcon(UserMangement.class.getResource("/img/icons8_Show_Property_16.png")));
-		actions.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		actions.setEnabled(false);
-		actions.setBorder(new LineBorder(new Color(255, 186, 74), 2));
-		actions.setBackground(new Color(255, 255, 201));
-		actions.setBounds(227, 397, 187, 38);
-		contentPane.add(actions);
-		
 		reloadTable();
 	}
 	
-	public void reloadTable() throws SQLException{
+	public static void reloadTable() throws SQLException{
 		FillTables.fillUser(date, table, -1);
+		updateUser.setEnabled(false);
+		moreInfo.setEnabled(false);
+		sleepUser.setEnabled(false);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(1).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(2).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(3).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(4).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(0).setMaxWidth(40);
 	}
 }
