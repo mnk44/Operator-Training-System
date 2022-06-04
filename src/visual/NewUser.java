@@ -247,7 +247,7 @@ public class NewUser extends JDialog {
 		acept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					if(validate_view()){
+					if(validate_view(option)){
 						if(option == -1){
 							try {
 								User user = new User(name_user.getText(), identity_card.getText(), SchoolLevel.valueOf(school_level.getSelectedItem().toString()), (int)years.getValue(),
@@ -256,6 +256,31 @@ public class NewUser extends JDialog {
 								String result = UserService.createUser(user);
 								if(result == null){
 									JOptionPane.showMessageDialog(null, "Nuevo Usuario añadido satisfactoriamente", "Acción Completada", JOptionPane.INFORMATION_MESSAGE);
+									UserMangement.reloadTable();
+									dispose();
+								}else{
+									JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+								}
+							} catch (SQLException e) {
+								e.printStackTrace();
+								JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						}else{
+							try {
+								User user = UserService.findById(option);
+								user.setName_user(name_user.getText());
+								user.setIdentity_card(identity_card.getText());
+								user.setSchool_level(SchoolLevel.valueOf(school_level.getSelectedItem().toString()));
+								user.setExperience((int)years.getValue());
+								user.setPosition_years((int)position_years.getValue());
+								user.setRol(Rol.valueOf(rol.getSelectedItem().toString()));
+								user.setArea(AreaService.findByName(area.getSelectedItem().toString()).getId_area());
+								user.setNick_name(nick_name.getText());
+								user.setSleep(!active.isSelected());
+
+								String result = UserService.updateUser(user);
+								if(result == null){
+									JOptionPane.showMessageDialog(null, "Usuario modificado satisfactoriamente", "Acción Completada", JOptionPane.INFORMATION_MESSAGE);
 									UserMangement.reloadTable();
 									dispose();
 								}else{
@@ -349,7 +374,7 @@ public class NewUser extends JDialog {
 				}
 			}
 		});
-		
+
 		if(option == -1){
 			setTitle("Nuevo Usuario");
 		}else{
@@ -357,7 +382,7 @@ public class NewUser extends JDialog {
 			fillView(option);
 		}
 	}
-	
+
 	public void fillView(int option) throws SQLException{
 		User user = UserService.findById(option);
 		name_user.setText(user.getName_user());
@@ -370,8 +395,8 @@ public class NewUser extends JDialog {
 		rol.setSelectedItem(user.getRol());
 		school_level.setSelectedItem(user.getSchool_level());
 	}
-	
-	public boolean validate_view() throws HeadlessException, SQLException{
+
+	public boolean validate_view(int option) throws HeadlessException, SQLException{
 		if(name_user.getText().isEmpty() || name_user.getText().replaceAll(" ", "").isEmpty() ||
 				nick_name.getText().isEmpty() || identity_card.getText().isEmpty()){
 			JOptionPane.showMessageDialog(null, "No pueden haber campos vacíos", "Error", JOptionPane.ERROR_MESSAGE);
@@ -382,10 +407,10 @@ public class NewUser extends JDialog {
 		}else if(((int)years.getValue() < (int)position_years.getValue()) && position_years.isEnabled()){
 			JOptionPane.showMessageDialog(null, "La cantidad de años como jefe no puede ser mayor a la cantidad de años de trabajo", "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
-		}else if(UserService.findByNick(nick_name.getText())!= null){
+		}else if(UserService.findByNick(nick_name.getText())!= null && option == -1){
 			JOptionPane.showMessageDialog(null, "El nick del usuario ya existe en la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
-		}else if(UserService.findByCard(identity_card.getText())!= null){
+		}else if(UserService.findByCard(identity_card.getText())!= null && option == -1){
 			JOptionPane.showMessageDialog(null, "El carnet de identidad ya existe en la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}else{

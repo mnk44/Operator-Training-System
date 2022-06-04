@@ -47,7 +47,7 @@ public class UserService {
 	public static String updateUser(User user) throws SQLException{
 		try{
 			String sqlSentenc = "UPDATE user_table SET name_user = ?, identity_card = ?, school_level = ?, experience = ?,"
-					+ "positio_years = ?, nick_name = ?, password = ?, area = ?, rol = ? WHERE id_user = ?";
+					+ "position_years = ?, nick_name = ?, password = ?, area = ?, rol = ?, sleep = ? WHERE id_user = ?";
 			CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1,user.getName_user());
 			cs.setString(2,user.getIdentity_card());
@@ -58,7 +58,8 @@ public class UserService {
 			cs.setString(7,user.getPassword());
 			cs.setInt(8,user.getArea());
 			cs.setInt(9,user.getRol().ordinal()+1);
-			cs.setInt(10, user.getId_user());
+			cs.setBoolean(10, user.getSleep());
+			cs.setInt(11, user.getId_user());
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
