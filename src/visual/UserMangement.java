@@ -26,6 +26,8 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import services.UserService;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.ActionListener;
@@ -96,6 +98,11 @@ public class UserMangement extends JFrame {
 					selected = -1;
 				}else{
 					selected = table.getSelectedRow();
+					if(table.getValueAt(selected, 4) == "INACTIVO"){
+						sleepUser.setText("Activar Usuario");
+					}else{
+						sleepUser.setText("Desactivar Usuario");
+					}
 				}
 				
 				if (selected != -1) {
@@ -184,6 +191,25 @@ public class UserMangement extends JFrame {
 		contentPane.add(updateUser);
 
 		sleepUser = new JButton("Desactivar Usuario");
+		sleepUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(sleepUser.getText()=="Desactivar Usuario"){
+					try {
+						UserService.sleepUser((Integer) table.getValueAt(table.getSelectedRow(), 0));
+						reloadTable();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}else{
+					try {
+						UserService.awakeUser((Integer) table.getValueAt(table.getSelectedRow(), 0));
+						reloadTable();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 		sleepUser.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
