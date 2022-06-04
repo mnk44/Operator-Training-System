@@ -44,7 +44,6 @@ public class UserMangement extends JFrame {
 	private static JButton updateUser;
 	private static JButton sleepUser;
 	private int selected = -1;
-	private static JButton moreInfo;
 	private JLabel image;
 
 	/**
@@ -107,11 +106,9 @@ public class UserMangement extends JFrame {
 				
 				if (selected != -1) {
 					updateUser.setEnabled(true);
-					moreInfo.setEnabled(true);
 					sleepUser.setEnabled(true);
 				}else{
 					updateUser.setEnabled(false);
-					moreInfo.setEnabled(false);
 					sleepUser.setEnabled(false);
 				}
 			}
@@ -229,31 +226,8 @@ public class UserMangement extends JFrame {
 		sleepUser.setBorder(new LineBorder(new Color(255, 186, 74), 2));
 		sleepUser.setFont(new Font("Segoe UI", Font.BOLD, 17));
 		sleepUser.setIcon(new ImageIcon(UserMangement.class.getResource("/img/icons8_Sleep_16.png")));
-		sleepUser.setBounds(230, 427, 187, 38);
+		sleepUser.setBounds(104, 431, 222, 38);
 		contentPane.add(sleepUser);
-		
-		moreInfo = new JButton("Ver Detalles");
-		moreInfo.setIcon(new ImageIcon(UserMangement.class.getResource("/img/icons8_Info_16.png")));
-		moreInfo.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				if(moreInfo.isEnabled()){
-					moreInfo.setBackground(new Color(255, 206, 126));
-				}
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				if(moreInfo.isEnabled()){
-					moreInfo.setBackground(new Color(255, 255, 201));
-				}
-			}
-		});
-		moreInfo.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		moreInfo.setEnabled(false);
-		moreInfo.setBorder(new LineBorder(new Color(255, 186, 74), 2));
-		moreInfo.setBackground(new Color(255, 255, 201));
-		moreInfo.setBounds(25, 427, 187, 38);
-		contentPane.add(moreInfo);
 		
 		image = new JLabel("");
 		image.setIcon(new ImageIcon(UserMangement.class.getResource("/img/undraw_meet_the_team_re_4h08.png")));
@@ -266,7 +240,6 @@ public class UserMangement extends JFrame {
 	public static void reloadTable() throws SQLException{
 		FillTables.fillUser(date, table, -1);
 		updateUser.setEnabled(false);
-		moreInfo.setEnabled(false);
 		sleepUser.setEnabled(false);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
