@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
@@ -26,8 +25,6 @@ import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-
-import services.AreaService;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
@@ -126,6 +123,16 @@ public class UserMangement extends JFrame {
 		scrollPane.setViewportView(this.table);
 
 		newUser = new JButton("Nuevo Usuario");
+		newUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					NewUser newUserView = new NewUser(0);
+					newUserView.setVisible(true);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		newUser.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
