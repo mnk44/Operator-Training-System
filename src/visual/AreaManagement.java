@@ -71,7 +71,6 @@ public class AreaManagement extends JFrame {
 		setAutoRequestFocus(false);
 		setTitle("Gesti\u00F3n de \u00C1reas");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 691, 555);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
