@@ -20,8 +20,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
+
+import contentClass.User;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -38,8 +41,8 @@ public class HomePage {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					HomePage window = new HomePage();
-					window.frmSistemaDeEntrenamiento.setVisible(true);
+					HomePage window = new HomePage(null);
+					window.getFrmSistemaDeEntrenamiento().setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -50,23 +53,24 @@ public class HomePage {
 	/**
 	 * Create the application.
 	 */
-	public HomePage() {
-		initialize();
+	public HomePage(User uss) {
+		initialize(uss);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
-		frmSistemaDeEntrenamiento = new JFrame();
-		frmSistemaDeEntrenamiento.getContentPane().setBackground(Color.WHITE);
-		frmSistemaDeEntrenamiento.getContentPane().setLayout(null);
+	private void initialize(User uss) {
+		setFrmSistemaDeEntrenamiento(new JFrame());
+		getFrmSistemaDeEntrenamiento().getContentPane().setBackground(Color.WHITE);
+		((JComponent) getFrmSistemaDeEntrenamiento().getContentPane()).setBorder(new LineBorder(Color.LIGHT_GRAY));
+		getFrmSistemaDeEntrenamiento().getContentPane().setLayout(null);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBorder(null);
 		menuBar.setBackground(new Color(255, 186, 74));
 		menuBar.setBounds(0, 0, 860, 31);
-		frmSistemaDeEntrenamiento.getContentPane().add(menuBar);
+		getFrmSistemaDeEntrenamiento().getContentPane().add(menuBar);
 		
 		JMenu mnPersonal = new JMenu("Usuario");
 		mnPersonal.setBorder(null);
@@ -162,11 +166,19 @@ public class HomePage {
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(HomePage.class.getResource("/img/undraw_dev_focus_re_6iwt.png")));
 		lblNewLabel.setBounds(166, 102, 575, 385);
-		frmSistemaDeEntrenamiento.getContentPane().add(lblNewLabel);
-		frmSistemaDeEntrenamiento.setResizable(false);
-		frmSistemaDeEntrenamiento.setTitle("Sistema de Entrenamiento SECPROIT");
-		frmSistemaDeEntrenamiento.setIconImage(Toolkit.getDefaultToolkit().getImage(HomePage.class.getResource("/img/Captura de pantalla (133).png")));
-		frmSistemaDeEntrenamiento.setBounds(100, 100, 866, 614);
-		frmSistemaDeEntrenamiento.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getFrmSistemaDeEntrenamiento().getContentPane().add(lblNewLabel);
+		getFrmSistemaDeEntrenamiento().setResizable(false);
+		getFrmSistemaDeEntrenamiento().setTitle("Sistema de Entrenamiento SECPROIT");
+		getFrmSistemaDeEntrenamiento().setIconImage(Toolkit.getDefaultToolkit().getImage(HomePage.class.getResource("/img/Captura de pantalla (133).png")));
+		getFrmSistemaDeEntrenamiento().setBounds(100, 100, 866, 614);
+		getFrmSistemaDeEntrenamiento().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	public JFrame getFrmSistemaDeEntrenamiento() {
+		return frmSistemaDeEntrenamiento;
+	}
+
+	public void setFrmSistemaDeEntrenamiento(JFrame frmSistemaDeEntrenamiento) {
+		this.frmSistemaDeEntrenamiento = frmSistemaDeEntrenamiento;
 	}
 }
