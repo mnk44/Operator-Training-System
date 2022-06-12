@@ -33,6 +33,10 @@ import java.sql.SQLException;
 public class HomePage {
 
 	private JFrame frmSistemaDeEntrenamiento;
+	private JMenuItem changePassword;
+	private JMenuItem resetPassword;
+	private JMenuItem logout;
+	private JMenuItem seeInfo;
 
 	/**
 	 * Launch the application.
@@ -78,32 +82,40 @@ public class HomePage {
 		mnPersonal.setForeground(Color.WHITE);
 		menuBar.add(mnPersonal);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("Cambiar Contrase\u00F1a");
-		mntmNewMenuItem.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Lock_16.png")));
-		mntmNewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
-		mntmNewMenuItem.setFont(new Font("Arial", Font.BOLD, 19));
-		mntmNewMenuItem.setBackground(new Color(255, 186, 74));
-		mntmNewMenuItem.setForeground(Color.WHITE);
-		mnPersonal.add(mntmNewMenuItem);
+		seeInfo = new JMenuItem("Informaci\u00F3n Personal");
+		seeInfo.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_User_Menu_Male_16.png")));
+		seeInfo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
+		seeInfo.setForeground(Color.WHITE);
+		seeInfo.setFont(new Font("Arial", Font.BOLD, 19));
+		seeInfo.setBackground(new Color(255, 186, 74));
+		mnPersonal.add(seeInfo);
 		
-		JMenuItem mntmRestablecerContrasea = new JMenuItem("Reiniciar Contrase\u00F1a");
-		mntmRestablecerContrasea.setBorder(new LineBorder(Color.WHITE));
-		mntmRestablecerContrasea.setBorderPainted(true);
-		mntmRestablecerContrasea.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Password_Reset_16.png")));
-		mntmRestablecerContrasea.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
-		mntmRestablecerContrasea.setForeground(Color.WHITE);
-		mntmRestablecerContrasea.setFont(new Font("Arial", Font.BOLD, 19));
-		mntmRestablecerContrasea.setBackground(new Color(255, 186, 74));
-		mnPersonal.add(mntmRestablecerContrasea);
+		changePassword = new JMenuItem("Cambiar Contrase\u00F1a");
+		changePassword.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Lock_16.png")));
+		changePassword.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
+		changePassword.setFont(new Font("Arial", Font.BOLD, 19));
+		changePassword.setBackground(new Color(255, 186, 74));
+		changePassword.setForeground(Color.WHITE);
+		mnPersonal.add(changePassword);
 		
-		JMenuItem mntmSalirDelSisitema = new JMenuItem("Cerrar Sesi\u00F3n");
-		mntmSalirDelSisitema.setHorizontalAlignment(SwingConstants.LEFT);
-		mntmSalirDelSisitema.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Exit_16.png")));
-		mntmSalirDelSisitema.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
-		mntmSalirDelSisitema.setForeground(Color.WHITE);
-		mntmSalirDelSisitema.setFont(new Font("Arial", Font.BOLD, 19));
-		mntmSalirDelSisitema.setBackground(new Color(255, 186, 74));
-		mnPersonal.add(mntmSalirDelSisitema);
+		resetPassword = new JMenuItem("Reiniciar Contrase\u00F1a");
+		resetPassword.setBorder(null);
+		resetPassword.setBorderPainted(true);
+		resetPassword.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Password_Reset_16.png")));
+		resetPassword.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
+		resetPassword.setForeground(Color.WHITE);
+		resetPassword.setFont(new Font("Arial", Font.BOLD, 19));
+		resetPassword.setBackground(new Color(255, 186, 74));
+		mnPersonal.add(resetPassword);
+		
+		logout = new JMenuItem("Cerrar Sesi\u00F3n");
+		logout.setHorizontalAlignment(SwingConstants.LEFT);
+		logout.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Exit_16.png")));
+		logout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
+		logout.setForeground(Color.WHITE);
+		logout.setFont(new Font("Arial", Font.BOLD, 19));
+		logout.setBackground(new Color(255, 186, 74));
+		mnPersonal.add(logout);
 		
 		JMenu mnAdministrador = new JMenu("Administrador");
 		mnAdministrador.setBorder(null);

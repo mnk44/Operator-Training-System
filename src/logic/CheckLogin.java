@@ -18,9 +18,7 @@ public class CheckLogin {
 	
 	public static User checkPass(String user, String pass) throws SQLException{
 		User uss = UserService.findByNick(user);
-		if(uss != null ){
-			System.out.println(Encrypting.getMd5(pass));
-			System.out.println(uss.getPassword());
+		if(uss != null && Encrypting.getMd5(pass).equals(uss.getPassword())){
 			return uss;
 		}else{
 			System.out.println("no Devolvi el usuario");
