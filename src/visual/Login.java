@@ -22,7 +22,6 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 
-import utils.Rol;
 import contentClass.User;
 
 import java.awt.event.ActionListener;
@@ -100,11 +99,9 @@ public class Login extends JDialog {
 					try {
 						User uss = CheckLogin.checkPass(user.getText(), passwordField.getText());
 						if(uss != null){
-							if(uss.getRol() == Rol.ADMINISTRADOR){
-								HomePage home = new HomePage(uss);
-								home.getFrmSistemaDeEntrenamiento().setVisible(true);
-								Login.this.setVisible(false);
-							}
+							HomePage home = new HomePage(uss);
+							home.getFrmSistemaDeEntrenamiento().setVisible(true);
+							Login.this.setVisible(false);
 
 						}else{
 							JOptionPane.showMessageDialog(null, "Error en las credenciales", "Error", JOptionPane.ERROR_MESSAGE);

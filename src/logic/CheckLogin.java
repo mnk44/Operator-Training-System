@@ -21,7 +21,7 @@ public class CheckLogin {
 		if(uss != null && Encrypting.getMd5(pass).equals(uss.getPassword())){
 			return uss;
 		}else{
-			System.out.println("no Devolvi el usuario");
+			System.out.println("Credenciales incorrectas");
 			return null;
 		}
 	}

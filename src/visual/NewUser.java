@@ -246,14 +246,22 @@ public class NewUser extends JDialog {
 
 		acept = new JButton("Aceptar");
 		acept.addActionListener(new ActionListener() {
+			@SuppressWarnings("null")
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					if(validate_view(option)){
 						if(option == -1){
 							try {
-								User user = new User(name_user.getText(), identity_card.getText(), SchoolLevel.valueOf(school_level.getSelectedItem().toString()), (int)years.getValue(),
-										(int)position_years.getValue(), nick_name.getText(), Encrypting.getMd5("se" + identity_card.getText() + "*"),
-										AreaService.findByName(area.getSelectedItem().toString()).getId_area(), Rol.valueOf(rol.getSelectedItem().toString()), !active.isSelected());
+								User user = null;
+								if(Rol.valueOf(rol.getSelectedItem().toString()).equals(Rol.JEFE_DE_AREA)){
+									user = new User(name_user.getText(), identity_card.getText(), SchoolLevel.valueOf(school_level.getSelectedItem().toString()), (int)years.getValue(),
+											(int)position_years.getValue(), nick_name.getText(), Encrypting.getMd5("se" + identity_card.getText() + "*"),
+											AreaService.findByName(area.getSelectedItem().toString()).getId_area(), Rol.valueOf(rol.getSelectedItem().toString()), !active.isSelected());
+								}else{
+									user = new User(name_user.getText(), identity_card.getText(), SchoolLevel.valueOf(school_level.getSelectedItem().toString()), (int)years.getValue(),
+											(Integer) null, nick_name.getText(), Encrypting.getMd5("se" + identity_card.getText() + "*"),
+											AreaService.findByName(area.getSelectedItem().toString()).getId_area(), Rol.valueOf(rol.getSelectedItem().toString()), !active.isSelected());
+								}
 								String result = UserService.createUser(user);
 								if(result == null){
 									JOptionPane.showMessageDialog(null, "Nuevo Usuario añadido satisfactoriamente", "Acción Completada", JOptionPane.INFORMATION_MESSAGE);

@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
@@ -45,6 +46,8 @@ public class UserMangement extends JFrame {
 	private static JButton sleepUser;
 	private int selected = -1;
 	private JLabel image;
+	private static int id_user = -1;
+	private static JButton resetPass;
 
 	/**
 	 * Launch the application.
@@ -53,7 +56,7 @@ public class UserMangement extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UserMangement frame = new UserMangement();
+					UserMangement frame = new UserMangement(id_user);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -67,7 +70,8 @@ public class UserMangement extends JFrame {
 	 * @throws SQLException 
 	 */
 	@SuppressWarnings("static-access")
-	public UserMangement() throws SQLException {
+	public UserMangement(final int id) throws SQLException {
+		id_user = id;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(UserMangement.class.getResource("/img/Captura de pantalla (133).png")));
 		setAutoRequestFocus(false);
 		setTitle("Gesti\u00F3n de Usuarios");
@@ -105,9 +109,11 @@ public class UserMangement extends JFrame {
 				
 				if (selected != -1) {
 					updateUser.setEnabled(true);
+					resetPass.setEnabled(true);
 					sleepUser.setEnabled(true);
 				}else{
 					updateUser.setEnabled(false);
+					resetPass.setEnabled(false);
 					sleepUser.setEnabled(false);
 				}
 			}
@@ -225,7 +231,7 @@ public class UserMangement extends JFrame {
 		sleepUser.setBorder(new LineBorder(new Color(255, 186, 74), 2));
 		sleepUser.setFont(new Font("Segoe UI", Font.BOLD, 17));
 		sleepUser.setIcon(new ImageIcon(UserMangement.class.getResource("/img/icons8_Sleep_16.png")));
-		sleepUser.setBounds(104, 431, 222, 38);
+		sleepUser.setBounds(25, 437, 187, 38);
 		contentPane.add(sleepUser);
 		
 		image = new JLabel("");
@@ -233,13 +239,60 @@ public class UserMangement extends JFrame {
 		image.setBounds(429, 342, 222, 157);
 		contentPane.add(image);
 		
+		resetPass = new JButton("Restablecer Clave");
+		resetPass.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selected = table.getSelectedRow();
+				int segure = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea restablecer la contraseña?", "Restablecer Clave", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+				int id_user = (Integer) table.getValueAt(selected, 0);
+				if(segure == 0){
+					try {
+						String error = UserService.changePassword(id_user, "se" + UserService.findById(id_user).getIdentity_card() + "*");
+						if(error == null){
+							JOptionPane.showMessageDialog(null, "Contraseña cambiada con éxito", "Acción Completada", JOptionPane.INFORMATION_MESSAGE);
+						}else{
+							JOptionPane.showMessageDialog(null, "No se pudo completar la acción", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		resetPass.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				if(resetPass.isEnabled()){
+					resetPass.setBackground(new Color(255, 206, 126));
+				}
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				if(resetPass.isEnabled()){
+					resetPass.setBackground(new Color(255, 255, 201));
+				}
+			}
+		});
+		resetPass.setIcon(new ImageIcon(UserMangement.class.getResource("/img/pass.png")));
+		resetPass.setFont(new Font("Segoe UI", Font.BOLD, 17));
+		resetPass.setEnabled(false);
+		resetPass.setBorder(new LineBorder(new Color(255, 186, 74), 2));
+		resetPass.setBackground(new Color(255, 255, 201));
+		resetPass.setBounds(230, 437, 187, 38);
+		contentPane.add(resetPass);
+		
 		reloadTable();
 	}
 	
 	public static void reloadTable() throws SQLException{
-		FillTables.fillUser(date, table, -1);
+		FillTables.fillUser(date, table, id_user);
 		updateUser.setEnabled(false);
+		resetPass.setEnabled(false);
 		sleepUser.setEnabled(false);
+		resetPass.setBackground(new Color(255, 255, 201));
+		sleepUser.setBackground(new Color(255, 255, 201));
+		updateUser.setBackground(new Color(255, 255, 201));
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
@@ -248,5 +301,6 @@ public class UserMangement extends JFrame {
 		table.getColumnModel().getColumn(3).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(4).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(0).setMaxWidth(40);
+		table.getColumnModel().getColumn(1).setMaxWidth(200);
 	}
 }
