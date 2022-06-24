@@ -6,6 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SpinnerNumberModel;
 
 import java.awt.HeadlessException;
 import java.awt.Toolkit;
@@ -63,6 +64,7 @@ public class NewUser extends JDialog {
 	@SuppressWarnings("rawtypes")
 	private JComboBox area;
 	private JRadioButton active;
+	private SpinnerNumberModel model = new SpinnerNumberModel(0,0,70,1);
 
 	/**
 	 * Launch the application.
@@ -173,6 +175,7 @@ public class NewUser extends JDialog {
 					identity_card.setForeground(Color.RED);
 				}else if(identity_card.getText().trim().length() == 11){
 					e.consume();
+					getToolkit().beep();
 				}
 			}
 			@Override
@@ -355,7 +358,7 @@ public class NewUser extends JDialog {
 		separator.setBounds(0, 79, 685, 9);
 		contentPanel.add(separator);
 
-		years = new JSpinner();
+		years = new JSpinner(model);
 		years.setFont(new Font("Arial", Font.PLAIN, 16));
 		years.setBounds(255, 355, 59, 26);
 		contentPanel.add(years);
@@ -366,7 +369,7 @@ public class NewUser extends JDialog {
 		importantLabel.setBounds(412, 358, 129, 20);
 		contentPanel.add(importantLabel);
 
-		position_years = new JSpinner();
+		position_years = new JSpinner(model);
 		position_years.setEnabled(false);
 		position_years.setFont(new Font("Arial", Font.PLAIN, 16));
 		position_years.setBounds(545, 356, 59, 26);
