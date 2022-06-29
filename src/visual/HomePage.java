@@ -21,15 +21,18 @@ import java.awt.event.InputEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
-
+import services.UserService;
 import utils.Rol;
 import contentClass.User;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class HomePage {
 
@@ -40,6 +43,7 @@ public class HomePage {
 	private JMenuItem seeInfo;
 	private JLabel lblNewLabel;
 	private JMenu admin;
+	private JMenu boss;
 	private JMenuItem adminReports;
 
 	/**
@@ -95,6 +99,32 @@ public class HomePage {
 		mnPersonal.add(seeInfo);
 
 		changePassword = new JMenuItem("Cambiar Contrase\u00F1a");
+		changePassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String pass = JOptionPane.showInputDialog(null, "Escriba la nueva contraseña:", "Nueva Clave", JOptionPane.INFORMATION_MESSAGE);
+				if(pass != null){
+					if(!pass.isEmpty()){
+						int segure = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea cambiar su contraseña?", "Cambiar Clave", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+						if(segure == 0){
+							try {
+								String error = UserService.changePassword(uss.getId_user(), pass);
+								if(error == null){
+									JOptionPane.showMessageDialog(null, "Contraseña cambiada con éxito", "Acción Completada", JOptionPane.INFORMATION_MESSAGE);
+								}else{
+									JOptionPane.showMessageDialog(null, "No se pudo completar la acción", "Error", JOptionPane.ERROR_MESSAGE);
+								}
+							} catch (SQLException e) {
+								e.printStackTrace();
+								JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						}
+					}else{
+						JOptionPane.showMessageDialog(null, "La contraseña no puede ser vacía", "Error", JOptionPane.ERROR_MESSAGE);
+						changePassword.doClick();
+					}
+				}
+			}
+		});
 		changePassword.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Lock_16.png")));
 		changePassword.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
 		changePassword.setFont(new Font("Arial", Font.BOLD, 19));
@@ -103,6 +133,24 @@ public class HomePage {
 		mnPersonal.add(changePassword);
 
 		resetPassword = new JMenuItem("Reiniciar Contrase\u00F1a");
+		resetPassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int segure = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea restablecer su contraseña?", "Restablecer Clave", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+				if(segure == 0){
+					try {
+						String error = UserService.changePassword(uss.getId_user(), "se" + uss.getIdentity_card() + "*");
+						if(error == null){
+							JOptionPane.showMessageDialog(null, "Contraseña cambiada con éxito", "Acción Completada", JOptionPane.INFORMATION_MESSAGE);
+						}else{
+							JOptionPane.showMessageDialog(null, "No se pudo completar la acción", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
 		resetPassword.setBorder(null);
 		resetPassword.setBorderPainted(true);
 		resetPassword.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Password_Reset_16.png")));
@@ -113,6 +161,16 @@ public class HomePage {
 		mnPersonal.add(resetPassword);
 
 		logout = new JMenuItem("Cerrar Sesi\u00F3n");
+		logout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int segure = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea cerrar la sesión?", "Cerrar Sesión", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if(segure == 0){
+					HomePage.this.getFrmSistemaDeEntrenamiento().setVisible(false);
+					Login login = new Login();
+					login.setVisible(true);
+				}
+			}
+		});
 		logout.setHorizontalAlignment(SwingConstants.LEFT);
 		logout.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Exit_16.png")));
 		logout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
@@ -165,6 +223,32 @@ public class HomePage {
 			mntmGestinDeUsuarios.setFont(new Font("Arial", Font.BOLD, 19));
 			mntmGestinDeUsuarios.setBackground(new Color(255, 186, 74));
 			admin.add(mntmGestinDeUsuarios);
+			
+		}else if(uss.getRol().equals(Rol.JEFE_DE_AREA)){
+			boss = new JMenu("Jefe de \u00C1rea");
+			boss.setBorder(null);
+			boss.setForeground(Color.WHITE);
+			boss.setFont(new Font("Arial", Font.BOLD, 20));
+			menuBar.add(boss);
+
+			JMenuItem process = new JMenuItem("Gesti\u00F3n de Procesos");
+			process.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					try {
+						ProcessManagement process = new ProcessManagement();
+						process.setVisible(true);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			});
+			process.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Test_Tube_16.png")));
+			process.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
+			process.setForeground(Color.WHITE);
+			process.setFont(new Font("Arial", Font.BOLD, 19));
+			process.setBackground(new Color(255, 186, 74));
+			boss.add(process);
 		}
 
 		JMenu mnReportes = new JMenu("Reportes");
@@ -184,16 +268,21 @@ public class HomePage {
 		}
 
 		lblNewLabel = new JLabel("");
+		lblNewLabel.setBounds(166, 102, 578, 385);
 		if(uss.getRol().equals(Rol.ADMINISTRADOR)){
 			lblNewLabel.setIcon(new ImageIcon(HomePage.class.getResource("/img/undraw_dev_focus_re_6iwt.png")));
+		}else if(uss.getRol().equals(Rol.JEFE_DE_AREA)){
+			lblNewLabel.setIcon(new ImageIcon(HomePage.class.getResource("/img/jefe.png")));
+		}else if(uss.getRol().equals(Rol.OPERARIO)){
+			lblNewLabel.setBounds(70, 102, 764, 385);
+			lblNewLabel.setIcon(new ImageIcon(HomePage.class.getResource("/img/Componente 2 – 1.png")));
 		}
-		lblNewLabel.setBounds(166, 102, 578, 385);
 		getFrmSistemaDeEntrenamiento().getContentPane().add(lblNewLabel);
 		getFrmSistemaDeEntrenamiento().setResizable(false);
 		getFrmSistemaDeEntrenamiento().setTitle("Sistema de Entrenamiento SECPROIT");
 		getFrmSistemaDeEntrenamiento().setIconImage(Toolkit.getDefaultToolkit().getImage(HomePage.class.getResource("/img/Captura de pantalla (133).png")));
 		getFrmSistemaDeEntrenamiento().setBounds(100, 100, 866, 614);
-		getFrmSistemaDeEntrenamiento().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getFrmSistemaDeEntrenamiento().setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
 
 	public JFrame getFrmSistemaDeEntrenamiento() {
@@ -202,5 +291,14 @@ public class HomePage {
 
 	public void setFrmSistemaDeEntrenamiento(JFrame frmSistemaDeEntrenamiento) {
 		this.frmSistemaDeEntrenamiento = frmSistemaDeEntrenamiento;
+		frmSistemaDeEntrenamiento.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				int segure = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea salir del Sistema?", "Salir", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if(segure == 0){
+					System.exit(0);
+				}
+			}
+		});
 	}
 }
