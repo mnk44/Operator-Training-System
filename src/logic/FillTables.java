@@ -1,15 +1,18 @@
 package logic;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import services.AreaService;
+import services.ProcessService;
 import services.UserService;
 import utils.UserStatus;
 import contentClass.Area;
+import contentClass.Process;
 import contentClass.User;
 
 /**
@@ -81,6 +84,36 @@ public class FillTables {
 		date.addColumn("Área",area_name.toArray());
 		date.addColumn("Rol",rol.toArray());
 		date.addColumn("Estado",sleep.toArray());
+		table.setModel(date);
+	}
+
+	//Procesos
+	public static void fillProcess(DefaultTableModel date, JTable table) throws SQLException{
+		ArrayList<Process> process = ProcessService.getProcess();
+		ArrayList<Integer> id_process = new ArrayList<Integer>();
+		ArrayList<String> name_process = new ArrayList<String>();
+		ArrayList<Timestamp> create_name = new ArrayList<Timestamp>();
+		ArrayList<String> area_name = new ArrayList<String>();
+		
+		for(int i=0; i<process.size(); i++){
+			id_process.add(process.get(i).getId_process());
+			name_process.add(process.get(i).getName_process());
+			create_name.add(process.get(i).getCreation_date());
+			area_name.add(AreaService.findById(process.get(i).getArea()).getName_area());
+		}
+
+		date = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int r,int c){
+				return false;
+			}
+		};
+
+		date.addColumn("ID",id_process.toArray());
+		date.addColumn("Nombre",name_process.toArray());
+		date.addColumn("Creado",create_name.toArray());
+		date.addColumn("Área",area_name.toArray());
 		table.setModel(date);
 	}
 }

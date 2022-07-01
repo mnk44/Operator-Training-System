@@ -18,8 +18,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import logic.FillTables;
 
 public class ProcessManagement extends JFrame {
 
@@ -170,19 +174,16 @@ public class ProcessManagement extends JFrame {
 
 		JLabel image = new JLabel("");
 		image.setIcon(new ImageIcon(ProcessManagement.class.getResource("/img/undraw_working_remotely_re_6b3a.png")));
-		image.setBounds(427, 298, 243, 201);
+		image.setBounds(427, 294, 243, 205);
 		contentPane.add(image);
 
-		
+		reloadTable();
 	}
 
-//	public void reloadTable() throws SQLException{
-//		FillTables.fillArea(date, table);
-//		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
-//		tcr.setHorizontalAlignment(SwingConstants.CENTER);
-//		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
-//		table.getColumnModel().getColumn(1).setCellRenderer(tcr);
-//		table.getColumnModel().getColumn(0).setPreferredWidth(15);
-//	}
+	public void reloadTable() throws SQLException{
+		FillTables.fillProcess(date, table);
+		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+	}
 
 }
