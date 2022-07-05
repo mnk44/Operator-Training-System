@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?p2f version='1.0.0'?>
+<p2f version='1.0.0'>
+  <ius size='1'>
+    <iu id='epp.package.java' name='Eclipse IDE for Java Developers' version='2.0.1.20130919-0803'>
+      <repositories size='0'/>
+    </iu>
+  </ius>
+</p2f>

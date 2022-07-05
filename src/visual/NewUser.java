@@ -85,6 +85,11 @@ public class NewUser extends JDialog {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public NewUser(final int option) throws SQLException {
+		if(option == -1){
+			setTitle("Nuevo Usuario");
+		}else{
+			setTitle("Modificar Usuario");
+		}
 		setModal(true);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(NewUser.class.getResource("/img/Captura de pantalla (133).png")));
 		setResizable(false);
