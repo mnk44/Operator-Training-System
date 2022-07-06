@@ -235,7 +235,7 @@ public class HomePage {
 			process.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
-						ProcessManagement process = new ProcessManagement();
+						ProcessManagement process = new ProcessManagement(uss.getArea());
 						process.setVisible(true);
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block

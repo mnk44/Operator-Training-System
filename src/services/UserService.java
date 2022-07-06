@@ -133,12 +133,13 @@ public class UserService {
 	}
 
 	//encontrar un usuario por su nombre
-	public static User findByName(String name_user) throws SQLException {
+	public static User findByName(String name_user, int area) throws SQLException {
 		User user = null;
 		try{
-			String sqlSentenc = "SELECT * FROM user_table WHERE name_user = ?";
+			String sqlSentenc = "SELECT * FROM user_table WHERE name_user = ? and area = ?";
 			CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, name_user);
+			cs.setInt(2, area);
 			ResultSet rs = cs.executeQuery();
 			if(rs.next()){
 				user = new User(rs.getInt("id_user"),rs.getString("name_user"),rs.getString("identity_card"),
@@ -205,6 +206,26 @@ public class UserService {
 		}
 		return users;
 	}
+	
+	//obtener todos los operarios de un Area
+		public static ArrayList<User> getOp(int area) throws SQLException{
+			ArrayList<User> users = new ArrayList<User>();
+			try{
+				String sqlSentenc = "SELECT * FROM user_table WHERE area = ? and rol = 3";
+				CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
+				cs.setInt(1, area);
+				ResultSet rs = cs.executeQuery();
+				while(rs.next()){
+					User user =  new User(rs.getInt("id_user"),rs.getString("name_user"),rs.getString("identity_card"),
+							findSchoolLevel(rs.getString("school_level")), rs.getInt("experience"), rs.getInt("position_years"),
+							rs.getString("nick_name"), rs.getString("password"), rs.getInt("area"), findRol(rs.getInt("rol")), rs.getBoolean("sleep"));
+					users.add(user);
+				}
+			}catch (Exception e){
+				System.out.println("Error en getUsers(): " + e.getMessage());
+			}
+			return users;
+		}
 
 	////////////////////////////////////////////////////////////////////
 	public static SchoolLevel findSchoolLevel(String schoolLevel){

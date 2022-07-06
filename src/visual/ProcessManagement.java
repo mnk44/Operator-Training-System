@@ -25,12 +25,15 @@ import javax.swing.table.DefaultTableModel;
 
 import logic.FillTables;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class ProcessManagement extends JFrame {
 
 	private static final long serialVersionUID = -488723709801092457L;
 	private JPanel contentPane;
-	private JTable table;
-	private DefaultTableModel date;
+	private static JTable table;
+	private static DefaultTableModel date;
 	private JButton newProcess;
 	private JButton updateProcess;
 	private JButton deleteProcess;
@@ -43,7 +46,7 @@ public class ProcessManagement extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ProcessManagement frame = new ProcessManagement();
+					ProcessManagement frame = new ProcessManagement(1);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -55,7 +58,8 @@ public class ProcessManagement extends JFrame {
 	 * Create the dialog.
 	 * @throws SQLException 
 	 */
-	public ProcessManagement() throws SQLException {
+	@SuppressWarnings("static-access")
+	public ProcessManagement(final int area) throws SQLException {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ProcessManagement.class.getResource("/img/Captura de pantalla (133).png")));
 		setAutoRequestFocus(false);
 		setTitle("Gesti\u00F3n de Procesos");
@@ -68,6 +72,17 @@ public class ProcessManagement extends JFrame {
 		contentPane.setLayout(null);
 		
 		newProcess = new JButton("Nuevo Proceso");
+		newProcess.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					NewProcess proc = new NewProcess(-1, area);
+					proc.setVisible(true);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		newProcess.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -78,7 +93,6 @@ public class ProcessManagement extends JFrame {
 				newProcess.setBackground(new Color(255, 255, 201));
 			}
 		});
-
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBorder(null);
 		scrollPane.setAutoscrolls(true);
@@ -180,7 +194,7 @@ public class ProcessManagement extends JFrame {
 		reloadTable();
 	}
 
-	public void reloadTable() throws SQLException{
+	public static void reloadTable() throws SQLException{
 		FillTables.fillProcess(date, table);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);

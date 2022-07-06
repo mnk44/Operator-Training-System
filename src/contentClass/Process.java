@@ -23,6 +23,18 @@ public class Process {
 		this.drl_file = drl_file;
 		this.area = area;
 	}
+	
+	public Process(String name_process,
+			Timestamp creation_date, byte[] process_image, byte[] anm_file,
+			byte[] drl_file, int area) {
+		super();
+		this.name_process = name_process;
+		this.creation_date = creation_date;
+		this.process_image = process_image;
+		this.anm_file = anm_file;
+		this.drl_file = drl_file;
+		this.area = area;
+	}
 
 	public int getId_process() {
 		return id_process;
