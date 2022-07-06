@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -23,6 +24,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import services.ProcessService;
 import logic.FillTables;
 
 import java.awt.event.ActionListener;
@@ -164,6 +166,27 @@ public class ProcessManagement extends JFrame {
 		contentPane.add(updateProcess);
 
 		deleteProcess = new JButton("Eliminar Proceso");
+		deleteProcess.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selected = table.getSelectedRow();
+				int delete = JOptionPane.showConfirmDialog(null, "¿Está seguro que desea eliminar este Proceso?", "Eliminar Proceso", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+				int id_proc = (Integer) table.getValueAt(selected, 0);
+				if(delete == 0){
+					try {
+						String result = ProcessService.deleteProcess(id_proc);
+						if(result == null){
+							JOptionPane.showMessageDialog(null, "Proceso eliminado satisfactoriamente", "Acción Completada", JOptionPane.INFORMATION_MESSAGE);
+							reloadTable();
+						}else{
+							JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
 		deleteProcess.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -198,6 +221,10 @@ public class ProcessManagement extends JFrame {
 		FillTables.fillProcess(date, table);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(1).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(2).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(0).setMaxWidth(40);
 	}
 
 }

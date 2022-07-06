@@ -51,6 +51,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 
+import logic.ChargeFileProcess;
 import logic.Convert;
 import contentClass.User;
 
@@ -558,27 +559,30 @@ public class NewProcess extends JDialog {
 								consCause.isSelected(), QuestionType.valueOf(typeCause.getSelectedItem().toString()), (int) cantRec.getValue(), consRec.isSelected(), QuestionType.valueOf(typeRec.getSelectedItem().toString()));
 						ProcessConfigService.createProcessConfig(config);
 
+						int proces = ProcessService.findByName(nameProcess.getText()).getId_process();
+						
 						if(rdbtnTodosLosOperarios.isSelected()){
 							ArrayList<User> u = UserService.getOp(area);
-							int proces = ProcessService.findByName(nameProcess.getText()).getId_process();
 
 							for(int i=0; i<u.size(); i++){
 								ProcessConfigService.createUserRelate(proces, u.get(i).getId_user());
 							}
 						}else{
-							int proces = ProcessService.findByName(nameProcess.getText()).getId_process();
-							
 							//ProcessConfigService.deleteAllRelations(proces);
 
 							for(int i=0; i<usersA.size(); i++){
 								User u = UserService.findByName(usersA.get(i), area);
 								ProcessConfigService.createUserRelate(proces, u.getId_user());
 							}
-						}						
+						}			
+						
+						ChargeFileProcess.chargeAnmBD(proces);
+						ChargeFileProcess.chargeDrlBD(proces);
+						
 						JOptionPane.showMessageDialog(null, "Nuevo Proceso añadido satisfactoriamente", "Acción Completada", JOptionPane.INFORMATION_MESSAGE);
 						ProcessManagement.reloadTable();
 						dispose();
-					} catch (IOException | SQLException e) {
+					} catch (IOException | SQLException | ClassNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);

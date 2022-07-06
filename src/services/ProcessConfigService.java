@@ -36,7 +36,7 @@ public class ProcessConfigService {
 			String sqlSentenc = "INSERT INTO user_process VALUES (DEFAULT,?,?)";
 			CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, process);
-			cs.setInt(1, user);
+			cs.setInt(2, user);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){

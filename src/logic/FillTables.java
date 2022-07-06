@@ -112,7 +112,6 @@ public class FillTables {
 
 		date.addColumn("ID",id_process.toArray());
 		date.addColumn("Nombre",name_process.toArray());
-		date.addColumn("Creado",create_name.toArray());
 		date.addColumn("Área",area_name.toArray());
 		table.setModel(date);
 	}

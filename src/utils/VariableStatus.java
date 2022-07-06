@@ -1,8 +1,8 @@
 package utils;
 
 public enum VariableStatus {
-	ABIERTO,
-	CERRADO,
+	ABIERTA,
+	CERRADA,
 	NORMAL,
 	
 	POSITIVO,

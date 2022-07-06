@@ -249,6 +249,26 @@ public class HomePage {
 			process.setFont(new Font("Arial", Font.BOLD, 19));
 			process.setBackground(new Color(255, 186, 74));
 			boss.add(process);
+			
+		}else if(uss.getRol().equals(Rol.OPERARIO)){
+			boss = new JMenu("Operario");
+			boss.setBorder(null);
+			boss.setForeground(Color.WHITE);
+			boss.setFont(new Font("Arial", Font.BOLD, 20));
+			menuBar.add(boss);
+
+			JMenuItem entr = new JMenuItem("Realizar Entrenamiento");
+			entr.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					
+				}
+			});
+			entr.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Test_16.png")));
+			entr.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK | InputEvent.ALT_MASK));
+			entr.setForeground(Color.WHITE);
+			entr.setFont(new Font("Arial", Font.BOLD, 19));
+			entr.setBackground(new Color(255, 186, 74));
+			boss.add(entr);
 		}
 
 		JMenu mnReportes = new JMenu("Reportes");
