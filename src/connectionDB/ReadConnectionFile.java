@@ -13,7 +13,7 @@ import java.util.LinkedList;
 
 public class ReadConnectionFile {
 	
-	@SuppressWarnings("resource")
+	@SuppressWarnings({ "resource" })
 	public static LinkedList<String> connectionProperties() throws IOException{
 		LinkedList<String> properties = new LinkedList<String>();
 

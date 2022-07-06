@@ -2,14 +2,12 @@ package contentClass;
 
 import utils.VariableStatus;
 import utils.VariableType;
-import cu.edu.cujae.ceis.tree.general.GeneralTree;
 
 public class Variable {
 	
     private String variable_name;
     private VariableType type;
     protected VariableStatus status;
-    protected GeneralTree<String> tree;
     
 	public Variable(String variable_name,
 			VariableType type) {
@@ -39,11 +37,5 @@ public class Variable {
 	}
 	public void setStatus(VariableStatus status) {
 		this.status = status;
-	}
-	public GeneralTree<String> getTree() {
-		return tree;
-	}
-	public void setTree(GeneralTree<String> tree) {
-		this.tree = tree;
-	}   
+	} 
 }

@@ -131,7 +131,6 @@ public class NewProcess extends JDialog {
 	 */
 	@SuppressWarnings({ "deprecation" })
 	public NewProcess(final int option, final int area) throws SQLException {
-		setAlwaysOnTop(true);
 		this.area = area;
 		usersNA = fillUser();
 		getContentPane().setBackground(Color.WHITE);
