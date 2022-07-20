@@ -260,7 +260,14 @@ public class HomePage {
 			JMenuItem entr = new JMenuItem("Realizar Entrenamiento");
 			entr.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					
+					EntManagement ent = null;
+					try {
+						ent = new EntManagement(uss.getId_user());
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					ent.setVisible(true);
 				}
 			});
 			entr.setIcon(new ImageIcon(HomePage.class.getResource("/img/icons8_Test_16.png")));

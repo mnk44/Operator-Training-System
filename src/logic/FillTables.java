@@ -9,7 +9,9 @@ import javax.swing.table.DefaultTableModel;
 
 import services.AreaService;
 import services.ProcessService;
+import services.TrainService;
 import services.UserService;
+import utils.TrainingStatus;
 import utils.UserStatus;
 import contentClass.Area;
 import contentClass.Process;
@@ -115,4 +117,33 @@ public class FillTables {
 		date.addColumn("Área",area_name.toArray());
 		table.setModel(date);
 	}
+	
+	//Entrenamientos por Procesos
+		public static void fillEnt(DefaultTableModel date, JTable table, int id_user) throws SQLException{
+			ArrayList<Process> process = ProcessService.getProcess(id_user);
+			ArrayList<String> name = new ArrayList<>();
+			ArrayList<String> status = new ArrayList<>();
+
+			for(int i=0; i<process.size(); i++){
+				name.add(process.get(i).getName_process());
+				if(TrainService.findByProcs(process.get(i).getId_process(), id_user) != null){
+					status.add(TrainingStatus.INICIADO.toString());
+				}else{
+					status.add(TrainingStatus.NO_INICIADO.toString());
+				}
+			}
+
+			date = new DefaultTableModel(){
+				private static final long serialVersionUID = 1L;
+
+				public boolean isCellEditable(int r,int c){
+					return false;
+				}
+			};
+
+			date.addColumn("Nombre del Proceso",name.toArray());
+			date.addColumn("Estado",status.toArray());
+			table.setModel(date);
+		}
+
 }

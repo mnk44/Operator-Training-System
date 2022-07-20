@@ -23,7 +23,7 @@ public class ConnectionTest {
 				Connection connection = conect.crateConnection();
 				System.out.println("Conexión establecida..."); 	
 				
-				ChargeFileProcess.chargeAnmBD(8);
+				ChargeFileProcess.chargeDrlBD(9);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

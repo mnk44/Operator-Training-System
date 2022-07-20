@@ -3,7 +3,9 @@ package services;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
+import contentClass.Variable;
 import utils.VariableType;
 
 public class UtilsServices {
@@ -42,6 +44,24 @@ public class UtilsServices {
 			System.out.println("Error: " + e.getMessage());
 		}
 		return id_var;
+	}
+	
+	public static ArrayList<Variable> getVar(int id_process) throws SQLException {
+		ArrayList<Variable> variables = new ArrayList<>();
+		try{
+			String sqlSentenc = "SELECT * FROM variable WHERE process = ?";
+			CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, id_process);
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				Variable v = new Variable(rs.getInt("id_variable"),rs.getString("name_variable"),rs.getString("type"),
+						rs.getInt("max_value"),rs.getInt("min_value"));
+				variables.add(v);
+			}
+		}catch (Exception e){
+			System.out.println("Error: " + e.getMessage());
+		}
+		return variables;
 	}
 
 	//encuentra causa
@@ -107,5 +127,22 @@ public class UtilsServices {
 			return e.getMessage();
 		}
 		return null;
+	}
+	
+	public static ArrayList<String> findState(int id_var) throws SQLException {
+		ArrayList<String> variables = new ArrayList<>();
+		try{
+			String sqlSentenc = "SELECT * FROM variable_cause WHERE variable = ?";
+			CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, id_var);
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				String v = rs.getString("status");
+				variables.add(v);
+			}
+		}catch (Exception e){
+			System.out.println("Error: " + e.getMessage());
+		}
+		return variables;
 	}
 }

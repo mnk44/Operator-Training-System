@@ -124,4 +124,22 @@ public class ProcessService {
 		}
 		return ps;
 	}
+
+	//obtener todas los procesos de un usuario
+	public static ArrayList<Process> getProcess(int id_user) throws SQLException{
+		ArrayList<Process> ps = new ArrayList<Process>();
+		try{
+			String sqlSentenc = "SELECT * FROM user_process WHERE user_id = ?";
+			CallableStatement cs = ServiceConnection.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, id_user);
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				Process p = findById(rs.getInt("process"));
+				ps.add(p);
+			}
+		}catch (Exception e){
+			System.out.println("Error en getProcess(): " + e.getMessage());
+		}
+		return ps;
+	}
 }

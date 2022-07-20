@@ -71,15 +71,16 @@ public class ChargeFileProcess {
 			current = fi.readLine();
 		}
 		
+		int id_var = 0;
+		String state = null;
+		ArrayList<Integer> id_causes = new ArrayList<>();
+		int save = -1;
+		
 		while(!current.replace(" ", "").equalsIgnoreCase("when")){
-			int id_var = 0;
-			String state = null;
-			ArrayList<Integer> id_causes = new ArrayList<>();
 			
 			if(current.contains("when (")){
 				String varName;
 				VariableType type;
-				VariableStatus status;
 				
 				String linea = current.replace("when (", "");
 				int position = linea.indexOf("(");
@@ -115,12 +116,15 @@ public class ChargeFileProcess {
 				}else{
 					position = linea.indexOf(")");
 				}
-				status = VariableStatus.valueOf(linea.substring(0, position)); //aqui obtengo el estado
+				
+				state = linea.substring(0, position); //aqui obtengo el estado
 				
 				id_var = UtilsServices.findVar(varName, id_process);
-				state = status.toString();
+				
+				save++;
 				
 			}else if(current.contains("ProcesarDatos.insertarRespueta(")){
+				id_causes = new ArrayList<>();
 				String causas[] = null;
 				String causa = null;
 				
@@ -140,10 +144,16 @@ public class ChargeFileProcess {
 				}else{
 					id_causes.add(UtilsServices.findCause(causa, id_process));
 				}
-			}else if(current.replace(" ", "").equalsIgnoreCase("end")){
+				
+				save++;
+			}
+			
+			if(save == 1){
 				for(int i=0; i<id_causes.size(); i++){
+					System.out.println(id_var + " " + id_causes.get(i) + " " + state);
 					UtilsServices.createRuleVC(id_var, id_causes.get(i), state); //llenando regla variable causa
 				}
+				save = -1;
 			}
 			
 			current = fi.readLine();

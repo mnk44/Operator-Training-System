@@ -575,6 +575,7 @@ public class NewProcess extends JDialog {
 								ProcessConfigService.createUserRelate(proces, u.getId_user());
 							}
 						}			
+						//JOptionPane.showMessageDialog(null, "Cargando ", "Acción Completada", JOptionPane.INFORMATION_MESSAGE);
 						
 						ChargeFileProcess.chargeAnmBD(proces);
 						ChargeFileProcess.chargeDrlBD(proces);
