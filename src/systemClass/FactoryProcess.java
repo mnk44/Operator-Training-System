@@ -1,36 +1,31 @@
 package systemClass;
 
-import java.sql.Timestamp;
-
 public class FactoryProcess {
 	int process_id;
 	String process_name;
 	int process_area;
-	Timestamp creation_date;
 	byte[] process_img;
 	byte[] process_anm;
 	byte[] process_drl;
 	
 	public FactoryProcess(int process_id, String process_name,
-			int process_area, Timestamp creation_date, byte[] process_img,
+			int process_area, byte[] process_img,
 			byte[] process_anm, byte[] process_drl) {
 		super();
 		this.process_id = process_id;
 		this.process_name = process_name;
 		this.process_area = process_area;
-		this.creation_date = creation_date;
 		this.process_img = process_img;
 		this.process_anm = process_anm;
 		this.process_drl = process_drl;
 	}
 	
 	public FactoryProcess(String process_name, int process_area,
-			Timestamp creation_date, byte[] process_img, byte[] process_anm,
+		    byte[] process_img, byte[] process_anm,
 			byte[] process_drl) {
 		super();
 		this.process_name = process_name;
 		this.process_area = process_area;
-		this.creation_date = creation_date;
 		this.process_img = process_img;
 		this.process_anm = process_anm;
 		this.process_drl = process_drl;
@@ -53,12 +48,6 @@ public class FactoryProcess {
 	}
 	public void setProcess_area(int process_area) {
 		this.process_area = process_area;
-	}
-	public Timestamp getCreation_date() {
-		return creation_date;
-	}
-	public void setCreation_date(Timestamp creation_date) {
-		this.creation_date = creation_date;
 	}
 	public byte[] getProcess_img() {
 		return process_img;
