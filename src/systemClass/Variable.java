@@ -10,40 +10,44 @@ public class Variable {
 	int max_value;
 	int variable_process;
 	
-	public Variable(String variable_name, VariableTypes variable_type,
+	public Variable(String variable_name, String variable_type,
 			int variable_process) {
 		super();
 		this.variable_name = variable_name;
-		this.variable_type = variable_type;
+		this.variable_type = VariableTypes.valueOf(variable_type);
+		this.min_value = -1;
+		this.max_value = -1;
 		this.variable_process = variable_process;
 	}
 
-	public Variable(String variable_name, VariableTypes variable_type,
+	public Variable(String variable_name, String variable_type,
 			int min_value, int max_value, int variable_process) {
 		super();
 		this.variable_name = variable_name;
-		this.variable_type = variable_type;
+		this.variable_type = VariableTypes.valueOf(variable_type);
 		this.min_value = min_value;
 		this.max_value = max_value;
 		this.variable_process = variable_process;
 	}
 
 	public Variable(int variable_id, String variable_name,
-			VariableTypes variable_type, int variable_process) {
+			String variable_type, int variable_process) {
 		super();
 		this.variable_id = variable_id;
 		this.variable_name = variable_name;
-		this.variable_type = variable_type;
+		this.variable_type = VariableTypes.valueOf(variable_type);
+		this.min_value = -1;
+		this.max_value = -1;
 		this.variable_process = variable_process;
 	}
 
 	public Variable(int variable_id, String variable_name,
-			VariableTypes variable_type, int min_value, int max_value,
+			String variable_type, int min_value, int max_value,
 			int variable_process) {
 		super();
 		this.variable_id = variable_id;
 		this.variable_name = variable_name;
-		this.variable_type = variable_type;
+		this.variable_type = VariableTypes.valueOf(variable_type);
 		this.min_value = min_value;
 		this.max_value = max_value;
 		this.variable_process = variable_process;

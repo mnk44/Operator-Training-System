@@ -9,7 +9,7 @@ public class ConnectionTest {
 			try {
 				ConnectionClass conect = new ConnectionClass("localhost", "5432", "SECPROIT", "postgres", "postgres");
 				conect.crateConnection();
-				System.out.println("Conexión establecida..."); 	
+				System.out.println("Conexión establecida..."); 					
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
