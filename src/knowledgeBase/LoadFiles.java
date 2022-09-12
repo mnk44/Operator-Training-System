@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import systemClass.Cause;
 import systemClass.Recomendation;
@@ -63,7 +64,7 @@ public class LoadFiles {
 		}
 		
 		//recomendations
-		current =fi.readLine();
+		current = fi.readLine();
 		while(!current.equals("-1")){
 			Recomendation recomendation = new Recomendation(current, process_id);
 			Object result = RecomendationService.newRecomendation(recomendation);
@@ -74,6 +75,34 @@ public class LoadFiles {
 		}
 		
 		fi.close();
+	}
+	
+	public static void getDrlInfo(byte[] drl, int process_id) throws IOException, ClassNotFoundException, SQLException{
+		File drlFile = (File) toObject(drl); 
+		FileReader fr = new FileReader(drlFile);
+		BufferedReader fi = new BufferedReader(fr);	
+		String current = fi.readLine();
+		
+        while(current != null){
+        	int begining = -1;
+    		while(begining == -1){
+    			begining = current.indexOf("rule");
+    			current = fi.readLine();
+    		}
+    		
+    		//read one rule
+    		ArrayList<String> rule = new ArrayList<String>();
+    		while(!current.replace(" ", "").equals("end")){
+    			rule.add(current);
+    			current = fi.readLine();
+    		}
+    		ReadRules.readRules(rule, process_id);
+    		
+    		current = fi.readLine();
+    		current = fi.readLine();
+        }
+        
+        fi.close();
 	}
 
 	public static byte[] toBytes(Object object) throws IOException{ 
