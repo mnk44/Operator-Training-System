@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 import sun.misc.BASE64Encoder;
 
+@SuppressWarnings("restriction")
 public class Encrypting {
 	
 	public static String getEncript(String password){
