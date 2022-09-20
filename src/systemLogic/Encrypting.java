@@ -1,22 +1,16 @@
 package systemLogic;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import sun.misc.BASE64Encoder;
-
-@SuppressWarnings("restriction")
 public class Encrypting {
 	
-	public static String getEncript(String password){
-		MessageDigest md5;
+	public static String getEncript(String password) throws UnsupportedEncodingException{
 		try {
-
-			md5 = MessageDigest.getInstance("MD5");
-			md5.update(password.getBytes());
-			byte[] keys = md5.digest();
-			return new String(new BASE64Encoder().encode(keys));
-
+			MessageDigest md = MessageDigest.getInstance("SHA-384");
+			byte[] digest = md.digest(password.getBytes("UTF-8"));
+			return digest.toString();
 		}catch (NoSuchAlgorithmException e){
 			return e.getMessage();
 		}
