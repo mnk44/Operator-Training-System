@@ -35,6 +35,8 @@ import javax.swing.event.AncestorListener;
 import javax.swing.event.AncestorEvent;
 import javax.swing.JComboBox;
 
+import systemEnums.QuestionsTypes;
+
 public class NewProcessView extends JDialog {
 
 	private static final long serialVersionUID = -3463338119647839725L;
@@ -59,6 +61,9 @@ public class NewProcessView extends JDialog {
 	private JButton left;
 	private JSpinner shots;
 	private JSpinner aprovShots;
+	private JComboBox var;
+	private JComboBox cause;
+	private JComboBox rec;
 
 	public static void main(String[] args) {
 		try {
@@ -70,7 +75,7 @@ public class NewProcessView extends JDialog {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public NewProcessView() throws SQLException {
 		usersNA = fillUser();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/imgs/logo.png")));
@@ -437,23 +442,34 @@ public class NewProcessView extends JDialog {
 		lblTipoDePregunta.setBounds(73, 368, 464, 37);
 		ent.add(lblTipoDePregunta);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBackground(Color.WHITE);
-		comboBox.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		comboBox.setBounds(552, 207, 331, 34);
-		ent.add(comboBox);
+		var = new JComboBox();
+		var.addItem(QuestionsTypes.Verdadero_o_falso.toString().replace("_", " "));
+		var.addItem(QuestionsTypes.Completar_espacios_en_blanco.toString().replace("_", " "));
+		var.addItem(QuestionsTypes.Selección_múltiple.toString().replace("_", " "));
+		var.setBackground(Color.WHITE);
+		var.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		var.setBounds(552, 207, 331, 34);
+		ent.add(var);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBackground(Color.WHITE);
-		comboBox_1.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		comboBox_1.setBounds(552, 289, 331, 34);
-		ent.add(comboBox_1);
+		cause = new JComboBox();
+		cause.addItem(QuestionsTypes.Completar_espacios_en_blanco.toString().replace("_", " "));
+		cause.addItem(QuestionsTypes.Verdadero_o_falso.toString().replace("_", " "));
+		cause.addItem(QuestionsTypes.Enlazar.toString());
+		cause.addItem(QuestionsTypes.Selección_múltiple.toString().replace("_", " "));
+		cause.setBackground(Color.WHITE);
+		cause.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		cause.setBounds(552, 289, 331, 34);
+		ent.add(cause);
 		
-		JComboBox comboBox_2 = new JComboBox();
-		comboBox_2.setBackground(Color.WHITE);
-		comboBox_2.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		comboBox_2.setBounds(552, 371, 331, 34);
-		ent.add(comboBox_2);
+		rec = new JComboBox();
+		rec.addItem(QuestionsTypes.Completar_espacios_en_blanco.toString().replace("_", " "));
+		rec.addItem(QuestionsTypes.Verdadero_o_falso.toString().replace("_", " "));
+		rec.addItem(QuestionsTypes.Enlazar.toString());
+		rec.addItem(QuestionsTypes.Selección_múltiple.toString().replace("_", " "));
+		rec.setBackground(Color.WHITE);
+		rec.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		rec.setBounds(552, 371, 331, 34);
+		ent.add(rec);
 		tabbedPane.setBackgroundAt(2, Color.WHITE);
 		setTitle("Nuevo proceso");
 		setResizable(false);
