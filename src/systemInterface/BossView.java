@@ -92,7 +92,6 @@ public class BossView {
 		mntmListadoDeProcesos.setFont(new Font("Segoe UI", Font.BOLD, 19));
 		mnNewMenu.add(mntmListadoDeProcesos);
 		
-		frame.setAlwaysOnTop(true);
 		frame.setTitle("Sistema de Entrenamiento SECPROIT");
 		frame.setResizable(false);
 		frame.setBounds(100, 100, 1080, 676);
