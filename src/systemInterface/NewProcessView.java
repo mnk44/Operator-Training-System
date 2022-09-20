@@ -1,7 +1,6 @@
 package systemInterface;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 
@@ -31,8 +30,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.AncestorEvent;
 import javax.swing.JComboBox;
 
 import systemEnums.QuestionsTypes;
@@ -44,6 +41,8 @@ public class NewProcessView extends JDialog {
 	private JTextField anm;
 	private JTextField drl;
 	private JTextField image;
+
+	int user = -1;
 	
 	String imageRoute = null;
 	String anmRoute = null;
@@ -61,13 +60,13 @@ public class NewProcessView extends JDialog {
 	private JButton left;
 	private JSpinner shots;
 	private JSpinner aprovShots;
-	private JComboBox var;
-	private JComboBox cause;
-	private JComboBox rec;
+	private JComboBox<String> var;
+	private JComboBox<String> cause;
+	private JComboBox<String> rec;
 
 	public static void main(String[] args) {
 		try {
-			NewProcessView dialog = new NewProcessView();
+			NewProcessView dialog = new NewProcessView(-1);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -75,8 +74,8 @@ public class NewProcessView extends JDialog {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public NewProcessView() throws SQLException {
+	public NewProcessView(int userA) throws SQLException {
+		user = userA;
 		usersNA = fillUser();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/imgs/logo.png")));
 		setBackground(new Color(173, 216, 230));
@@ -442,7 +441,7 @@ public class NewProcessView extends JDialog {
 		lblTipoDePregunta.setBounds(73, 368, 464, 37);
 		ent.add(lblTipoDePregunta);
 		
-		var = new JComboBox();
+		var = new JComboBox<String>();
 		var.addItem(QuestionsTypes.Verdadero_o_falso.toString().replace("_", " "));
 		var.addItem(QuestionsTypes.Completar_espacios_en_blanco.toString().replace("_", " "));
 		var.addItem(QuestionsTypes.Selección_múltiple.toString().replace("_", " "));
@@ -451,7 +450,7 @@ public class NewProcessView extends JDialog {
 		var.setBounds(552, 207, 331, 34);
 		ent.add(var);
 		
-		cause = new JComboBox();
+		cause = new JComboBox<String>();
 		cause.addItem(QuestionsTypes.Completar_espacios_en_blanco.toString().replace("_", " "));
 		cause.addItem(QuestionsTypes.Verdadero_o_falso.toString().replace("_", " "));
 		cause.addItem(QuestionsTypes.Enlazar.toString());
@@ -461,7 +460,7 @@ public class NewProcessView extends JDialog {
 		cause.setBounds(552, 289, 331, 34);
 		ent.add(cause);
 		
-		rec = new JComboBox();
+		rec = new JComboBox<String>();
 		rec.addItem(QuestionsTypes.Completar_espacios_en_blanco.toString().replace("_", " "));
 		rec.addItem(QuestionsTypes.Verdadero_o_falso.toString().replace("_", " "));
 		rec.addItem(QuestionsTypes.Enlazar.toString());
