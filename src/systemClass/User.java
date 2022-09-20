@@ -2,6 +2,7 @@ package systemClass;
 
 import systemEnums.RolesTypes;
 import systemEnums.SchoolarLevel;
+import systemLogic.Encrypting;
 
 public class User {
 	int user_id;
@@ -28,7 +29,7 @@ public class User {
 		this.user_experience = user_experience;
 		this.user_position_years = user_position_years;
 		this.user_nick = user_nick;
-		this.user_password = user_password;
+		this.user_password = Encrypting.getEncript(user_password);
 		this.user_active = user_active;
 		this.user_area = user_area;
 		this.user_rol = user_rol;
@@ -45,7 +46,7 @@ public class User {
 		this.user_experience = user_experience;
 		this.user_position_years = user_position_years;
 		this.user_nick = user_nick;
-		this.user_password = user_password;
+		this.user_password = Encrypting.getEncript(user_password);
 		this.user_active = user_active;
 		this.user_area = user_area;
 		this.user_rol = user_rol;
