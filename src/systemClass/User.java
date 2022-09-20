@@ -2,7 +2,6 @@ package systemClass;
 
 import systemEnums.RolesTypes;
 import systemEnums.SchoolarLevel;
-import systemLogic.Encrypting;
 
 public class User {
 	int user_id;
