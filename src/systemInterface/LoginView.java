@@ -2,24 +2,27 @@ package systemInterface;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
-import java.awt.Toolkit;
+
+import systemEnums.ErrorType;
+import javax.swing.SwingConstants;
 
 public class LoginView extends JDialog {
 
-	private static final long serialVersionUID = -1995912037948383187L;
-	private JTextField userName;
-	private JButton okButton;
-	private JPasswordField userPass;
+	private static final long serialVersionUID = 7424831289335760294L;
 
 	public static void main(String[] args) {
 		try {
@@ -31,6 +34,10 @@ public class LoginView extends JDialog {
 		}
 	}
 
+	private JButton okButton;
+	private JTextField userName;
+	private JPasswordField userPass;
+
 	public LoginView() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/imgs/logo.png")));
 		setBackground(new Color(173, 216, 230));
@@ -38,53 +45,74 @@ public class LoginView extends JDialog {
 		setForeground(Color.BLACK);
 		getContentPane().setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
-		
-		setAlwaysOnTop(true);
-		setTitle("Sistema de Entrenamiento SECPROIT");
+		setTitle("SECPROIT");
 		setResizable(false);
-		setBounds(100, 100, 1080, 676);
+		setBounds(100, 100, 767, 596);
 		
 		okButton = new JButton("Aceptar");
 		okButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
-				
+				if(userName.getText().isEmpty() || userPass.getText().isEmpty()){
+					JOptionPane.showMessageDialog(null, ErrorType.Debe_completar_todos_los_campos_para_avanzar.toString().replace("_", " "), "", JOptionPane.WARNING_MESSAGE);
+				}else{
+					
+				}
 			}
 		});
 		okButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
 		okButton.setForeground(new Color(255, 255, 255));
 		okButton.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		okButton.setBackground(new Color(244, 164, 96));
-		okButton.setBounds(455, 487, 153, 37);
+		okButton.setBounds(294, 469, 153, 37);
 		getContentPane().add(okButton);
 		
 		userName = new JTextField();
+		userName.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char key = e.getKeyChar();
+
+				if (Character.isWhitespace(key))
+				{
+					e.consume();
+					getToolkit().beep();
+				}
+			}
+		});
 		userName.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		userName.setBounds(414, 370, 279, 29);
+		userName.setBounds(256, 344, 279, 29);
 		getContentPane().add(userName);
 		userName.setColumns(10);
 		
 		JLabel image = new JLabel();
-		image.setIcon(new ImageIcon(LoginView.class.getResource("/imgs/login.png")));
-		image.setBounds(317, 16, 427, 312);
+		image.setIcon(new ImageIcon(LoginView.class.getResource("/imgs/LoginView.png")));
+		image.setBounds(169, 16, 428, 271);
 		getContentPane().add(image);
 		
 		JLabel user = new JLabel("Usuario:");
 		user.setForeground(new Color(47, 46, 65));
 		user.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		user.setBounds(324, 366, 93, 37);
+		user.setBounds(162, 340, 93, 37);
 		getContentPane().add(user);
 		
 		JLabel pass = new JLabel("Contrase\u00F1a:");
 		pass.setForeground(new Color(47, 46, 65));
 		pass.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		pass.setBounds(286, 419, 123, 37);
+		pass.setBounds(123, 392, 132, 37);
 		getContentPane().add(pass);
 		
 		userPass = new JPasswordField();
 		userPass.setEchoChar('*');
 		userPass.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		userPass.setBounds(414, 421, 279, 29);
+		userPass.setBounds(256, 396, 279, 29);
 		getContentPane().add(userPass);
+		
+		JLabel lblNewLabel = new JLabel("Sistema Experto para el Control de Procesos Qu\u00EDmicos");
+		lblNewLabel.setForeground(new Color(244, 164, 96));
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 22));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(15, 279, 746, 45);
+		getContentPane().add(lblNewLabel);
 	}
-
 }
