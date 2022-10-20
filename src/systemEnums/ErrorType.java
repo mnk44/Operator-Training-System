@@ -2,5 +2,6 @@ package systemEnums;
 
 public enum ErrorType {
 	Debe_completar_todos_los_campos_para_avanzar,
-	Usuario_o_contraseña_incorrectos
+	Usuario_o_contraseña_incorrectos,
+	La_cantidad_de_intentos_debe_ser_mayor_que_la_cantidad_intentos_aprobados
 }

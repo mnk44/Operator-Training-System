@@ -54,9 +54,11 @@ public class LoginView extends JDialog {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
 				if(userName.getText().isEmpty() || userPass.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, ErrorType.Debe_completar_todos_los_campos_para_avanzar.toString().replace("_", " "), "", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, ErrorType.Debe_completar_todos_los_campos_para_avanzar.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
 				}else{
-					
+					CenterView center = new CenterView();
+					LoginView.this.setVisible(false);
+					center.getFrame().setVisible(true);
 				}
 			}
 		});

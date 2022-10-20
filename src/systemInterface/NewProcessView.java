@@ -32,6 +32,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JComboBox;
 
+import systemEnums.ErrorType;
 import systemEnums.QuestionsTypes;
 
 public class NewProcessView extends JDialog {
@@ -58,11 +59,14 @@ public class NewProcessView extends JDialog {
 	private JList<String> aut;
 	private JButton right;
 	private JButton left;
-	private JSpinner shots;
-	private JSpinner aprovShots;
+	private JSpinner cantEnt;
+	private JSpinner cantAprov;
 	private JComboBox<String> var;
 	private JComboBox<String> cause;
 	private JComboBox<String> rec;
+	private JButton imageButt;
+	private JButton button_2;
+	private JButton button_1;
 
 	public static void main(String[] args) {
 		try {
@@ -85,7 +89,16 @@ public class NewProcessView extends JDialog {
 		getContentPane().setLayout(null);
 		
 		JButton button = new JButton("Aceptar");
-		button.setBounds(478, 583, 153, 37);
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(processName.getText().replace(" ", "").isEmpty() || anmRoute.isEmpty() || drlRoute.isEmpty()){
+					JOptionPane.showMessageDialog(null, ErrorType.Debe_completar_todos_los_campos_para_avanzar.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
+				}else if((int)cantEnt.getValue() < (int)cantAprov.getValue()){
+					JOptionPane.showMessageDialog(null, ErrorType.La_cantidad_de_intentos_debe_ser_mayor_que_la_cantidad_intentos_aprobados.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		button.setBounds(338, 487, 153, 37);
 		button.setForeground(Color.WHITE);
 		button.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		button.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
@@ -93,7 +106,7 @@ public class NewProcessView extends JDialog {
 		getContentPane().add(button);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 1074, 567);
+		tabbedPane.setBounds(0, 0, 871, 471);
 		tabbedPane.setBackground(Color.WHITE);
 		tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		tabbedPane.setBorder(null);
@@ -112,34 +125,34 @@ public class NewProcessView extends JDialog {
 		lblNombreDelProceso.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNombreDelProceso.setForeground(new Color(47, 46, 65));
 		lblNombreDelProceso.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblNombreDelProceso.setBounds(147, 81, 248, 37);
+		lblNombreDelProceso.setBounds(26, 33, 248, 37);
 		process.add(lblNombreDelProceso);
 		
 		processName = new JTextField();
 		processName.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		processName.setColumns(10);
-		processName.setBounds(399, 85, 452, 29);
+		processName.setBounds(289, 37, 471, 29);
 		process.add(processName);
 		
 		JLabel lblImagenDelProceso = new JLabel("*Imagen del proceso:");
 		lblImagenDelProceso.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblImagenDelProceso.setForeground(new Color(47, 46, 65));
 		lblImagenDelProceso.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblImagenDelProceso.setBounds(162, 161, 233, 37);
+		lblImagenDelProceso.setBounds(87, 131, 233, 37);
 		process.add(lblImagenDelProceso);
 		
-		JLabel lblFicheroDeExtensin = new JLabel("Fichero de extensi\u00F3n .anm:");
+		JLabel lblFicheroDeExtensin = new JLabel("Fichero de variables (anm):");
 		lblFicheroDeExtensin.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblFicheroDeExtensin.setForeground(new Color(47, 46, 65));
 		lblFicheroDeExtensin.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblFicheroDeExtensin.setBounds(105, 242, 290, 37);
+		lblFicheroDeExtensin.setBounds(15, 205, 305, 37);
 		process.add(lblFicheroDeExtensin);
 		
-		JLabel lblFicheroDeExtensin_1 = new JLabel("Fichero de extensi\u00F3n .drl:");
+		JLabel lblFicheroDeExtensin_1 = new JLabel("Fichero de reglas (drl):");
 		lblFicheroDeExtensin_1.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblFicheroDeExtensin_1.setForeground(new Color(47, 46, 65));
 		lblFicheroDeExtensin_1.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblFicheroDeExtensin_1.setBounds(118, 323, 277, 37);
+		lblFicheroDeExtensin_1.setBounds(42, 281, 277, 37);
 		process.add(lblFicheroDeExtensin_1);
 		
 		image = new JTextField();
@@ -147,15 +160,16 @@ public class NewProcessView extends JDialog {
 		image.setEditable(false);
 		image.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		image.setColumns(10);
-		image.setBounds(399, 165, 359, 29);
+		image.setBounds(335, 135, 359, 29);
 		process.add(image);
 		
 		anm = new JTextField();
+		lblFicheroDeExtensin.setLabelFor(anm);
 		anm.setBackground(Color.WHITE);
 		anm.setEditable(false);
 		anm.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		anm.setColumns(10);
-		anm.setBounds(399, 250, 359, 29);
+		anm.setBounds(335, 209, 359, 29);
 		process.add(anm);
 		
 		drl = new JTextField();
@@ -163,11 +177,11 @@ public class NewProcessView extends JDialog {
 		drl.setEditable(false);
 		drl.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		drl.setColumns(10);
-		drl.setBounds(399, 331, 359, 29);
+		drl.setBounds(335, 285, 359, 29);
 		process.add(drl);
 		
-		final JButton button_1 = new JButton("");
-		button_1.addActionListener(new ActionListener() {
+		imageButt = new JButton("");
+		imageButt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(image.getText().isEmpty()){
 					JFileChooser chooser = new JFileChooser();
@@ -178,24 +192,24 @@ public class NewProcessView extends JDialog {
 					if (result == JFileChooser.APPROVE_OPTION){
 						image.setText(chooser.getSelectedFile().getName());
 						imageRoute = chooser.getSelectedFile().getAbsolutePath();
-						button_1.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/trash.png")));
+						imageButt.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/trash.png")));
 					}
 				}else{
 					image.setText("");
 					imageRoute = null;
-					button_1.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/openFolder.png")));
+					imageButt.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/openFolder.png")));
 				}
 			}
 		});
-		button_1.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/openFolder.png")));
-		button_1.setForeground(Color.WHITE);
-		button_1.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		button_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
-		button_1.setBackground(Color.WHITE);
-		button_1.setBounds(766, 150, 51, 48);
-		process.add(button_1);
+		imageButt.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/openFolder.png")));
+		imageButt.setForeground(Color.WHITE);
+		imageButt.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		imageButt.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
+		imageButt.setBackground(Color.WHITE);
+		imageButt.setBounds(709, 120, 51, 48);
+		process.add(imageButt);
 		
-		JButton button_2 = new JButton("");
+		button_2 = new JButton("");
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(anm.getText().isEmpty()){
@@ -207,12 +221,12 @@ public class NewProcessView extends JDialog {
 					if (result == JFileChooser.APPROVE_OPTION){
 						anm.setText(chooser.getSelectedFile().getName());
 						anmRoute = chooser.getSelectedFile().getAbsolutePath();
-						button_1.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/trash.png")));
+						button_2.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/trash.png")));
 					}
 				}else{
 					anm.setText("");
 					anmRoute = null;
-					button_1.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/openFolder.png")));
+					button_2.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/openFolder.png")));
 				}
 			}
 		});
@@ -221,11 +235,11 @@ public class NewProcessView extends JDialog {
 		button_2.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		button_2.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
 		button_2.setBackground(Color.WHITE);
-		button_2.setBounds(766, 242, 51, 48);
+		button_2.setBounds(709, 194, 51, 48);
 		process.add(button_2);
 		
-		JButton button_3 = new JButton("");
-		button_3.addActionListener(new ActionListener() {
+		button_1 = new JButton("");
+		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(drl.getText().isEmpty()){
 					JFileChooser chooser = new JFileChooser();
@@ -245,13 +259,13 @@ public class NewProcessView extends JDialog {
 				}
 			}
 		});
-		button_3.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/openFolder.png")));
-		button_3.setForeground(Color.WHITE);
-		button_3.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		button_3.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
-		button_3.setBackground(Color.WHITE);
-		button_3.setBounds(766, 323, 51, 48);
-		process.add(button_3);
+		button_1.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/openFolder.png")));
+		button_1.setForeground(Color.WHITE);
+		button_1.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		button_1.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
+		button_1.setBackground(Color.WHITE);
+		button_1.setBounds(709, 269, 51, 48);
+		process.add(button_1);
 		
 		JPanel config = new JPanel();
 		config.setBackground(Color.WHITE);
@@ -266,16 +280,16 @@ public class NewProcessView extends JDialog {
 		lblUsuarios.setEnabled(false);
 		lblUsuarios.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUsuarios.setForeground(new Color(47, 46, 65));
-		lblUsuarios.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblUsuarios.setBounds(124, 161, 302, 37);
+		lblUsuarios.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		lblUsuarios.setBounds(36, 132, 302, 37);
 		config.add(lblUsuarios);
 		
 		lblUsuariosAutorizados = new JLabel("Usuarios autorizados:");
 		lblUsuariosAutorizados.setEnabled(false);
 		lblUsuariosAutorizados.setHorizontalAlignment(SwingConstants.CENTER);
 		lblUsuariosAutorizados.setForeground(new Color(47, 46, 65));
-		lblUsuariosAutorizados.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblUsuariosAutorizados.setBounds(631, 161, 302, 37);
+		lblUsuariosAutorizados.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		lblUsuariosAutorizados.setBounds(488, 132, 302, 37);
 		config.add(lblUsuariosAutorizados);
 		
 		noAut = new JList<String>(new AbstractListModel<String>(){	
@@ -290,6 +304,7 @@ public class NewProcessView extends JDialog {
 			}
 
 		});
+		noAut.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		noAut.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -302,7 +317,7 @@ public class NewProcessView extends JDialog {
 		});
 		noAut.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		noAut.setEnabled(false);
-		noAut.setBounds(124, 214, 302, 296);
+		noAut.setBounds(46, 170, 284, 233);
 		config.add(noAut);
 		
 		aut = new JList<String>(new AbstractListModel<String>(){		
@@ -329,7 +344,7 @@ public class NewProcessView extends JDialog {
 		});
 		aut.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		aut.setEnabled(false);
-		aut.setBounds(631, 214, 302, 296);
+		aut.setBounds(488, 170, 302, 233);
 		config.add(aut);
 		
 		right = new JButton("");
@@ -339,7 +354,7 @@ public class NewProcessView extends JDialog {
 		right.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		right.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
 		right.setBackground(Color.WHITE);
-		right.setBounds(502, 288, 51, 48);
+		right.setBounds(385, 211, 51, 48);
 		config.add(right);
 		
 		left = new JButton("");
@@ -349,10 +364,10 @@ public class NewProcessView extends JDialog {
 		left.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		left.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
 		left.setBackground(Color.WHITE);
-		left.setBounds(502, 381, 51, 48);
+		left.setBounds(385, 302, 51, 48);
 		config.add(left);
 		
-		rdbtnTodosLosOperarios = new JRadioButton("Todos los operarios tienen acceso al entrenamiento:");
+		rdbtnTodosLosOperarios = new JRadioButton("Todos los operarios tienen acceso al entrenamiento:    ");
 		rdbtnTodosLosOperarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(!rdbtnTodosLosOperarios.isSelected()){
@@ -371,74 +386,74 @@ public class NewProcessView extends JDialog {
 		rdbtnTodosLosOperarios.setSelected(true);
 		rdbtnTodosLosOperarios.setForeground(new Color(47, 46, 65));
 		rdbtnTodosLosOperarios.setHorizontalTextPosition(SwingConstants.LEFT);
-		rdbtnTodosLosOperarios.setHorizontalAlignment(SwingConstants.CENTER);
+		rdbtnTodosLosOperarios.setHorizontalAlignment(SwingConstants.LEFT);
 		rdbtnTodosLosOperarios.setFont(new Font("Segoe UI", Font.BOLD, 22));
 		rdbtnTodosLosOperarios.setBackground(Color.WHITE);
-		rdbtnTodosLosOperarios.setBounds(124, 103, 809, 29);
+		rdbtnTodosLosOperarios.setBounds(99, 78, 615, 29);
 		config.add(rdbtnTodosLosOperarios);
 		
 		JLabel lblCantidadDeIntentos = new JLabel("Cantidad de veces que se puede realizar el entrenamiento:");
 		lblCantidadDeIntentos.setHorizontalAlignment(SwingConstants.LEFT);
 		lblCantidadDeIntentos.setForeground(new Color(47, 46, 65));
 		lblCantidadDeIntentos.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblCantidadDeIntentos.setBounds(173, 29, 621, 37);
+		lblCantidadDeIntentos.setBounds(36, 29, 621, 37);
 		config.add(lblCantidadDeIntentos);
 		
-		shots = new JSpinner();
-		shots.setModel(new SpinnerNumberModel(5, 1, 20, 1));
-		shots.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		shots.setBounds(786, 35, 67, 26);
-		config.add(shots);
+		cantEnt = new JSpinner();
+		cantEnt.setModel(new SpinnerNumberModel(5, 1, 20, 1));
+		cantEnt.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		cantEnt.setBounds(655, 35, 67, 26);
+		config.add(cantEnt);
 		
 		JPanel ent = new JPanel();
 		ent.setEnabled(false);
 		ent.setBackground(Color.WHITE);
 		ent.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		ent.setBorder(null);
-		tabbedPane.addTab("Entrenamiento", new ImageIcon(NewProcessView.class.getResource("/imgs/training.png")), ent, null);
+		tabbedPane.addTab("Entrenamiento", new ImageIcon(NewProcessView.class.getResource("/imgs/icons8_3Quiz_16.png")), ent, null);
 		ent.setLayout(null);
 		
 		JLabel lblCantidadDeIntentos_1 = new JLabel("Cantidad de intentos que se deben aprobar:");
 		lblCantidadDeIntentos_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblCantidadDeIntentos_1.setForeground(new Color(47, 46, 65));
 		lblCantidadDeIntentos_1.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblCantidadDeIntentos_1.setBounds(238, 39, 464, 37);
+		lblCantidadDeIntentos_1.setBounds(94, 47, 464, 37);
 		ent.add(lblCantidadDeIntentos_1);
 		
-		aprovShots = new JSpinner();
-		aprovShots.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
-		aprovShots.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		aprovShots.setBounds(707, 45, 67, 26);
-		ent.add(aprovShots);
+		cantAprov = new JSpinner();
+		cantAprov.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		cantAprov.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		cantAprov.setBounds(573, 53, 67, 26);
+		ent.add(cantAprov);
 		
-		JRadioButton rdbtnSeDebenAprobar = new JRadioButton("Intentos aprobados consecutivamente:");
+		JRadioButton rdbtnSeDebenAprobar = new JRadioButton("Los intentos deben aprobarse consecutivamente:     ");
 		rdbtnSeDebenAprobar.setHorizontalTextPosition(SwingConstants.LEFT);
-		rdbtnSeDebenAprobar.setHorizontalAlignment(SwingConstants.CENTER);
+		rdbtnSeDebenAprobar.setHorizontalAlignment(SwingConstants.LEFT);
 		rdbtnSeDebenAprobar.setForeground(new Color(47, 46, 65));
 		rdbtnSeDebenAprobar.setFont(new Font("Segoe UI", Font.BOLD, 22));
 		rdbtnSeDebenAprobar.setBackground(Color.WHITE);
-		rdbtnSeDebenAprobar.setBounds(239, 109, 535, 29);
+		rdbtnSeDebenAprobar.setBounds(41, 107, 625, 29);
 		ent.add(rdbtnSeDebenAprobar);
 		
-		JLabel lblTipoDePreguntas = new JLabel("Tipo de preguntas para las variables:");
-		lblTipoDePreguntas.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel lblTipoDePreguntas = new JLabel("Pregunta para las variables:");
+		lblTipoDePreguntas.setHorizontalAlignment(SwingConstants.LEFT);
 		lblTipoDePreguntas.setForeground(new Color(47, 46, 65));
 		lblTipoDePreguntas.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblTipoDePreguntas.setBounds(73, 206, 464, 37);
+		lblTipoDePreguntas.setBounds(130, 187, 303, 37);
 		ent.add(lblTipoDePreguntas);
 		
-		JLabel lblTipoDePreguntas_1 = new JLabel("Tipo de preguntas para las causas:");
-		lblTipoDePreguntas_1.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel lblTipoDePreguntas_1 = new JLabel("Pregunta para las causas:");
+		lblTipoDePreguntas_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblTipoDePreguntas_1.setForeground(new Color(47, 46, 65));
 		lblTipoDePreguntas_1.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblTipoDePreguntas_1.setBounds(127, 289, 410, 37);
+		lblTipoDePreguntas_1.setBounds(155, 249, 278, 37);
 		ent.add(lblTipoDePreguntas_1);
 		
-		JLabel lblTipoDePregunta = new JLabel("Tipo de pregunta para las recomendaciones:");
+		JLabel lblTipoDePregunta = new JLabel("Pregunta para las recomendaciones:");
 		lblTipoDePregunta.setHorizontalAlignment(SwingConstants.LEFT);
 		lblTipoDePregunta.setForeground(new Color(47, 46, 65));
 		lblTipoDePregunta.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblTipoDePregunta.setBounds(73, 368, 464, 37);
+		lblTipoDePregunta.setBounds(41, 314, 390, 37);
 		ent.add(lblTipoDePregunta);
 		
 		var = new JComboBox<String>();
@@ -447,7 +462,7 @@ public class NewProcessView extends JDialog {
 		var.addItem(QuestionsTypes.Selección_múltiple.toString().replace("_", " "));
 		var.setBackground(Color.WHITE);
 		var.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		var.setBounds(552, 207, 331, 34);
+		var.setBounds(431, 188, 358, 34);
 		ent.add(var);
 		
 		cause = new JComboBox<String>();
@@ -457,7 +472,7 @@ public class NewProcessView extends JDialog {
 		cause.addItem(QuestionsTypes.Selección_múltiple.toString().replace("_", " "));
 		cause.setBackground(Color.WHITE);
 		cause.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		cause.setBounds(552, 289, 331, 34);
+		cause.setBounds(431, 250, 358, 34);
 		ent.add(cause);
 		
 		rec = new JComboBox<String>();
@@ -467,12 +482,12 @@ public class NewProcessView extends JDialog {
 		rec.addItem(QuestionsTypes.Selección_múltiple.toString().replace("_", " "));
 		rec.setBackground(Color.WHITE);
 		rec.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		rec.setBounds(552, 371, 331, 34);
+		rec.setBounds(431, 315, 358, 34);
 		ent.add(rec);
 		tabbedPane.setBackgroundAt(2, Color.WHITE);
 		setTitle("Nuevo proceso");
 		setResizable(false);
-		setBounds(100, 100, 1080, 676);
+		setBounds(100, 100, 873, 583);
 	}
 	
 	public boolean validation(){
@@ -484,7 +499,7 @@ public class NewProcessView extends JDialog {
 			JOptionPane.showMessageDialog(null, "Debe seleccionar un fichero de extensión .anm", "Error", JOptionPane.ERROR_MESSAGE);
 		}else if(drl.getText().isEmpty()){
 			JOptionPane.showMessageDialog(null, "Debe seleccionar un fichero de extensión .drl", "Error", JOptionPane.ERROR_MESSAGE);
-		}else if((Integer)shots.getValue() < (Integer)aprovShots.getValue()){
+		}else if((Integer)cantEnt.getValue() < (Integer)cantAprov.getValue()){
 			JOptionPane.showMessageDialog(null, "La cantidad de entrenamientos aprobados no puede ser mayor a la cantidad total", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
