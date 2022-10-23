@@ -32,7 +32,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JComboBox;
 
-import systemEnums.ErrorType;
+import systemEnums.MessagesType;
 import systemEnums.QuestionsTypes;
 
 public class NewProcessView extends JDialog {
@@ -92,9 +92,9 @@ public class NewProcessView extends JDialog {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(processName.getText().replace(" ", "").isEmpty() || anmRoute.isEmpty() || drlRoute.isEmpty()){
-					JOptionPane.showMessageDialog(null, ErrorType.Debe_completar_todos_los_campos_para_avanzar.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, MessagesType.Debe_completar_todos_los_campos_para_avanzar.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
 				}else if((int)cantEnt.getValue() < (int)cantAprov.getValue()){
-					JOptionPane.showMessageDialog(null, ErrorType.La_cantidad_de_intentos_debe_ser_mayor_que_la_cantidad_intentos_aprobados.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, MessagesType.La_cantidad_de_intentos_debe_ser_mayor_que_la_cantidad_intentos_aprobados.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

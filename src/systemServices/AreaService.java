@@ -22,12 +22,12 @@ public class AreaService {
 		return null;
 	}
 	
-	public static String updateArea(Area area) throws SQLException{
+	public static String updateArea(int area_id, String area_name) throws SQLException{
 		try{
 			String sqlSentenc = "UPDATE area SET area_name = ? WHERE area_id = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
-			cs.setString(1, area.getArea_name());
-			cs.setInt(2, area.getArea_id());
+			cs.setString(1, area_name);
+			cs.setInt(2, area_id);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){

@@ -70,4 +70,26 @@ public class TablesInfo {
 		date.addColumn(" ",area_name.toArray());
 		table.setModel(date);
 	}
+	
+	public static void getAreas(DefaultTableModel date, JTable table, ArrayList<Area> areas) throws SQLException{
+		ArrayList<Integer> id_area = new ArrayList<Integer>();
+		ArrayList<String> name_area = new ArrayList<String>();
+
+		for(int i=0; i<areas.size(); i++){
+			id_area.add(areas.get(i).getArea_id());
+			name_area.add(areas.get(i).getArea_name());
+		}
+
+		date = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int r,int c){
+				return false;
+			}
+		};
+
+		date.addColumn("ID",id_area.toArray());
+		date.addColumn("Áreas",name_area.toArray());
+		table.setModel(date);
+	}
 }

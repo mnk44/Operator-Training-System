@@ -3,13 +3,21 @@ package systemInterface;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+
 import java.awt.Color;
 import java.awt.Toolkit;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
+
 import java.awt.Font;
+
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 public class CenterView {
 
@@ -81,6 +89,18 @@ public class CenterView {
 		menuBar.add(mnAdministrador);
 		
 		JMenuItem mntmGestinDereas = new JMenuItem("Gesti\u00F3n de \u00E1reas");
+		mntmGestinDereas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				AreaListView areaView = null;
+				try {
+					areaView = new AreaListView();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				areaView.setVisible(true);
+			}
+		});
 		mntmGestinDereas.setIcon(new ImageIcon(CenterView.class.getResource("/imgs/icons8_Unit_16.png")));
 		mntmGestinDereas.setFont(new Font("Segoe UI", Font.BOLD, 19));
 		mntmGestinDereas.setBackground(new Color(244, 164, 96));

@@ -57,9 +57,22 @@ public class UserService {
 		return null;
 	}
 	
-	public static String deleteUser(int user_id) throws SQLException{
+	public static String sleepUser(int user_id) throws SQLException{
 		try{
-			String sqlSentenc = "DELETE FROM userSystem WHERE user_id = ?";
+			String sqlSentenc = "UPDATE userSystem SET user_active = false WHERE user_id = ?";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, user_id);
+			cs.execute();
+			cs.close();
+		}catch(Exception e){
+			return e.getMessage();
+		}
+		return null;
+	}
+	
+	public static String awakeUser(int user_id) throws SQLException{
+		try{
+			String sqlSentenc = "UPDATE userSystem SET user_active = true WHERE user_id = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_id);
 			cs.execute();

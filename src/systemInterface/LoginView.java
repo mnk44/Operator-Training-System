@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,7 +19,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 
-import systemEnums.ErrorType;
+import systemEnums.MessagesType;
+
 import javax.swing.SwingConstants;
 
 public class LoginView extends JDialog {
@@ -54,12 +57,22 @@ public class LoginView extends JDialog {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
 				if(userName.getText().isEmpty() || userPass.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, ErrorType.Debe_completar_todos_los_campos_para_avanzar.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, MessagesType.Debe_completar_todos_los_campos_para_avanzar.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
 				}else{
 					CenterView center = new CenterView();
 					LoginView.this.setVisible(false);
 					center.getFrame().setVisible(true);
 				}
+			}
+		});
+		okButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				okButton.setBackground(new Color(239, 196, 159));
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				okButton.setBackground(new Color(244, 164, 96));
 			}
 		});
 		okButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
