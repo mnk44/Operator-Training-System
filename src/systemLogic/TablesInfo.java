@@ -15,9 +15,7 @@ import systemServices.FactoryProcessService;
 
 public class TablesInfo {
 	
-	@SuppressWarnings("unchecked")
-	public static void getProcess(DefaultTableModel date, JTable table) throws SQLException{
-		ArrayList<FactoryProcess> process = (ArrayList<FactoryProcess>) FactoryProcessService.getProcess();
+	public static void getProcess(DefaultTableModel date, JTable table, ArrayList<FactoryProcess> process) throws SQLException{
 		ArrayList<Integer> process_id = new ArrayList<Integer>();
 		ArrayList<String> process_name = new ArrayList<String>();
 		ArrayList<String> area_name = new ArrayList<String>();

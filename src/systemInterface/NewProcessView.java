@@ -32,7 +32,10 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JComboBox;
 
+import systemClass.User;
 import systemEnums.QuestionsTypes;
+import systemEnums.RolesTypes;
+import systemServices.UserService;
 
 public class NewProcessView extends JDialog {
 
@@ -42,7 +45,7 @@ public class NewProcessView extends JDialog {
 	private JTextField drl;
 	private JTextField image;
 
-	int user = -1;
+	User userG = null;
 	
 	String imageRoute = null;
 	String anmRoute = null;
@@ -69,7 +72,7 @@ public class NewProcessView extends JDialog {
 
 	public static void main(String[] args) {
 		try {
-			NewProcessView dialog = new NewProcessView(-1);
+			NewProcessView dialog = new NewProcessView(4);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -77,8 +80,8 @@ public class NewProcessView extends JDialog {
 		}
 	}
 
-	public NewProcessView(int userA) throws SQLException {
-		user = userA;
+	public NewProcessView(int u) throws SQLException {
+		userG = (User) UserService.findId(u);
 		usersNA = fillUser();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/imgs/logo.png")));
 		setBackground(new Color(173, 216, 230));
@@ -94,6 +97,8 @@ public class NewProcessView extends JDialog {
 					JOptionPane.showMessageDialog(null, "Debes completar todos los campos para continuar", "Error", JOptionPane.ERROR_MESSAGE);
 				}else if((int)cantEnt.getValue() < (int)cantAprov.getValue()){
 					JOptionPane.showMessageDialog(null, "La cantidad de intentos debe ser mayor que la cantidad intentos aprobados", "Error", JOptionPane.ERROR_MESSAGE);
+				}else{
+					
 				}
 			}
 		});
@@ -331,6 +336,7 @@ public class NewProcessView extends JDialog {
 			}
 
 		});
+		aut.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		aut.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -347,6 +353,23 @@ public class NewProcessView extends JDialog {
 		config.add(aut);
 		
 		right = new JButton("");
+		right.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				actualizar(0);
+			}
+		});
+		right.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				if(right.isEnabled())
+					right.setBackground(new Color(239, 196, 159));
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				if(right.isEnabled())
+					right.setBackground(Color.WHITE);
+			}
+		});
 		right.setEnabled(false);
 		right.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/rightArrow.png")));
 		right.setForeground(Color.WHITE);
@@ -357,6 +380,23 @@ public class NewProcessView extends JDialog {
 		config.add(right);
 		
 		left = new JButton("");
+		left.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				actualizar(1);
+			}
+		});
+		left.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				if(left.isEnabled())
+					left.setBackground(new Color(239, 196, 159));
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				if(left.isEnabled())
+					left.setBackground(Color.WHITE);
+			}
+		});
 		left.setEnabled(false);
 		left.setIcon(new ImageIcon(NewProcessView.class.getResource("/imgs/leftArrow.png")));
 		left.setForeground(Color.WHITE);
@@ -420,7 +460,7 @@ public class NewProcessView extends JDialog {
 		ent.add(lblCantidadDeIntentos_1);
 		
 		cantAprov = new JSpinner();
-		cantAprov.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+		cantAprov.setModel(new SpinnerNumberModel(1, 1, 20, 1));
 		cantAprov.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		cantAprov.setBounds(573, 53, 67, 26);
 		ent.add(cantAprov);
@@ -507,12 +547,87 @@ public class NewProcessView extends JDialog {
 	
 	public ArrayList<String> fillUser() throws SQLException{
 		ArrayList<String> names = new ArrayList<>();
-//		ArrayList<User> user = UserService.getOp(area);
-//
-//		for(int i=0; i<user.size(); i++){
-//			names.add(user.get(i).getName_user());
-//		}
+		@SuppressWarnings("unchecked")
+		ArrayList<User> usersL = (ArrayList<User>) UserService.getUsers();
+
+		for(int i=0; i<usersL.size(); i++){
+			if(usersL.get(i).getUser_rol().equals(RolesTypes.Operario) && usersL.get(i).getUser_area() == userG.getUser_area()){
+				names.add(usersL.get(i).getUser_name());
+			}
+		}
 
 		return names;
+	}
+	
+	public void actualizar(int action){
+		if(action == 0){
+			int position = noAut.getSelectedIndex();
+			usersA.add(usersNA.get(position));
+			usersNA.remove(position);
+			aut.setModel(new AbstractListModel<String>(){
+				private static final long serialVersionUID = 1563486566874624L;
+				
+				public int getSize() {
+					return usersA.size(); 
+				}
+
+				public String getElementAt(int i) {
+					return usersA.get(i);
+				}
+
+			});
+			noAut.setModel(new AbstractListModel<String>(){	
+				private static final long serialVersionUID = 51563486566874624L;
+				
+				public int getSize() {
+					return usersNA.size(); 
+				}
+
+				public String getElementAt(int i) {
+					return usersNA.get(i);
+				}
+
+			});
+			aut.clearSelection();
+			noAut.clearSelection();
+			right.setEnabled(false);
+			left.setEnabled(false);
+			left.setBackground(new Color(255, 255, 201));
+			right.setBackground(new Color(255, 255, 201));
+		}else{
+			int position = aut.getSelectedIndex();
+			usersNA.add(usersA.get(position));
+			usersA.remove(position);
+			noAut.setModel(new AbstractListModel<String>(){	
+				private static final long serialVersionUID = 599186566874624L;
+				
+				public int getSize() {
+					return usersNA.size(); 
+				}
+
+				public String getElementAt(int i) {
+					return usersNA.get(i);
+				}
+
+			});
+			aut.setModel(new AbstractListModel<String>(){	
+				private static final long serialVersionUID = 599156348674624L;
+				
+				public int getSize() {
+					return usersA.size(); 
+				}
+
+				public String getElementAt(int i) {
+					return usersA.get(i);
+				}
+
+			});
+			aut.clearSelection();
+			noAut.clearSelection();
+			right.setEnabled(false);
+			left.setEnabled(false);
+			left.setBackground(new Color(255, 255, 201));
+			right.setBackground(new Color(255, 255, 201));
+		}
 	}
 }

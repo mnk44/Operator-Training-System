@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import systemClass.Area;
+import systemClass.FactoryProcess;
 import systemClass.User;
 
 public class FindObjects {
@@ -14,6 +15,18 @@ public class FindObjects {
 		for(int i=0; i<areas.size(); i++){
 			if(areas.get(i).getArea_name().toLowerCase().contains(name.toLowerCase())){
 				result.add(areas.get(i));
+			}
+		}
+		
+		return result;
+	}
+	
+	public static ArrayList<FactoryProcess> findProcess (ArrayList<FactoryProcess> process, String name) throws SQLException{
+		ArrayList<FactoryProcess> result = new ArrayList<>();
+		
+		for(int i=0; i<process.size(); i++){
+			if(process.get(i).getProcess_name().toLowerCase().contains(name.toLowerCase())){
+				result.add(process.get(i));
 			}
 		}
 		

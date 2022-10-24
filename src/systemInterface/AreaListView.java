@@ -350,5 +350,7 @@ public class AreaListView extends JDialog {
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(1).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(0).setMaxWidth(50);
+		btnModificarrea.setEnabled(false);
+		btnEliminarrea.setEnabled(false);
 	}
 }
