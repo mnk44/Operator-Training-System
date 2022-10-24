@@ -76,6 +76,13 @@ public class CenterView {
 		mnNewMenu.add(mntmNewMenuItem);
 		
 		JMenuItem mntmCerrarSesin = new JMenuItem("Cerrar sesi\u00F3n");
+		mntmCerrarSesin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				LoginView log = new LoginView();
+				log.setVisible(true);
+				CenterView.this.frmSecproit.setVisible(false);
+			}
+		});
 		mntmCerrarSesin.setIcon(new ImageIcon(CenterView.class.getResource("/imgs/exit.png")));
 		mntmCerrarSesin.setFont(new Font("Segoe UI", Font.BOLD, 19));
 		mntmCerrarSesin.setBackground(new Color(244, 164, 96));
