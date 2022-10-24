@@ -1,5 +1,6 @@
 package systemServices;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class UserService {
 			cs.setInt(4, user_experience);
 			cs.setInt(5, user_position_years);
 			cs.setString(6, user_nick);
-			cs.setString(7, Encrypting.getEncript(user_password));
+			cs.setString(7, user_password);
 			cs.setBoolean(8, user_active);
 			cs.setInt(9, user_area);
 			cs.setInt(10, user_rol.ordinal() + 1);
@@ -170,6 +171,17 @@ public class UserService {
 			return e.getMessage();
 		}
 		return user;
+	}
+	
+	public static int nickPassword(String nick, String password) throws UnsupportedEncodingException, SQLException{
+		int isTrue = -1;
+		User uss = (User) findNick(nick);
+		System.out.println(uss.getUser_password());
+		System.out.println(Encrypting.getEncript(password));
+		if(uss != null && uss.getUser_password().equals(Encrypting.getEncript(password))){
+			isTrue = uss.getUser_id();
+		}
+		return isTrue;
 	}
 	
 	public static Object getUsers() throws SQLException{

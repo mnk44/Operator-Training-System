@@ -22,12 +22,14 @@ import java.sql.SQLException;
 public class CenterView {
 
 	private JFrame frmSecproit;
+	
+	int userID;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CenterView window = new CenterView();
+					CenterView window = new CenterView(1);
 					window.frmSecproit.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -36,11 +38,12 @@ public class CenterView {
 		});
 	}
 
-	public CenterView() {
-		initialize();
+	public CenterView(int id) {
+		initialize(id);
 	}
 
-	private void initialize() {
+	private void initialize(int id) {
+		userID = id;
 		frmSecproit = new JFrame();
 		frmSecproit.getContentPane().setBackground(Color.WHITE);
 		frmSecproit.setTitle("SECPROIT");

@@ -199,18 +199,20 @@ public class NewUserView extends JDialog {
 						JOptionPane.showMessageDialog(null, "Debe rellenar los datos personales para obtener la contraseña", "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}else{
-					password = nameUser.getText().substring(0, 1).toLowerCase() + card.getText() + "*";
+					password = nameUser.getText().substring(0, 1).toLowerCase() + card.getText();
 					try {
 						if(!Encrypting.getEncript(password).equalsIgnoreCase(uss.getUser_password())){
 							int change = JOptionPane.showConfirmDialog(null, "La contraseña actual es diferente a la original ¿Desea restablecerla?", "Restablecer contraseña", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 							if(change == 0){
-								rest = true;
 								if(!nameUser.getText().isEmpty() && card.getForeground() != Color.RED){
 									JOptionPane.showMessageDialog(null, "La contraseña del usuario es: " + password, "Contraseña", JOptionPane.INFORMATION_MESSAGE);
+									rest = true;
 								}else{
 									JOptionPane.showMessageDialog(null, "Debe rellenar los datos personales para obtener la contraseña", "Error", JOptionPane.ERROR_MESSAGE);
 								}
 							}
+						}else{
+							JOptionPane.showMessageDialog(null, "La contraseña del usuario es: " + password, "Contraseña", JOptionPane.INFORMATION_MESSAGE);
 						}
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
@@ -383,11 +385,15 @@ public class NewUserView extends JDialog {
 					JOptionPane.showMessageDialog(null, "La cantidad de años de experiencia laboral no pueden ser menor que la cantidad de años como jefe", "Error", JOptionPane.ERROR_MESSAGE);
 				}else if(opt == -1){
 					String result = "No funciona";
+					password = nameUser.getText().substring(0, 1).toLowerCase() + card.getText();
 					try {
 						result = UserService.newUser(nameUser.getText(), card.getText(), SchoolarLevel.valueOf(school.getSelectedItem().toString()), 
-								(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), nameUser.getText().substring(0, 1).toLowerCase() + card.getText() + "*", actve.isSelected(),
+								(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), Encrypting.getEncript(password), actve.isSelected(),
 								((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolesTypes.valueOf(rol.getSelectedItem().toString()));
 					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -408,7 +414,7 @@ public class NewUserView extends JDialog {
 					if(rest){
 						try {
 							ret = new User(uss.getUser_id(), nameUser.getText(), card.getText(), SchoolarLevel.valueOf(school.getSelectedItem().toString()), 
-									(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), Encrypting.getEncript(nameUser.getText().substring(0, 1).toLowerCase() + card.getText() + "*"), actve.isSelected(),
+									(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), Encrypting.getEncript(password), actve.isSelected(),
 									((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolesTypes.valueOf(rol.getSelectedItem().toString()));
 						} catch (SQLException | UnsupportedEncodingException e) {
 							// TODO Auto-generated catch block

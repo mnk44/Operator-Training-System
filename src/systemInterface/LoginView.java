@@ -2,6 +2,7 @@ package systemInterface;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +10,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,8 +21,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
-
 import javax.swing.SwingConstants;
+
+import systemServices.UserService;
 
 public class LoginView extends JDialog {
 
@@ -57,9 +61,25 @@ public class LoginView extends JDialog {
 				if(userName.getText().isEmpty() || userPass.getText().isEmpty()){
 					JOptionPane.showMessageDialog(null, "Debes completar todos los campos para continuar", "Error", JOptionPane.ERROR_MESSAGE);
 				}else{
-					CenterView center = new CenterView();
-					LoginView.this.setVisible(false);
-					center.getFrame().setVisible(true);
+					try {
+						int idUser = UserService.nickPassword(userName.getText(), userPass.getText());
+						if(idUser != -1){
+							CenterView center = new CenterView(idUser);
+							LoginView.this.setVisible(false);
+							center.getFrame().setVisible(true);
+						}else{
+							JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					} catch (HeadlessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -86,8 +106,7 @@ public class LoginView extends JDialog {
 			public void keyTyped(KeyEvent e) {
 				char key = e.getKeyChar();
 
-				if (Character.isWhitespace(key))
-				{
+				if (Character.isWhitespace(key)){
 					e.consume();
 					getToolkit().beep();
 				}
