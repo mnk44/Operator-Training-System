@@ -37,8 +37,8 @@ public class UserListView extends JDialog {
 	private static final long serialVersionUID = 7774743997604860561L;
 	private final JPanel contentPanel = new JPanel();
 	private JButton newUser;
-	private JButton updateUser;
-	private JButton sleepUser;
+	private static JButton updateUser;
+	private static JButton sleepUser;
 	private JLabel lblNewLabel;
 	private JTextField findUser;
 	private static DefaultTableModel date;
@@ -96,6 +96,13 @@ public class UserListView extends JDialog {
 				if (selected != -1) {
 					updateUser.setEnabled(true);
 					sleepUser.setEnabled(true);
+					if(table.getValueAt(selected, 5).equals("x")){
+						sleepUser.setText("Inactivar usuario");
+						sleepUser.setIcon(new ImageIcon(UserListView.class.getResource("/imgs/icons8_Sleeping_in_Bed_16.png")));
+					}else{
+						sleepUser.setText("Activar usuario");
+						sleepUser.setIcon(new ImageIcon(UserListView.class.getResource("/imgs/icons8_Insomnia_16.png")));
+					}
 				}else{
 					updateUser.setEnabled(false);
 					sleepUser.setEnabled(false);
@@ -174,10 +181,49 @@ public class UserListView extends JDialog {
 		updateUser.setBounds(817, 197, 202, 37);
 		contentPanel.add(updateUser);
 
-		sleepUser = new JButton("Dormir usuario");
+		sleepUser = new JButton("Inactivar usuario");
 		sleepUser.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent arg0) {
-				
+				if(sleepUser.getText().equals("Inactivar usuario")){
+					try {
+						UserService.sleepUser((int) table.getValueAt(selected, 0));
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						userList = (ArrayList<User>) UserService.getUsers();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						reloadTable(userList);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					try {
+						UserService.awakeUser((int) table.getValueAt(selected, 0));
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						userList = (ArrayList<User>) UserService.getUsers();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						reloadTable(userList);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		});
 		sleepUser.setEnabled(false);
@@ -275,6 +321,8 @@ public class UserListView extends JDialog {
 		table.getColumnModel().getColumn(0).setMaxWidth(45);
 		table.getColumnModel().getColumn(4).setMaxWidth(55);
 		table.getColumnModel().getColumn(5).setMaxWidth(60);
+		updateUser.setEnabled(false);
+		sleepUser.setEnabled(false);
 	}
 }
 
