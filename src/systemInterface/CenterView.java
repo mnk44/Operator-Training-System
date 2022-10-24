@@ -108,6 +108,18 @@ public class CenterView {
 		mnAdministrador.add(mntmGestinDereas);
 		
 		JMenuItem mntmGestinDeUsuarios = new JMenuItem("Gesti\u00F3n de usuarios");
+		mntmGestinDeUsuarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				UserListView u = null;
+				try {
+					u = new UserListView();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				u.setVisible(true);
+			}
+		});
 		mntmGestinDeUsuarios.setIcon(new ImageIcon(CenterView.class.getResource("/imgs/icons8_User_Groups_16.png")));
 		mntmGestinDeUsuarios.setFont(new Font("Segoe UI", Font.BOLD, 19));
 		mntmGestinDeUsuarios.setBackground(new Color(244, 164, 96));
