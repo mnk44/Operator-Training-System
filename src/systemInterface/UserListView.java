@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -29,6 +31,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import systemClass.User;
+import systemLogic.FindObjects;
 import systemLogic.TablesInfo;
 import systemServices.UserService;
 
@@ -260,51 +263,59 @@ public class UserListView extends JDialog {
 		contentPanel.add(lblNewLabel);
 
 		findUser = new JTextField();
-//		findArea.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyPressed(KeyEvent arg0) {
-//				if(findArea.getText().equals("Buscar \u00E1rea por su nombre")){
-//					if(arg0.getKeyChar() == KeyEvent.VK_BACK_SPACE){
-//						arg0.consume();
-//						getToolkit().beep();
-//					}else{
-//						findArea.setText("");
-//						findArea.setForeground(Color.BLACK);
-//						try {
-//							reloadTable(FindObjects.findUser(usersList, findArea.getText() + arg0.getKeyChar()));
-//						} catch (SQLException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//					}
-//				}else if(findArea.getText().length() == 1 && arg0.getKeyChar() == KeyEvent.VK_BACK_SPACE){
-//					findArea.setText("Buscar \u00E1rea por su nombre");
-//					findArea.setForeground(Color.LIGHT_GRAY);
-//					arg0.consume();
-//					findArea.setCaretPosition(0);
-//					try {
-//						reloadTable(areasList);
-//					} catch (SQLException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}else if(arg0.getKeyChar() == KeyEvent.VK_BACK_SPACE){
-//					try {
-//						reloadTable(FindObjects.findArea(areasList, findArea.getText().substring(0, findArea.getText().length()-1)));
-//					} catch (SQLException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}else{
-//					try {
-//						reloadTable(FindObjects.findArea(areasList, findArea.getText() + arg0.getKeyChar()));
-//					} catch (SQLException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//		});
+		findUser.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(findUser.getText().equals("Buscar usuario")){
+					findUser.setCaretPosition(0);
+				}
+			}
+		});
+		findUser.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				if(findUser.getText().equals("Buscar usuario")){
+					if(arg0.getKeyChar() == KeyEvent.VK_BACK_SPACE){
+						arg0.consume();
+						getToolkit().beep();
+					}else{
+						findUser.setText("");
+						findUser.setForeground(Color.BLACK);
+						try {
+							reloadTable(FindObjects.findUsers(userList, findUser.getText() + arg0.getKeyChar()));
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}else if(findUser.getText().length() == 1 && arg0.getKeyChar() == KeyEvent.VK_BACK_SPACE){
+					findUser.setText("Buscar usuario");
+					findUser.setForeground(Color.LIGHT_GRAY);
+					arg0.consume();
+					findUser.setCaretPosition(0);
+					try {
+						reloadTable(userList);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(arg0.getKeyChar() == KeyEvent.VK_BACK_SPACE){
+					try {
+						reloadTable(FindObjects.findUsers(userList, findUser.getText().substring(0, findUser.getText().length()-1)));
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					try {
+						reloadTable(FindObjects.findUsers(userList, findUser.getText() + arg0.getKeyChar()));
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 		findUser.setForeground(Color.LIGHT_GRAY);
 		findUser.setText("Buscar usuario");
 		findUser.setFont(new Font("Segoe UI", Font.PLAIN, 20));
