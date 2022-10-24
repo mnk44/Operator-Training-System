@@ -53,6 +53,7 @@ public class UserService {
 			cs.setBoolean(8, user.isUser_active());
 			cs.setInt(9, user.getUser_area());
 			cs.setInt(10, user.getUser_rol().ordinal() + 1);
+			cs.setInt(11, user.getUser_id());
 			cs.execute();
 			cs.close();
 		}catch(Exception e){

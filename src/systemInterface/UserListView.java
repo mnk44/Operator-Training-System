@@ -158,7 +158,14 @@ public class UserListView extends JDialog {
 		updateUser.setEnabled(false);
 		updateUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				NewUserView view = null;
+				try {
+					view = new NewUserView((int) table.getValueAt(selected, 0));
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				view.setVisible(true);
 			}
 		});
 		updateUser.addMouseListener(new MouseAdapter() {

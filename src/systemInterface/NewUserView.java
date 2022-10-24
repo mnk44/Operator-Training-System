@@ -19,6 +19,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.UnsupportedEncodingException;
 
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
@@ -30,8 +31,10 @@ import systemClass.Area;
 import systemClass.User;
 import systemEnums.RolesTypes;
 import systemEnums.SchoolarLevel;
+import systemLogic.Encrypting;
 import systemServices.AreaService;
 import systemServices.UserService;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -68,6 +71,9 @@ public class NewUserView extends JDialog {
 	String password = null;
 	private JRadioButton actve;
 
+	User uss = null;
+	boolean rest = false;
+
 	public static void main(String[] args) {
 		try {
 			NewUserView dialog = new NewUserView(-1);
@@ -79,7 +85,7 @@ public class NewUserView extends JDialog {
 	}
 
 	@SuppressWarnings("unchecked")
-	public NewUserView(int opt) throws SQLException {
+	public NewUserView(final int opt) throws SQLException {
 		setModal(true);
 		setBackground(Color.WHITE);
 		setBounds(100, 100, 884, 591);
@@ -185,11 +191,31 @@ public class NewUserView extends JDialog {
 		label.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if(!nameUser.getText().isEmpty() && card.getForeground() != Color.RED){
-					password = nameUser.getText().substring(0, 1).toLowerCase() + card.getText() + "*";
-					JOptionPane.showMessageDialog(null, "La contraseña del usuario es: " + password, "Contraseña", JOptionPane.INFORMATION_MESSAGE);
+				if(opt == -1){
+					if(!nameUser.getText().isEmpty() && card.getForeground() != Color.RED){
+						password = nameUser.getText().substring(0, 1).toLowerCase() + card.getText() + "*";
+						JOptionPane.showMessageDialog(null, "La contraseña del usuario es: " + password, "Contraseña", JOptionPane.INFORMATION_MESSAGE);
+					}else{
+						JOptionPane.showMessageDialog(null, "Debe rellenar los datos personales para obtener la contraseña", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}else{
-					JOptionPane.showMessageDialog(null, "Debe rellenar los datos personales para obtener la contraseña", "Error", JOptionPane.ERROR_MESSAGE);
+					password = nameUser.getText().substring(0, 1).toLowerCase() + card.getText() + "*";
+					try {
+						if(!Encrypting.getEncript(password).equalsIgnoreCase(uss.getUser_password())){
+							int change = JOptionPane.showConfirmDialog(null, "La contraseña actual es diferente a la original ¿Desea restablecerla?", "Restablecer contraseña", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+							if(change == 0){
+								rest = true;
+								if(!nameUser.getText().isEmpty() && card.getForeground() != Color.RED){
+									JOptionPane.showMessageDialog(null, "La contraseña del usuario es: " + password, "Contraseña", JOptionPane.INFORMATION_MESSAGE);
+								}else{
+									JOptionPane.showMessageDialog(null, "Debe rellenar los datos personales para obtener la contraseña", "Error", JOptionPane.ERROR_MESSAGE);
+								}
+							}
+						}
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -355,12 +381,52 @@ public class NewUserView extends JDialog {
 					JOptionPane.showMessageDialog(null, "Debes completar todos los campos para continuar", "Error", JOptionPane.ERROR_MESSAGE);
 				}else if((int)experience.getValue() < (int)jefe.getValue()){
 					JOptionPane.showMessageDialog(null, "La cantidad de años de experiencia laboral no pueden ser menor que la cantidad de años como jefe", "Error", JOptionPane.ERROR_MESSAGE);
-				}else{
+				}else if(opt == -1){
 					String result = "No funciona";
 					try {
 						result = UserService.newUser(nameUser.getText(), card.getText(), SchoolarLevel.valueOf(school.getSelectedItem().toString()), 
-									(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), nameUser.getText().substring(0, 1).toLowerCase() + card.getText() + "*", actve.isSelected(),
+								(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), nameUser.getText().substring(0, 1).toLowerCase() + card.getText() + "*", actve.isSelected(),
+								((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolesTypes.valueOf(rol.getSelectedItem().toString()));
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(result == null){
+						JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+						try {
+							UserListView.reloadTable((ArrayList<User>) UserService.getUsers());
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						dispose();
+					}else{
+						JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}else{
+					User ret = null;
+					if(rest){
+						try {
+							ret = new User(uss.getUser_id(), nameUser.getText(), card.getText(), SchoolarLevel.valueOf(school.getSelectedItem().toString()), 
+									(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), Encrypting.getEncript(nameUser.getText().substring(0, 1).toLowerCase() + card.getText() + "*"), actve.isSelected(),
 									((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolesTypes.valueOf(rol.getSelectedItem().toString()));
+						} catch (SQLException | UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}else{
+						try {
+							ret = new User(uss.getUser_id(), nameUser.getText(), card.getText(), SchoolarLevel.valueOf(school.getSelectedItem().toString()), 
+									(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), uss.getUser_password(), actve.isSelected(),
+									((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolesTypes.valueOf(rol.getSelectedItem().toString()));
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					String result = "No funciona";
+					try {
+						result = UserService.updateUser(ret);
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -414,9 +480,19 @@ public class NewUserView extends JDialog {
 		rol.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		rol.setBounds(353, 171, 274, 29);
 		userInfo.add(rol);
-		
+
 		if(opt != -1){
-			
+			uss = (User) UserService.findId(opt);
+			nameUser.setText(uss.getUser_name());
+			card.setText(uss.getUser_card());
+			school.setSelectedItem(uss.getUser_academic()); 
+			experience.setValue(uss.getUser_experience());
+			jefe.setValue(uss.getUser_position_years());
+			nick.setText(uss.getUser_nick());
+			nick.setForeground(Color.BLACK);
+			actve.setSelected(uss.isUser_active());
+			areaSelect.setSelectedItem(((Area) AreaService.findId(uss.getUser_area())).getArea_name());
+			rol.setSelectedItem(uss.getUser_rol());
 		}
 	}
 }
