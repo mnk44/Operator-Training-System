@@ -30,7 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import systemClass.Area;
-import systemEnums.MessagesType;
 import systemLogic.FindObjects;
 import systemLogic.TablesInfo;
 import systemServices.AreaService;
@@ -136,11 +135,11 @@ public class AreaListView extends JDialog {
 						try {
 							String result = systemServices.AreaService.newArea(area_name);
 							if(result == null){
-								JOptionPane.showMessageDialog(null, MessagesType.Acción_completada_satisfactoriamente.toString().replace("_", " "), "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
 								areasList = (ArrayList<Area>) AreaService.getAreas();
 								reloadTable(areasList);
 							}else{
-								JOptionPane.showMessageDialog(null, MessagesType.El_objeto_que_trata_de_crear_ya_existe.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(null, "El objeto que trata de crear ya existe", "Error", JOptionPane.ERROR_MESSAGE);
 								btnNuevarea.doClick();
 							}
 						} catch (SQLException e) {
@@ -148,7 +147,7 @@ public class AreaListView extends JDialog {
 							JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 						}
 					}else{
-						JOptionPane.showMessageDialog(null, MessagesType.Debe_completar_todos_los_campos_para_avanzar.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Debes completar todos los campos para continuar", "Error", JOptionPane.ERROR_MESSAGE);
 						btnNuevarea.doClick();
 					}
 				}
@@ -184,18 +183,18 @@ public class AreaListView extends JDialog {
 						try {
 							String result = systemServices.AreaService.updateArea(id_area, name_area);
 							if(result == null){
-								JOptionPane.showMessageDialog(null, MessagesType.Acción_completada_satisfactoriamente.toString().replace("_", " "), "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
 								areasList = (ArrayList<Area>) AreaService.getAreas();
 								reloadTable(areasList);
 							}else{
-								JOptionPane.showMessageDialog(null, MessagesType.El_objeto_que_trata_de_crear_ya_existe.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(null, "El objeto que trata de crear ya existe", "Error", JOptionPane.ERROR_MESSAGE);
 							}
 						} catch (SQLException e) {
 							e.printStackTrace();
 							JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 						}
 					}else{
-						JOptionPane.showMessageDialog(null, MessagesType.Debe_completar_todos_los_campos_para_avanzar.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Debes completar todos los campos para continuar", "Error", JOptionPane.ERROR_MESSAGE);
 						btnModificarrea.doClick();
 					}
 				}
@@ -225,7 +224,7 @@ public class AreaListView extends JDialog {
 		btnEliminarrea.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				selected = table.getSelectedRow();
-				int delete = JOptionPane.showConfirmDialog(null, "¿"+ MessagesType.Seguro_que_desea_realizar_esta_operación.toString().replace("_", " ") +"?", "Eliminar área", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+				int delete = JOptionPane.showConfirmDialog(null, "¿Seguro que desea eliminar esta área?", "Eliminar área", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
 				int id_area = (Integer) table.getValueAt(selected, 0);
 				if(delete == 0){
 					Object users = null;
@@ -236,12 +235,12 @@ public class AreaListView extends JDialog {
 						e1.printStackTrace();
 					}
 					if(users.getClass().isArray()){
-						JOptionPane.showMessageDialog(null, MessagesType.No_puede_eliminar_un_área_si_exisisten_usuarios_en_ella.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "No puede eliminar un área si existen usuarios en ella", "Error", JOptionPane.ERROR_MESSAGE);
 					}else{
 						try {
 							String result = systemServices.AreaService.deleteArea(id_area);
 							if(result == null){
-								JOptionPane.showMessageDialog(null, MessagesType.Acción_completada_satisfactoriamente.toString().replace("_", " "), "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
 								reloadTable((ArrayList<Area>) AreaService.getAreas());
 							}else{
 								JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
@@ -281,6 +280,14 @@ public class AreaListView extends JDialog {
 		contentPanel.add(lblNewLabel);
 
 		findArea = new JTextField();
+		findArea.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(findArea.getText().equals("Buscar \u00E1rea por su nombre")){
+					findArea.setCaretPosition(0);
+				}
+			}
+		});
 		findArea.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {

@@ -8,23 +8,27 @@ import java.util.ArrayList;
 import systemClass.User;
 import systemEnums.RolesTypes;
 import systemEnums.SchoolarLevel;
+import systemLogic.Encrypting;
 
 public class UserService {
 	
-	public static String newUser(User user) throws SQLException{
+	public static String newUser(String user_name, String user_card,
+			SchoolarLevel user_academic, int user_experience,
+			int user_position_years, String user_nick, String user_password,
+			boolean user_active, int user_area, RolesTypes user_rol) throws SQLException{
 		try{
-			String sqlSentenc = "INSERT INTO userSystem VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?)";
+			String sqlSentenc = "INSERT INTO people VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
-			cs.setString(1, user.getUser_name());
-			cs.setString(2, user.getUser_card());
-			cs.setString(3, user.getUser_academic().toString().replace("_" , ""));
-			cs.setInt(4, user.getUser_experience());
-			cs.setInt(5, user.getUser_position_years());
-			cs.setString(6, user.getUser_nick());
-			cs.setString(7, user.getUser_password());
-			cs.setBoolean(8, user.isUser_active());
-			cs.setInt(9, user.getUser_area());
-			cs.setInt(10, user.getUser_rol().ordinal() + 1);
+			cs.setString(1, user_name);
+			cs.setString(2, user_card);
+			cs.setString(3, user_academic.toString().replace("_" , ""));
+			cs.setInt(4, user_experience);
+			cs.setInt(5, user_position_years);
+			cs.setString(6, user_nick);
+			cs.setString(7, Encrypting.getEncript(user_password));
+			cs.setBoolean(8, user_active);
+			cs.setInt(9, user_area);
+			cs.setInt(10, user_rol.ordinal() + 1);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
@@ -35,7 +39,7 @@ public class UserService {
 	
 	public static String updateUser(User user) throws SQLException{
 		try{
-			String sqlSentenc = "UPDATE userSystem SET user_name = ?, user_card = ?, user_academic = ?,"
+			String sqlSentenc = "UPDATE people SET user_name = ?, user_card = ?, user_academic = ?,"
 					+ "user_experience = ?, user_position_years = ?, user_nick = ?,"
 					+ "user_password = ?, user_active = ?, user_area = ?, user_rol = ? WHERE user_id = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
@@ -59,7 +63,7 @@ public class UserService {
 	
 	public static String sleepUser(int user_id) throws SQLException{
 		try{
-			String sqlSentenc = "UPDATE userSystem SET user_active = false WHERE user_id = ?";
+			String sqlSentenc = "UPDATE people SET user_active = false WHERE user_id = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_id);
 			cs.execute();
@@ -72,7 +76,7 @@ public class UserService {
 	
 	public static String awakeUser(int user_id) throws SQLException{
 		try{
-			String sqlSentenc = "UPDATE userSystem SET user_active = true WHERE user_id = ?";
+			String sqlSentenc = "UPDATE people SET user_active = true WHERE user_id = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_id);
 			cs.execute();
@@ -86,7 +90,7 @@ public class UserService {
 	public static Object findId(int user_id) throws SQLException {
 		User user = null;
 		try{
-			String sqlSentenc = "SELECT * FROM userSystem WHERE user_id = ?";
+			String sqlSentenc = "SELECT * FROM people WHERE user_id = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_id);
 			ResultSet rs = cs.executeQuery();
@@ -114,7 +118,7 @@ public class UserService {
 	public static Object findCard(String user_card) throws SQLException {
 		User user = null;
 		try{
-			String sqlSentenc = "SELECT * FROM userSystem WHERE user_card = ?";
+			String sqlSentenc = "SELECT * FROM people WHERE user_card = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, user_card);
 			ResultSet rs = cs.executeQuery();
@@ -142,7 +146,7 @@ public class UserService {
 	public static Object findNick(String user_nick) throws SQLException {
 		User user = null;
 		try{
-			String sqlSentenc = "SELECT * FROM userSystem WHERE user_nick = ?";
+			String sqlSentenc = "SELECT * FROM people WHERE user_nick = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, user_nick);
 			ResultSet rs = cs.executeQuery();
@@ -170,7 +174,7 @@ public class UserService {
 	public static Object getUsers() throws SQLException{
 		ArrayList<User> usersList = new ArrayList<User>();
 		try{
-			ResultSet rs = ConnectionService.getConnection().createStatement().executeQuery("SELECT * FROM userSystem");
+			ResultSet rs = ConnectionService.getConnection().createStatement().executeQuery("SELECT * FROM people");
 			while(rs.next()){
 				RolesTypes rol = null;
 				if(rs.getInt("user_rol") == 1){
@@ -197,7 +201,7 @@ public class UserService {
 	public static Object getUsersArea(int user_area) throws SQLException{
 		ArrayList<User> usersList = new ArrayList<User>();
 		try{
-			String sqlSentenc = "SELECT * FROM userSystem WHERE user_area = ?";
+			String sqlSentenc = "SELECT * FROM people WHERE user_area = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_area);
 			ResultSet rs = cs.executeQuery();
@@ -227,7 +231,7 @@ public class UserService {
 	public static Object getUsersName(int user_name) throws SQLException{
 		ArrayList<User> usersList = new ArrayList<User>();
 		try{
-			String sqlSentenc = "SELECT * FROM userSystem WHERE user_name = ?";
+			String sqlSentenc = "SELECT * FROM people WHERE user_name = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_name);
 			ResultSet rs = cs.executeQuery();

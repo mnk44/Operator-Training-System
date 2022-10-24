@@ -19,8 +19,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 
-import systemEnums.MessagesType;
-
 import javax.swing.SwingConstants;
 
 public class LoginView extends JDialog {
@@ -57,7 +55,7 @@ public class LoginView extends JDialog {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
 				if(userName.getText().isEmpty() || userPass.getText().isEmpty()){
-					JOptionPane.showMessageDialog(null, MessagesType.Debe_completar_todos_los_campos_para_avanzar.toString().replace("_", " "), "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Debes completar todos los campos para continuar", "Error", JOptionPane.ERROR_MESSAGE);
 				}else{
 					CenterView center = new CenterView();
 					LoginView.this.setVisible(false);
