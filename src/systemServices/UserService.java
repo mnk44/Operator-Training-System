@@ -176,8 +176,6 @@ public class UserService {
 	public static int nickPassword(String nick, String password) throws UnsupportedEncodingException, SQLException{
 		int isTrue = -1;
 		User uss = (User) findNick(nick);
-		System.out.println(uss.getUser_password());
-		System.out.println(Encrypting.getEncript(password));
 		if(uss != null && uss.getUser_password().equals(Encrypting.getEncript(password))){
 			isTrue = uss.getUser_id();
 		}

@@ -42,6 +42,7 @@ public class LoginView extends JDialog {
 	private JButton okButton;
 	private JTextField userName;
 	private JPasswordField userPass;
+	private JLabel showPass;
 
 	public LoginView() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/imgs/logo.png")));
@@ -108,6 +109,7 @@ public class LoginView extends JDialog {
 
 				if(KeyEvent.VK_ENTER == key){
 					userName.setFocusable(false);
+					userName.setFocusable(true);
 				}else if(Character.isWhitespace(key)){
 					e.consume();
 					getToolkit().beep();
@@ -156,5 +158,22 @@ public class LoginView extends JDialog {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(15, 279, 746, 45);
 		getContentPane().add(lblNewLabel);
+		
+		showPass = new JLabel("");
+		showPass.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				userPass.setEchoChar((char)0);
+				showPass.setIcon(new ImageIcon(LoginView.class.getResource("/imgs/icons8_Invisible_32.png")));
+			}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				userPass.setEchoChar('*');
+				showPass.setIcon(new ImageIcon(LoginView.class.getResource("/imgs/icons8_Eye_32.png")));
+			}
+		});
+		showPass.setIcon(new ImageIcon(LoginView.class.getResource("/imgs/icons8_Eye_32.png")));
+		showPass.setBounds(539, 392, 41, 37);
+		getContentPane().add(showPass);
 	}
 }
