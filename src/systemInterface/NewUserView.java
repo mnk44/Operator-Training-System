@@ -265,7 +265,7 @@ public class NewUserView extends JDialog {
 		lblNombreCompletoDel.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNombreCompletoDel.setForeground(new Color(47, 46, 65));
 		lblNombreCompletoDel.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblNombreCompletoDel.setBounds(15, 33, 333, 40);
+		lblNombreCompletoDel.setBounds(28, 35, 333, 40);
 		personalInfo.add(lblNombreCompletoDel);
 
 		nameUser = new JTextField();
@@ -292,14 +292,14 @@ public class NewUserView extends JDialog {
 		});
 		nameUser.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		nameUser.setColumns(10);
-		nameUser.setBounds(354, 41, 477, 29);
+		nameUser.setBounds(365, 41, 466, 29);
 		personalInfo.add(nameUser);
 
 		lblCarnetDeIdentidad = new JLabel("Carnet de identidad:");
 		lblCarnetDeIdentidad.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblCarnetDeIdentidad.setForeground(new Color(47, 46, 65));
 		lblCarnetDeIdentidad.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblCarnetDeIdentidad.setBounds(15, 99, 333, 48);
+		lblCarnetDeIdentidad.setBounds(28, 99, 333, 48);
 		personalInfo.add(lblCarnetDeIdentidad);
 
 		card = new JTextField();
@@ -331,18 +331,18 @@ public class NewUserView extends JDialog {
 		});
 		card.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		card.setColumns(10);
-		card.setBounds(354, 109, 212, 29);
+		card.setBounds(365, 109, 212, 29);
 		personalInfo.add(card);
 
 		lblNivelEscolar = new JLabel("Nivel escolar:");
 		lblNivelEscolar.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNivelEscolar.setForeground(new Color(47, 46, 65));
 		lblNivelEscolar.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblNivelEscolar.setBounds(15, 172, 333, 48);
+		lblNivelEscolar.setBounds(28, 172, 333, 48);
 		personalInfo.add(lblNivelEscolar);
 
 		school = new JComboBox<Object>(SchoolarLevel.values());
-		school.setBounds(354, 183, 263, 29);
+		school.setBounds(365, 182, 263, 29);
 		school.setSelectedIndex(5);
 		school.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		personalInfo.add(school);
@@ -351,28 +351,28 @@ public class NewUserView extends JDialog {
 		lblAosDeExperiencia.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblAosDeExperiencia.setForeground(new Color(47, 46, 65));
 		lblAosDeExperiencia.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblAosDeExperiencia.setBounds(15, 249, 333, 48);
+		lblAosDeExperiencia.setBounds(28, 249, 333, 48);
 		personalInfo.add(lblAosDeExperiencia);
 
 		experience = new JSpinner();
 		experience.setModel(new SpinnerNumberModel(0, 0, 35, 1));
-		experience.setBounds(354, 260, 64, 29);
+		experience.setBounds(365, 259, 64, 29);
 		experience.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		personalInfo.add(experience);
 
-		lblAosCumplidosComo = new JLabel("A\u00F1os cumplidos como jefe:");
+		lblAosCumplidosComo = new JLabel("A\u00F1os de experiencia como jefe:");
 		lblAosCumplidosComo.setEnabled(false);
 		lblAosCumplidosComo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblAosCumplidosComo.setForeground(new Color(47, 46, 65));
 		lblAosCumplidosComo.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblAosCumplidosComo.setBounds(15, 326, 333, 48);
+		lblAosCumplidosComo.setBounds(28, 326, 333, 48);
 		personalInfo.add(lblAosCumplidosComo);
 
 		jefe = new JSpinner();
 		jefe.setEnabled(false);
 		jefe.setModel(new SpinnerNumberModel(0, 0, 35, 1));
 		jefe.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		jefe.setBounds(354, 336, 64, 29);
+		jefe.setBounds(365, 336, 64, 29);
 		personalInfo.add(jefe);
 		tabbedPane.setBackgroundAt(1, Color.WHITE);
 

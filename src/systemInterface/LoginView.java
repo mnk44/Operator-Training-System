@@ -68,7 +68,9 @@ public class LoginView extends JDialog {
 					try {
 						User user = (User) UserService.findNick(userName.getText());
 						if(user != null){
-							if(user.getUser_password().equals(Encrypting.getEncript(userPass.getText()))){
+							if(!user.isUser_active()){
+								JOptionPane.showMessageDialog(null, "Usuario bloqueado", "Error", JOptionPane.ERROR_MESSAGE);
+							}else if(user.getUser_password().equals(Encrypting.getEncript(userPass.getText()))){
 								CenterView center = new CenterView(user.getUser_id());
 								LoginView.this.setVisible(false);
 								center.getFrame().setLocationRelativeTo(null);

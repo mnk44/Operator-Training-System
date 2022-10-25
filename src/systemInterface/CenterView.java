@@ -104,6 +104,19 @@ public class CenterView {
 		mnNewMenu.add(mntmCambiarContrasea);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Informaci\u00F3n personal");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				PersonalInfoView piv = null;
+				try {
+					piv = new PersonalInfoView(userID);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				piv.setLocationRelativeTo(frmSecproit);
+				piv.setVisible(true);
+			}
+		});
 		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 19));
 		mntmNewMenuItem.setIcon(new ImageIcon(CenterView.class.getResource("/imgs/personalInformation.png")));
 		mntmNewMenuItem.setBackground(new Color(244, 164, 96));
