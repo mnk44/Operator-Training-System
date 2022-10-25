@@ -12,12 +12,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -31,8 +34,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import systemClass.User;
+import systemEnums.AccionTrace;
+import systemEnums.SystemClass;
 import systemLogic.FindObjects;
 import systemLogic.TablesInfo;
+import systemServices.TraceService;
 import systemServices.UserService;
 
 public class UserListView extends JDialog {
@@ -43,18 +49,19 @@ public class UserListView extends JDialog {
 	private static JButton updateUser;
 	private static JButton sleepUser;
 	private JLabel lblNewLabel;
-	private JTextField findUser;
+	private static JTextField findUser;
 	private static DefaultTableModel date;
 	private static JTable table;
 
 	private int selected = -1;
+	static int user = -1;
 	
 	@SuppressWarnings("unchecked")
 	ArrayList<User> userList = (ArrayList<User>) UserService.getUsers();
 
 	public static void main(String[] args) {
 		try {
-			UserListView dialog = new UserListView();
+			UserListView dialog = new UserListView(1);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -62,7 +69,8 @@ public class UserListView extends JDialog {
 		}
 	}
 
-	public UserListView() throws SQLException {
+	public UserListView(int userId) throws SQLException {
+		user = userId;
 		setModal(true);
 		setBackground(Color.WHITE);
 		setBounds(100, 100, 1051, 616);
@@ -131,7 +139,7 @@ public class UserListView extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				NewUserView view = null;
 				try {
-					view = new NewUserView(-1);
+					view = new NewUserView(-1, user);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -163,7 +171,7 @@ public class UserListView extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				NewUserView view = null;
 				try {
-					view = new NewUserView((int) table.getValueAt(selected, 0));
+					view = new NewUserView((int) table.getValueAt(selected, 0), user);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -202,6 +210,16 @@ public class UserListView extends JDialog {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					String result2 = null;
+					try {
+						result2 = TraceService.newTrace(user, AccionTrace.desactivó_al, SystemClass.usuario, (String)table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
+					} catch (SQLException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					if(result2 != null){
+						JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
+					}
 					try {
 						userList = (ArrayList<User>) UserService.getUsers();
 					} catch (SQLException e1) {
@@ -220,6 +238,16 @@ public class UserListView extends JDialog {
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+					}
+					String result2 = null;
+					try {
+						result2 = TraceService.newTrace(user, AccionTrace.activó_al, SystemClass.usuario, (String)table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
+					} catch (SQLException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+					if(result2 != null){
+						JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
 					}
 					try {
 						userList = (ArrayList<User>) UserService.getUsers();
@@ -327,7 +355,7 @@ public class UserListView extends JDialog {
 	}
 
 	public static void reloadTable(ArrayList<User> users) throws SQLException{
-		TablesInfo.getUsers(date, table, users);
+		TablesInfo.getUsers(date, table, users, user);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
@@ -341,6 +369,9 @@ public class UserListView extends JDialog {
 		table.getColumnModel().getColumn(5).setMaxWidth(60);
 		updateUser.setEnabled(false);
 		sleepUser.setEnabled(false);
+		if(findUser.getText().equals("Buscar usuario")){
+			findUser.setCaretPosition(0);
+		}
 	}
 }
 

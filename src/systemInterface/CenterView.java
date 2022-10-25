@@ -181,7 +181,7 @@ public class CenterView {
 			public void actionPerformed(ActionEvent arg0) {
 				UserListView u = null;
 				try {
-					u = new UserListView();
+					u = new UserListView(userID);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -29,14 +29,19 @@ import javax.swing.JComboBox;
 
 import systemClass.Area;
 import systemClass.User;
+import systemEnums.AccionTrace;
 import systemEnums.RolesTypes;
 import systemEnums.SchoolarLevel;
+import systemEnums.SystemClass;
 import systemLogic.Encrypting;
 import systemServices.AreaService;
+import systemServices.TraceService;
 import systemServices.UserService;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -73,10 +78,11 @@ public class NewUserView extends JDialog {
 
 	User uss = null;
 	boolean rest = false;
+	int userId = -1;
 
 	public static void main(String[] args) {
 		try {
-			NewUserView dialog = new NewUserView(-1);
+			NewUserView dialog = new NewUserView(-1, 1);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -85,7 +91,8 @@ public class NewUserView extends JDialog {
 	}
 
 	@SuppressWarnings("unchecked")
-	public NewUserView(final int opt) throws SQLException {
+	public NewUserView(final int opt, int user) throws SQLException {
+		userId = user;
 		setModal(true);
 		setBackground(Color.WHITE);
 		setBounds(100, 100, 884, 591);
@@ -278,7 +285,7 @@ public class NewUserView extends JDialog {
 				boolean space = key == 32;
 
 				if(!(capital || lower || space)){
-					if(key != 225 && key != 233 && key != 237 && key != 243 && key != 250){
+					if(key != 225 && key != 233 && key != 237 && key != 243 && key != 250 && key != 241){
 						e.consume();
 						if(key != KeyEvent.VK_BACK_SPACE){
 							getToolkit().beep();
@@ -399,6 +406,16 @@ public class NewUserView extends JDialog {
 					}
 					if(result == null){
 						JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+						String result2 = null;
+						try {
+							result2 = TraceService.newTrace(userId, AccionTrace.creó_el, SystemClass.usuario, nick.getText(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+						} catch (SQLException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
+						if(result2 != null){
+							JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
+						}
 						try {
 							UserListView.reloadTable((ArrayList<User>) UserService.getUsers());
 						} catch (SQLException e) {
@@ -439,6 +456,16 @@ public class NewUserView extends JDialog {
 					}
 					if(result == null){
 						JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+						String result2 = null;
+						try {
+							result2 = TraceService.newTrace(userId, AccionTrace.modificó_el, SystemClass.usuario, nick.getText(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+						} catch (SQLException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
+						if(result2 != null){
+							JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
+						}
 						try {
 							UserListView.reloadTable((ArrayList<User>) UserService.getUsers());
 						} catch (SQLException e) {
