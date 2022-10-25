@@ -106,7 +106,9 @@ public class LoginView extends JDialog {
 			public void keyTyped(KeyEvent e) {
 				char key = e.getKeyChar();
 
-				if (Character.isWhitespace(key)){
+				if(KeyEvent.VK_ENTER == key){
+					userName.setFocusable(false);
+				}else if(Character.isWhitespace(key)){
 					e.consume();
 					getToolkit().beep();
 				}
@@ -135,6 +137,14 @@ public class LoginView extends JDialog {
 		getContentPane().add(pass);
 		
 		userPass = new JPasswordField();
+		userPass.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				if(KeyEvent.VK_ENTER == arg0.getKeyChar()){
+					okButton.doClick();
+				}
+			}
+		});
 		userPass.setEchoChar('*');
 		userPass.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		userPass.setBounds(256, 396, 279, 29);
