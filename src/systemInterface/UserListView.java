@@ -144,6 +144,7 @@ public class UserListView extends JDialog {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				view.setLocationRelativeTo(UserListView.this);
 				view.setVisible(true);
 			}
 		});
@@ -176,6 +177,7 @@ public class UserListView extends JDialog {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				view.setLocationRelativeTo(UserListView.this);
 				view.setVisible(true);
 			}
 		});

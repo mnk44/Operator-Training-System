@@ -221,6 +221,19 @@ public class CenterView {
 		mntmRealizarEntrenamiento.setBackground(new Color(244, 164, 96));
 		mntmRealizarEntrenamiento.setForeground(Color.WHITE);
 		mnOperario.add(mntmRealizarEntrenamiento);
+		
+		JMenu mnReportes = new JMenu("Reportes");
+		mnReportes.setForeground(Color.WHITE);
+		mnReportes.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		mnReportes.setBackground(new Color(244, 164, 96));
+		menuBar.add(mnReportes);
+		
+		JMenuItem mntmControlDeAcciones = new JMenuItem("Control de acciones");
+		mntmControlDeAcciones.setIcon(new ImageIcon(CenterView.class.getResource("/imgs/list.png")));
+		mntmControlDeAcciones.setForeground(Color.WHITE);
+		mntmControlDeAcciones.setFont(new Font("Segoe UI", Font.BOLD, 19));
+		mntmControlDeAcciones.setBackground(new Color(244, 164, 96));
+		mnReportes.add(mntmControlDeAcciones);
 	}
 	
 	public JFrame getFrame() {

@@ -81,6 +81,7 @@ public class NewProcessView extends JDialog {
 	}
 
 	public NewProcessView(int u) throws SQLException {
+		setModal(true);
 		userG = (User) UserService.findId(u);
 		usersNA = fillUser();
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/imgs/logo.png")));

@@ -13,7 +13,9 @@ public class FindObjects {
 		ArrayList<Area> result = new ArrayList<>();
 		
 		for(int i=0; i<areas.size(); i++){
-			if(areas.get(i).getArea_name().toLowerCase().contains(name.toLowerCase())){
+			String areaName = areas.get(i).getArea_name().toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			String findingName = name.toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			if(areaName.contains(findingName)){
 				result.add(areas.get(i));
 			}
 		}
@@ -25,7 +27,9 @@ public class FindObjects {
 		ArrayList<FactoryProcess> result = new ArrayList<>();
 		
 		for(int i=0; i<process.size(); i++){
-			if(process.get(i).getProcess_name().toLowerCase().contains(name.toLowerCase())){
+			String procesName = process.get(i).getProcess_name().toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			String findingName = name.toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			if(procesName.contains(findingName)){
 				result.add(process.get(i));
 			}
 		}
@@ -37,9 +41,12 @@ public class FindObjects {
 		ArrayList<User> result = new ArrayList<>();
 		
 		for(int i=0; i<user.size(); i++){
-			if(user.get(i).getUser_name().toLowerCase().contains(name.toLowerCase())){
+			String userName = user.get(i).getUser_name().toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			String nickName = user.get(i).getUser_nick().toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			String findingName = name.toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			if(userName.contains(findingName)){
 				result.add(user.get(i));
-			}else if(user.get(i).getUser_nick().toLowerCase().contains(name.toLowerCase())){
+			}else if(nickName.contains(findingName)){
 				result.add(user.get(i));
 			}
 		}
