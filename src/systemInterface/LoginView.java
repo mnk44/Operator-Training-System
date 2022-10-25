@@ -33,6 +33,7 @@ public class LoginView extends JDialog {
 		try {
 			LoginView dialog = new LoginView();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setLocationRelativeTo(null);
 			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -67,6 +68,7 @@ public class LoginView extends JDialog {
 						if(idUser != -1){
 							CenterView center = new CenterView(idUser);
 							LoginView.this.setVisible(false);
+							center.getFrame().setLocationRelativeTo(null);
 							center.getFrame().setVisible(true);
 						}else{
 							JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
