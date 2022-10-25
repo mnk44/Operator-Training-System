@@ -23,6 +23,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class CenterView {
 
@@ -35,6 +37,7 @@ public class CenterView {
 			public void run() {
 				try {
 					CenterView window = new CenterView(1);
+					window.frmSecproit.setLocationRelativeTo(null);
 					window.frmSecproit.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,6 +53,15 @@ public class CenterView {
 	private void initialize(int id) {
 		userID = id;
 		frmSecproit = new JFrame();
+		frmSecproit.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				int segure = JOptionPane.showConfirmDialog(null, "¿Seguro que desea salir?", "Salir", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if(segure == 0){
+					System.exit(0);
+				}
+			}
+		});
 		frmSecproit.getContentPane().setBackground(Color.WHITE);
 		frmSecproit.setTitle("SECPROIT");
 		frmSecproit.setIconImage(Toolkit.getDefaultToolkit().getImage(CenterView.class.getResource("/imgs/logo.png")));
@@ -57,7 +69,7 @@ public class CenterView {
 		frmSecproit.setBackground(Color.WHITE);
 		frmSecproit.setForeground(Color.BLACK);
 		frmSecproit.setBounds(100, 100, 1064, 596);
-		frmSecproit.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmSecproit.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(new Color(244, 164, 96));
@@ -149,7 +161,7 @@ public class CenterView {
 			public void actionPerformed(ActionEvent arg0) {
 				AreaListView areaView = null;
 				try {
-					areaView = new AreaListView();
+					areaView = new AreaListView(userID);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

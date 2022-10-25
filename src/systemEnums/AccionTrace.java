@@ -1,7 +1,8 @@
 package systemEnums;
 
 public enum AccionTrace {
-	creó_un,
-	modificó_un,
-	eliminó_un
+	creó_el,
+	modificó_el,
+	eliminó_el,
+	cambió_su
 }

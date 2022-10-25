@@ -30,16 +30,21 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import systemClass.Area;
+import systemEnums.AccionTrace;
+import systemEnums.SystemClass;
 import systemLogic.FindObjects;
 import systemLogic.TablesInfo;
 import systemServices.AreaService;
+import systemServices.TraceService;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class AreaListView extends JDialog {
 
@@ -57,10 +62,11 @@ public class AreaListView extends JDialog {
 	ArrayList<Area> areasList = (ArrayList<Area>) AreaService.getAreas();
 
 	private int selected = -1;
+	int user = -1;
 
 	public static void main(String[] args) {
 		try {
-			AreaListView dialog = new AreaListView();
+			AreaListView dialog = new AreaListView(1);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -69,7 +75,8 @@ public class AreaListView extends JDialog {
 	}
 
 	@SuppressWarnings("unchecked")
-	public AreaListView() throws SQLException {
+	public AreaListView(int userId) throws SQLException {
+		user = userId;
 		setModal(true);
 		setBackground(Color.WHITE);
 		setBounds(100, 100, 822, 505);
@@ -136,6 +143,10 @@ public class AreaListView extends JDialog {
 							String result = systemServices.AreaService.newArea(area_name);
 							if(result == null){
 								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+								String result2 = TraceService.newTrace(user, AccionTrace.creó_el, SystemClass.área, area_name, new Timestamp(Calendar.getInstance().getTime().getTime()));
+								if(result2 != null){
+									JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
+								}
 								areasList = (ArrayList<Area>) AreaService.getAreas();
 								reloadTable(areasList);
 							}else{
@@ -184,6 +195,10 @@ public class AreaListView extends JDialog {
 							String result = systemServices.AreaService.updateArea(id_area, name_area);
 							if(result == null){
 								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+								String result2 = TraceService.newTrace(user, AccionTrace.modificó_el, SystemClass.área, name_area, new Timestamp(Calendar.getInstance().getTime().getTime()));
+								if(result2 !=null){
+									JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
+								}
 								areasList = (ArrayList<Area>) AreaService.getAreas();
 								reloadTable(areasList);
 							}else{
@@ -241,6 +256,10 @@ public class AreaListView extends JDialog {
 							String result = systemServices.AreaService.deleteArea(id_area);
 							if(result == null){
 								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+								String result2 = TraceService.newTrace(user, AccionTrace.eliminó_el, SystemClass.área, (String) table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
+								if(result2 !=null){
+									JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
+								}
 								reloadTable((ArrayList<Area>) AreaService.getAreas());
 							}else{
 								JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
@@ -352,5 +371,8 @@ public class AreaListView extends JDialog {
 		table.getColumnModel().getColumn(0).setMaxWidth(50);
 		btnModificarrea.setEnabled(false);
 		btnEliminarrea.setEnabled(false);
+		if(findArea.getText().equals("Buscar \u00E1rea por su nombre")){
+			findArea.setCaretPosition(0);
+		}
 	}
 }

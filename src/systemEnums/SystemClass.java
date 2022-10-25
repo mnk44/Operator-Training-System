@@ -4,5 +4,6 @@ public enum SystemClass {
 	proceso,
 	área,
 	usuario,
-	entrenamiento
+	entrenamiento,
+	contraseña
 }
