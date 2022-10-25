@@ -82,6 +82,7 @@ public class CenterView {
 		mntmCerrarSesin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				LoginView log = new LoginView();
+				log.setLocationRelativeTo(frmSecproit);
 				log.setVisible(true);
 				CenterView.this.frmSecproit.setVisible(false);
 			}
@@ -108,6 +109,7 @@ public class CenterView {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				areaView.setLocationRelativeTo(frmSecproit);
 				areaView.setVisible(true);
 			}
 		});
@@ -127,6 +129,7 @@ public class CenterView {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				u.setLocationRelativeTo(frmSecproit);
 				u.setVisible(true);
 			}
 		});
