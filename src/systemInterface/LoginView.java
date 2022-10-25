@@ -23,6 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 import javax.swing.SwingConstants;
 
+import systemClass.User;
+import systemLogic.Encrypting;
 import systemServices.UserService;
 
 public class LoginView extends JDialog {
@@ -64,24 +66,23 @@ public class LoginView extends JDialog {
 					JOptionPane.showMessageDialog(null, "Debes completar todos los campos para continuar", "Error", JOptionPane.ERROR_MESSAGE);
 				}else{
 					try {
-						int idUser = UserService.nickPassword(userName.getText(), userPass.getText());
-						if(idUser != -1){
-							CenterView center = new CenterView(idUser);
-							LoginView.this.setVisible(false);
-							center.getFrame().setLocationRelativeTo(null);
-							center.getFrame().setVisible(true);
+						User user = (User) UserService.findNick(userName.getText());
+						if(user != null){
+							if(user.getUser_password().equals(Encrypting.getEncript(userPass.getText()))){
+								CenterView center = new CenterView(user.getUser_id());
+								LoginView.this.setVisible(false);
+								center.getFrame().setLocationRelativeTo(null);
+								center.getFrame().setVisible(true);
+							}
 						}else{
 							JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
 						}
 					} catch (HeadlessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}

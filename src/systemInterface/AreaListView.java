@@ -173,7 +173,7 @@ public class AreaListView extends JDialog {
 
 		btnModificarrea = new JButton("Modificar \u00E1rea");
 		btnModificarrea.setEnabled(false);
-		btnModificarrea.addActionListener(new ActionListener() {
+		btnModificarrea.addActionListener(new ActionListener() { 
 			public void actionPerformed(ActionEvent arg0) {
 				selected = table.getSelectedRow();
 				int id_area = (Integer) table.getValueAt(selected, 0);		
@@ -224,7 +224,7 @@ public class AreaListView extends JDialog {
 		btnEliminarrea.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				selected = table.getSelectedRow();
-				int delete = JOptionPane.showConfirmDialog(null, "¿Seguro que desea eliminar esta área?", "Eliminar área", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+				int delete = JOptionPane.showConfirmDialog(null, "¿Seguro que desea eliminar esta área?", "Eliminar área", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 				int id_area = (Integer) table.getValueAt(selected, 0);
 				if(delete == 0){
 					Object users = null;

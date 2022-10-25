@@ -1,6 +1,5 @@
 package systemServices;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import systemClass.User;
 import systemEnums.RolesTypes;
 import systemEnums.SchoolarLevel;
-import systemLogic.Encrypting;
 
 public class UserService {
 	
@@ -81,6 +79,20 @@ public class UserService {
 			String sqlSentenc = "UPDATE people SET user_active = true WHERE user_id = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_id);
+			cs.execute();
+			cs.close();
+		}catch(Exception e){
+			return e.getMessage();
+		}
+		return null;
+	}
+	
+	public static String changePassword(int user_id, String new_pass) throws SQLException{
+		try{
+			String sqlSentenc = "UPDATE people SET user_password = ? WHERE user_id = ?";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setString(1, new_pass);
+			cs.setInt(2, user_id);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
@@ -171,15 +183,6 @@ public class UserService {
 			return e.getMessage();
 		}
 		return user;
-	}
-	
-	public static int nickPassword(String nick, String password) throws UnsupportedEncodingException, SQLException{
-		int isTrue = -1;
-		User uss = (User) findNick(nick);
-		if(uss != null && uss.getUser_password().equals(Encrypting.getEncript(password))){
-			isTrue = uss.getUser_id();
-		}
-		return isTrue;
 	}
 	
 	public static Object getUsers() throws SQLException{

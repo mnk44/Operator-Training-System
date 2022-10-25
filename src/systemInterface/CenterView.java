@@ -9,14 +9,19 @@ import java.awt.Toolkit;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
+import javax.swing.JOptionPane;
 
 import java.awt.Font;
 
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
 
+import systemLogic.Encrypting;
+import systemServices.UserService;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
 public class CenterView {
@@ -65,6 +70,33 @@ public class CenterView {
 		menuBar.add(mnNewMenu);
 		
 		JMenuItem mntmCambiarContrasea = new JMenuItem("Cambiar contrase\u00F1a");
+		mntmCambiarContrasea.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int option = JOptionPane.showConfirmDialog(null, "¿Seguro que desea cambiar su contraseña?", "Cambiar contraseña", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if(option == 0){
+					String new_pass = JOptionPane.showInputDialog(null, "Nueva contraseña:", "Nueva contraseña", JOptionPane.QUESTION_MESSAGE);
+					if(new_pass != null){
+						while(new_pass.isEmpty()){
+							JOptionPane.showMessageDialog(null, "Debe escribir una nueva contraseña", "Error", JOptionPane.ERROR_MESSAGE);
+							new_pass = JOptionPane.showInputDialog(null, "Nueva contraseña:", "Nueva contraseña", JOptionPane.QUESTION_MESSAGE);
+						}
+						String result = "No funciona";
+						try {
+							result = UserService.changePassword(userID, Encrypting.getEncript(new_pass));
+						} catch (UnsupportedEncodingException e) {
+							JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+						} catch (SQLException e) {
+							JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+						}
+						if(result != null){
+							JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+						}else{
+							JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+				}
+			}
+		});
 		mntmCambiarContrasea.setIcon(new ImageIcon(CenterView.class.getResource("/imgs/changePassword.png")));
 		mntmCambiarContrasea.setFont(new Font("Segoe UI", Font.BOLD, 19));
 		mntmCambiarContrasea.setBackground(new Color(244, 164, 96));
