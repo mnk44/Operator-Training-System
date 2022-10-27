@@ -9,9 +9,11 @@ import javax.swing.table.DefaultTableModel;
 
 import systemClass.Area;
 import systemClass.FactoryProcess;
+import systemClass.Trace;
 import systemClass.User;
 import systemServices.AreaService;
 import systemServices.FactoryProcessService;
+import systemServices.UserService;
 
 public class TablesInfo {
 	
@@ -37,6 +39,33 @@ public class TablesInfo {
 		date.addColumn("ID",process_id.toArray());
 		date.addColumn("Nombre",process_name.toArray());
 		date.addColumn("Área",area_name.toArray());
+		table.setModel(date);
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static void getTraces(DefaultTableModel date, JTable table, ArrayList<Trace> traces) throws SQLException{
+		ArrayList<String> traceResp = new ArrayList<String>();
+		ArrayList<String> accion = new ArrayList<String>();
+		ArrayList<String> hora = new ArrayList<String>();
+		
+		for(int i=0; i<traces.size(); i++){
+			traceResp.add(((User)UserService.findId(traces.get(i).getTrace_user())).getUser_nick());
+			String act = traces.get(i).getTrace_accion().toString().replace("_", " ");
+			accion.add(act.substring(0,1).toUpperCase() + act.substring(1).toLowerCase() + " " + traces.get(i).getTrace_class().toString() +
+					" <" + traces.get(i).getTrace_class_id() + ">");
+			hora.add(traces.get(i).getTrace_date().getHours() + ":" + traces.get(i).getTrace_date().getMinutes() + ":" + traces.get(i).getTrace_date().getSeconds());
+		}
+
+		date = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+			public boolean isCellEditable(int r,int c){
+				return false;
+			}
+		};
+
+		date.addColumn("Usuario",traceResp.toArray());
+		date.addColumn("Acción",accion.toArray());
+		date.addColumn("Hora",hora.toArray());
 		table.setModel(date);
 	}
 	

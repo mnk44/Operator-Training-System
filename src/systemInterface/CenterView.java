@@ -16,13 +16,18 @@ import java.awt.Font;
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
 
+import systemEnums.AccionTrace;
+import systemEnums.SystemClass;
 import systemLogic.Encrypting;
+import systemServices.TraceService;
 import systemServices.UserService;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -104,6 +109,16 @@ public class CenterView {
 							JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 						}else{
 							JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+							String result2 = null;
+							try {
+								result2 = TraceService.newTrace(userID, AccionTrace.cambió_su, SystemClass.contraseña, "", new Timestamp(Calendar.getInstance().getTime().getTime()));
+							} catch (SQLException e2) {
+								// TODO Auto-generated catch block
+								e2.printStackTrace();
+							}
+							if(result2 != null){
+								JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
+							}
 						}
 					}
 				}

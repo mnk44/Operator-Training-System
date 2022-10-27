@@ -48,6 +48,8 @@ public class FindObjects {
 				result.add(user.get(i));
 			}else if(nickName.contains(findingName)){
 				result.add(user.get(i));
+			}else if(user.get(i).getUser_card().contains(findingName)){
+				result.add(user.get(i));
 			}
 		}
 		
