@@ -244,6 +244,19 @@ public class CenterView {
 		menuBar.add(mnReportes);
 		
 		JMenuItem mntmControlDeAcciones = new JMenuItem("Control de acciones");
+		mntmControlDeAcciones.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				TracesSystemView tracs = null;
+				try {
+					tracs = new TracesSystemView();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				tracs.setLocationRelativeTo(frmSecproit);
+				tracs.setVisible(true);
+			}
+		});
 		mntmControlDeAcciones.setIcon(new ImageIcon(CenterView.class.getResource("/imgs/list.png")));
 		mntmControlDeAcciones.setForeground(Color.WHITE);
 		mntmControlDeAcciones.setFont(new Font("Segoe UI", Font.BOLD, 19));
