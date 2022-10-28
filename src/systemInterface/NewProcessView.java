@@ -22,6 +22,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -32,9 +34,12 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JComboBox;
 
+import systemClass.FactoryProcess;
 import systemClass.User;
 import systemEnums.QuestionsTypes;
 import systemEnums.RolesTypes;
+import systemLogic.Convert;
+import systemServices.FactoryProcessService;
 import systemServices.UserService;
 
 public class NewProcessView extends JDialog {
@@ -100,6 +105,38 @@ public class NewProcessView extends JDialog {
 					JOptionPane.showMessageDialog(null, "La cantidad de intentos debe ser mayor que la cantidad intentos aprobados", "Error", JOptionPane.ERROR_MESSAGE);
 				}else{
 					
+					//insert process into database
+					FactoryProcess process = null;
+					if(image.getText().isEmpty()){
+						try {
+							process = new FactoryProcess(processName.getText(), userG.getUser_area(), null, Convert.toBytes(new File(anmRoute)), Convert.toBytes(new File(drlRoute)));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}else{
+						try {
+							process = new FactoryProcess(processName.getText(), userG.getUser_area(), Convert.toBytes(new File(imageRoute)), Convert.toBytes(new File(anmRoute)), Convert.toBytes(new File(drlRoute)));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					String result = null;
+					try {
+						result = FactoryProcessService.newProcess(process);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(result != null){
+						JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					
+					//insert configuration into database
+					//insert users into database configuration process
+					//charge anm file into database
+					//charge drl file into database
 				}
 			}
 		});
