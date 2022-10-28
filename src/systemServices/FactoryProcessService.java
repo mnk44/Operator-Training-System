@@ -141,18 +141,4 @@ public class FactoryProcessService {
 		}
 		return processList;
 	}
-	
-	public static String newProcessUser(int user_id, int process_id) throws SQLException{
-		try{
-			String sqlSentenc = "INSERT INTO userProcess VALUES (DEFAULT,?,?)";
-			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
-			cs.setInt(1, user_id);
-			cs.setInt(2, process_id);
-			cs.execute();
-			cs.close();
-		}catch(Exception e){
-			return e.getMessage();
-		}
-		return null;
-	}
 }
