@@ -5,7 +5,9 @@ import java.util.ArrayList;
 
 import systemClass.Area;
 import systemClass.FactoryProcess;
+import systemClass.Trace;
 import systemClass.User;
+import systemServices.UserService;
 
 public class FindObjects {
 
@@ -17,6 +19,20 @@ public class FindObjects {
 			String findingName = name.toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
 			if(areaName.contains(findingName)){
 				result.add(areas.get(i));
+			}
+		}
+		
+		return result;
+	}
+	
+	public static ArrayList<Trace> findTrace (ArrayList<Trace> traces, String name) throws SQLException{
+		ArrayList<Trace> result = new ArrayList<>();
+		
+		for(int i=0; i<traces.size(); i++){
+			String userName = ((User)UserService.findId(traces.get(i).getTrace_user())).getUser_nick().toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			name = name.toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			if(userName.contains(name)){
+				result.add(traces.get(i));
 			}
 		}
 		

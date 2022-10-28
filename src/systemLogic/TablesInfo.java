@@ -43,17 +43,19 @@ public class TablesInfo {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static void getTraces(DefaultTableModel date, JTable table, ArrayList<Trace> traces) throws SQLException{
+	public static void getTraces(DefaultTableModel date, JTable table, ArrayList<Trace> traces, String fecha) throws SQLException{
 		ArrayList<String> traceResp = new ArrayList<String>();
 		ArrayList<String> accion = new ArrayList<String>();
 		ArrayList<String> hora = new ArrayList<String>();
 		
 		for(int i=0; i<traces.size(); i++){
-			traceResp.add(((User)UserService.findId(traces.get(i).getTrace_user())).getUser_nick());
-			String act = traces.get(i).getTrace_accion().toString().replace("_", " ");
-			accion.add(act.substring(0,1).toUpperCase() + act.substring(1).toLowerCase() + " " + traces.get(i).getTrace_class().toString() +
-					" <" + traces.get(i).getTrace_class_id() + ">");
-			hora.add(traces.get(i).getTrace_date().getHours() + ":" + traces.get(i).getTrace_date().getMinutes() + ":" + traces.get(i).getTrace_date().getSeconds());
+			if(traces.get(i).getTrace_date().toGMTString().substring(0, 11).equals(fecha)){
+				traceResp.add(((User)UserService.findId(traces.get(i).getTrace_user())).getUser_nick());
+				String act = traces.get(i).getTrace_accion().toString().replace("_", " ");
+				accion.add(act.substring(0,1).toUpperCase() + act.substring(1).toLowerCase() + " " + traces.get(i).getTrace_class().toString() +
+						" <" + traces.get(i).getTrace_class_id() + ">");
+				hora.add(traces.get(i).getTrace_date().getHours() + ":" + traces.get(i).getTrace_date().getMinutes() + ":" + traces.get(i).getTrace_date().getSeconds());
+			}
 		}
 
 		date = new DefaultTableModel(){

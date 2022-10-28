@@ -11,11 +11,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
-import javax.swing.JTextField;
-
 import java.awt.Font;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -37,22 +33,26 @@ import javax.swing.ListSelectionModel;
 import systemClass.Trace;
 import systemLogic.TablesInfo;
 import systemServices.TraceService;
+
 import com.toedter.calendar.JDateChooser;
-import javax.swing.SpinnerDateModel;
-import java.util.Date;
-import java.util.Calendar;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class TracesSystemView extends JDialog {
 
 	private static final long serialVersionUID = -1484207799427822513L;
 	private final JPanel contentPanel = new JPanel();
-	private static JTextField txtBuscar;
-	private JButton button;
+	private JButton btnExportar;
 	private static JTable table;
 	private static DefaultTableModel date;
 	
 	@SuppressWarnings("unchecked")
 	ArrayList<Trace> tracesList = (ArrayList<Trace>) TraceService.getTraces();
+	private JDateChooser dateChooser;
+	String fecha;
+	private JButton btnExportarPdf;
+	private JButton btnExportarImagen;
 
 	public static void main(String[] args) {
 		try {
@@ -75,57 +75,6 @@ public class TracesSystemView extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		
-		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(TracesSystemView.class.getResource("/imgs/search.png")));
-		label.setBounds(28, 16, 48, 48);
-		contentPanel.add(label);
-		
-		txtBuscar = new JTextField();
-		txtBuscar.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if(txtBuscar.getText().equals("Buscar")){
-					txtBuscar.setCaretPosition(0);
-				}
-			}
-		});
-		txtBuscar.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				if(txtBuscar.getText().equals("Buscar")){
-					if(arg0.getKeyChar() == KeyEvent.VK_BACK_SPACE){
-						arg0.consume();
-						getToolkit().beep();
-					}else{
-						txtBuscar.setText("");
-						txtBuscar.setForeground(Color.BLACK);
-							//reloadTable(FindObjects.findUsers(userList, findUser.getText() + arg0.getKeyChar()));
-					}
-				}else if(txtBuscar.getText().length() == 1 && arg0.getKeyChar() == KeyEvent.VK_BACK_SPACE){
-					txtBuscar.setText("Buscar");
-					txtBuscar.setForeground(Color.LIGHT_GRAY);
-					arg0.consume();
-					txtBuscar.setCaretPosition(0);
-					try {
-						reloadTable(tracesList);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}else if(arg0.getKeyChar() == KeyEvent.VK_BACK_SPACE){
-						//reloadTable(FindObjects.findUsers(userList, findUser.getText().substring(0, findUser.getText().length()-1)));
-				}else{
-						//reloadTable(FindObjects.findUsers(userList, findUser.getText() + arg0.getKeyChar()));
-				}
-			}
-		});
-		txtBuscar.setText("Buscar");
-		txtBuscar.setForeground(Color.LIGHT_GRAY);
-		txtBuscar.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		txtBuscar.setColumns(10);
-		txtBuscar.setBounds(79, 30, 500, 27);
-		contentPanel.add(txtBuscar);
 		
 		JLabel lblFecha = new JLabel("Fecha:");
 		lblFecha.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -155,34 +104,96 @@ public class TracesSystemView extends JDialog {
 		table.setAutoCreateRowSorter(true);
 		scrollPane.setViewportView(table);
 		
-		button = new JButton("Aceptar");
-		button.addMouseListener(new MouseAdapter() {
+		btnExportar = new JButton("Exportar excel");
+		btnExportar.setIcon(new ImageIcon(TracesSystemView.class.getResource("/imgs/icons8_Microsoft_Excel_16.png")));
+		btnExportar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				button.setBackground(new Color(239, 196, 159));
+				btnExportar.setBackground(new Color(239, 196, 159));
 			}
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				button.setBackground(new Color(244, 164, 96));
+				btnExportar.setBackground(new Color(244, 164, 96));
 			}
 		});
-		button.setForeground(Color.WHITE);
-		button.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		button.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
-		button.setBackground(new Color(244, 164, 96));
-		button.setBounds(377, 532, 153, 37);
-		contentPanel.add(button);
+		btnExportar.setForeground(Color.WHITE);
+		btnExportar.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		btnExportar.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
+		btnExportar.setBackground(new Color(244, 164, 96));
+		btnExportar.setBounds(670, 532, 185, 37);
+		contentPanel.add(btnExportar);
 		
-		JDateChooser dateChooser = new JDateChooser();
+		dateChooser = new JDateChooser();
+		dateChooser.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				String completo = dateChooser.getSpinner().getValue().toString();
+				int pos = completo.indexOf(" ");
+				fecha = completo.substring(pos + 1);
+				completo = fecha;
+				pos = completo.indexOf(" ");
+				int otherPos = pos;
+				completo = completo.substring(pos + 1);
+				pos = completo.indexOf(" ");
+				otherPos = otherPos + pos;
+				completo = completo.substring(pos + 1);
+				fecha = fecha.substring(0, otherPos + 1);
+				pos = completo.indexOf("T");
+				completo = completo.substring(pos + 1);
+				fecha = fecha + completo;
+				fecha = fecha.substring(4,6) + " " + fecha.substring(0,3) + " " + fecha.substring(7);
+				try {
+					reloadTable(tracesList, fecha);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		dateChooser.getSpinner().setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		dateChooser.setBounds(696, 30, 185, 26);
 		contentPanel.add(dateChooser);
 		
-		reloadTable(tracesList);
+		btnExportarPdf = new JButton("Exportar PDF");
+		btnExportarPdf.setIcon(new ImageIcon(TracesSystemView.class.getResource("/imgs/icons8_PDF_16.png")));
+		btnExportarPdf.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnExportarPdf.setBackground(new Color(239, 196, 159));
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnExportarPdf.setBackground(new Color(244, 164, 96));
+			}
+		});
+		btnExportarPdf.setForeground(Color.WHITE);
+		btnExportarPdf.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		btnExportarPdf.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
+		btnExportarPdf.setBackground(new Color(244, 164, 96));
+		btnExportarPdf.setBounds(354, 532, 194, 37);
+		contentPanel.add(btnExportarPdf);
+		
+		btnExportarImagen = new JButton("Exportar imagen");
+		btnExportarImagen.setIcon(new ImageIcon(TracesSystemView.class.getResource("/imgs/icons8_Image_File_16.png")));
+		btnExportarImagen.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				btnExportarImagen.setBackground(new Color(239, 196, 159));
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				btnExportarImagen.setBackground(new Color(244, 164, 96));
+			}
+		});
+		btnExportarImagen.setForeground(Color.WHITE);
+		btnExportarImagen.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		btnExportarImagen.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
+		btnExportarImagen.setBackground(new Color(244, 164, 96));
+		btnExportarImagen.setBounds(48, 532, 194, 37);
+		contentPanel.add(btnExportarImagen);
 	}
 	
-	public static void reloadTable(ArrayList<Trace> trace) throws SQLException{
-		TablesInfo.getTraces(date, table, trace);
+	public static void reloadTable(ArrayList<Trace> trace, String fecha) throws SQLException{
+		TablesInfo.getTraces(date, table, trace, fecha);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
@@ -190,8 +201,5 @@ public class TracesSystemView extends JDialog {
 		table.getColumnModel().getColumn(2).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(0).setMaxWidth(130);
 		table.getColumnModel().getColumn(2).setMaxWidth(130);
-		if(txtBuscar.getText().equals("Buscar")){
-			txtBuscar.setCaretPosition(0);
-		}
 	}
 }
