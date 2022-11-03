@@ -80,8 +80,6 @@ public class ReadRules {
 				break;
 			}
 			
-			//////////////////////////////////////////////////////////////
-			
 			boolean causes = false; //cause
 			ArrayList<Integer> positionCause = new ArrayList<>();
 			for(int i=0; i<rule.size(); i++){
@@ -108,6 +106,97 @@ public class ReadRules {
 				if(result != null){
 					System.out.println(result);
 				}
+			}
+		}
+		
+		//get conjunta
+		else if(rule.get(1).contains("Conjunta")){
+			//cause
+			int i = 0;
+			while(!rule.get(i).contains("ProcesarDatos.insertarRespueta(")){
+				i++;
+			}
+			
+			String causeLine = rule.get(i--);
+			causeLine = causeLine.replace("ProcesarDatos.insertarRespueta(", "");
+			causeLine = causeLine.substring(1,causeLine.length()-3);
+			
+			if((Cause) CauseService.findName(causeLine, process_id) == null){
+				cause = new Cause(causeLine, process_id);
+				CauseService.newCause(cause);
+			}
+			cause = (Cause) CauseService.findName(causeLine, process_id);
+			
+			//variables
+			int poss = 3;
+			String line = rule.get(poss);
+			while(!line.replace(" ", "").equals("then")){
+				if(line.contains("VariableContinua") || line.contains("VariableDiscreta") ||
+						line.contains("Valvula")){
+					int position = line.indexOf("matches ");
+					line = line.substring(position);
+					
+					String variable_name;
+					position = line.indexOf(",");
+					String line_name = line.substring(0, position);
+					line = line.substring(position);
+					if(rule.get(0).contains("VariableContinua")){
+						variable_name = line_name.substring(9);
+						variable_name = variable_name.substring(0, variable_name.length()-1);
+					}else{
+						variable_name = line_name.substring(10);
+						variable_name = variable_name.substring(0, variable_name.length()-1);
+					}
+
+					variable = (Variable) VariableService.findName(variable_name, process_id);
+
+					position = line.indexOf("Estados."); //state
+					line = line.substring(position);
+					line = line.replace("Estados.", "");
+
+					if(rule.get(0).contains("VariableContinua")){
+						position = line.indexOf(",");
+						line = line.substring(0,position);
+						line = line.replace(",", "");
+					}else{
+						position = line.indexOf(")");
+						line = line.substring(0,position);
+						line = line.replace(")", "");
+					}
+
+					switch (line) {
+					case "ALTO":
+						state = "Alto";
+						break;
+					case "BAJO":
+						state = "Bajo";
+						break;
+					case "NORMAL":
+						state = "Normal";
+						break;
+					case "ABIERTA":
+						state = "Abierto";
+						break;
+					case "CERRADA":
+						state = "Cerrado";
+						break;
+					case "NEGATIVO":
+						state = "Negativo";
+						break;
+					case "POSITIVO":
+						state = "Positivo";
+						break;
+					}
+					
+					System.out.println("Conjunta:" + " " + variable_name + " / " + causeLine);
+					VariableCause varCause = new VariableCause(variable.getVariable_id(), state, cause.getCause_id());
+					Object result = RulesService.newVariableCause(varCause);
+					if(result != null){
+						System.out.println(result);
+					}
+				}
+				poss++;
+				line = rule.get(poss);
 			}
 		}
 		

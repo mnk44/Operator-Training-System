@@ -44,7 +44,6 @@ public class LoadFiles {
 			}else{
 				variable = new Variable(name, VariableTypes.Discreta.toString(), process_id);
 			}
-			
 			Object result = VariableService.newVariable(variable);
 			if(result != null){
 				System.out.println(result);

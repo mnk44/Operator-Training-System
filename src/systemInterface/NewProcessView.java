@@ -34,6 +34,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JComboBox;
 
+import knowledgeBase.LoadFiles;
 import systemClass.FactoryProcess;
 import systemClass.User;
 import systemEnums.QuestionsTypes;
@@ -98,7 +99,7 @@ public class NewProcessView extends JDialog {
 		
 		JButton button = new JButton("Aceptar");
 		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {				
 				if(processName.getText().replace(" ", "").isEmpty() || anmRoute.isEmpty() || drlRoute.isEmpty()){
 					JOptionPane.showMessageDialog(null, "Debes completar todos los campos para continuar", "Error", JOptionPane.ERROR_MESSAGE);
 				}else if((int)cantEnt.getValue() < (int)cantAprov.getValue()){
@@ -251,7 +252,7 @@ public class NewProcessView extends JDialog {
 		imageButt.setBounds(709, 120, 51, 48);
 		process.add(imageButt);
 		
-		button_2 = new JButton("");
+		button_2 = new JButton();
 		button_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(anm.getText().isEmpty()){
