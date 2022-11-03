@@ -20,9 +20,9 @@ public class ProcessConfiguration {
 		this.cant_try = cant_try;
 		this.try_aprove = try_aprove;
 		this.consecutive = consecutive;
-		this.var_question = QuestionsTypes.valueOf(var_question);
-		this.cause_question = QuestionsTypes.valueOf(cause_question);
-		this.rec_question = QuestionsTypes.valueOf(rec_question);
+		this.var_question = QuestionsTypes.valueOf(var_question.replace(" ", "_"));
+		this.cause_question = QuestionsTypes.valueOf(cause_question.replace(" ", "_"));
+		this.rec_question = QuestionsTypes.valueOf(rec_question.replace(" ", "_"));
 	}
 	
 	public ProcessConfiguration(int class_id, int process_id, int cant_try,
@@ -34,9 +34,9 @@ public class ProcessConfiguration {
 		this.cant_try = cant_try;
 		this.try_aprove = try_aprove;
 		this.consecutive = consecutive;
-		this.var_question = QuestionsTypes.valueOf(var_question);
-		this.cause_question = QuestionsTypes.valueOf(cause_question);
-		this.rec_question = QuestionsTypes.valueOf(rec_question);
+		this.var_question = QuestionsTypes.valueOf(var_question.replace(" ", "_"));
+		this.cause_question = QuestionsTypes.valueOf(cause_question.replace(" ", "_"));
+		this.rec_question = QuestionsTypes.valueOf(rec_question.replace(" ", "_"));
 	}
 	
 	public int getClass_id() {

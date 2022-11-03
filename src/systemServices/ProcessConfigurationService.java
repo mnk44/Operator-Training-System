@@ -67,7 +67,7 @@ public class ProcessConfigurationService {
 	
 	public static String newProcessUser(int user_id, int process_id) throws SQLException{
 		try{
-			String sqlSentenc = "INSERT INTO userProcess VALUES (DEFAULT,?,?)";
+			String sqlSentenc = "INSERT INTO user_process VALUES (DEFAULT,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_id);
 			cs.setInt(2, process_id);

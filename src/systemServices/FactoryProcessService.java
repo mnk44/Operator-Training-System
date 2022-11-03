@@ -128,7 +128,7 @@ public class FactoryProcessService {
 	public static Object findUser(int user_id) throws SQLException{
 		ArrayList<FactoryProcess> processList = new ArrayList<FactoryProcess>();
 		try{
-			String sqlSentenc = "SELECT * FROM userProcess WHERE user_id = ?";
+			String sqlSentenc = "SELECT * FROM user_process WHERE user_id = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_id);
 			ResultSet rs = cs.executeQuery();

@@ -171,14 +171,14 @@ public class PersonalInfoView extends JDialog {
 		lblrea.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblrea.setForeground(new Color(47, 46, 65));
 		lblrea.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblrea.setBounds(31, 375, 227, 48);
+		lblrea.setBounds(31, 375, 164, 48);
 		contentPanel.add(lblrea);
 		
 		JLabel label_7 = new JLabel(((Area) AreaService.findId(user.getUser_area())).getArea_name());
 		label_7.setHorizontalAlignment(SwingConstants.LEFT);
 		label_7.setForeground(new Color(47, 46, 65));
 		label_7.setFont(new Font("Segoe UI", Font.PLAIN, 22));
-		label_7.setBounds(267, 381, 286, 37);
+		label_7.setBounds(199, 381, 354, 37);
 		contentPanel.add(label_7);
 		
 		if(user.getUser_rol().equals(RolesTypes.Jefe_de_área)){

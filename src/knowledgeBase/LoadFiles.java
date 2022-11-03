@@ -11,6 +11,8 @@ import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import systemClass.Cause;
 import systemClass.Recomendation;
 import systemClass.Variable;
@@ -46,7 +48,7 @@ public class LoadFiles {
 			}
 			Object result = VariableService.newVariable(variable);
 			if(result != null){
-				System.out.println(result);
+				JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			current = fi.readLine();
 		}
@@ -57,7 +59,7 @@ public class LoadFiles {
 			Cause cause = new Cause(current, process_id);
 			Object result = CauseService.newCause(cause);
 			if(result != null){
-				System.out.println(result);
+				JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			current = fi.readLine();             
 		}
@@ -68,7 +70,7 @@ public class LoadFiles {
 			Recomendation recomendation = new Recomendation(current, process_id);
 			Object result = RecomendationService.newRecomendation(recomendation);
 			if(result != null){
-				System.out.println(result);
+				JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			current = fi.readLine();             
 		}

@@ -80,7 +80,7 @@ public class TracesSystemView extends JDialog {
 		lblFecha.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblFecha.setForeground(new Color(47, 46, 65));
 		lblFecha.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblFecha.setBounds(620, 16, 73, 48);
+		lblFecha.setBounds(593, 16, 73, 48);
 		contentPanel.add(lblFecha);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -150,7 +150,7 @@ public class TracesSystemView extends JDialog {
 			}
 		});
 		dateChooser.getSpinner().setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		dateChooser.setBounds(696, 30, 185, 26);
+		dateChooser.setBounds(670, 30, 211, 26);
 		contentPanel.add(dateChooser);
 		
 		btnExportarPdf = new JButton("Exportar PDF");

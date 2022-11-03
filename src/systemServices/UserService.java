@@ -242,12 +242,13 @@ public class UserService {
 		return usersList;
 	}
 	
-	public static Object getUsersName(int user_name) throws SQLException{
+	public static Object getUsersName(String user_name, int user_area) throws SQLException{
 		ArrayList<User> usersList = new ArrayList<User>();
 		try{
-			String sqlSentenc = "SELECT * FROM people WHERE user_name = ?";
+			String sqlSentenc = "SELECT * FROM people WHERE user_name = ? and user_area = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
-			cs.setInt(1, user_name);
+			cs.setString(1, user_name);
+			cs.setInt(2, user_area);
 			ResultSet rs = cs.executeQuery();
 			if(rs.next()){
 				RolesTypes rol = null;

@@ -3,6 +3,8 @@ package knowledgeBase;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import systemClass.Cause;
 import systemClass.CauseRecomendation;
 import systemClass.Recomendation;
@@ -32,6 +34,7 @@ public class ReadRules {
 			position = line.indexOf(",");
 			String line_name = line.substring(0, position);
 			line = line.substring(position);
+
 			if(rule.get(0).contains("VariableContinua")){
 				variable_name = line_name.substring(9);
 				variable_name = variable_name.substring(0, variable_name.length()-1);
@@ -79,7 +82,7 @@ public class ReadRules {
 				state = "Positivo";
 				break;
 			}
-			
+
 			boolean causes = false; //cause
 			ArrayList<Integer> positionCause = new ArrayList<>();
 			for(int i=0; i<rule.size(); i++){
@@ -89,7 +92,7 @@ public class ReadRules {
 					positionCause.add(i);
 				}
 			}
-			
+
 			for(int i=0; i<positionCause.size(); i++) {
 				String causeLine = rule.get(positionCause.get(i));
 				position = causeLine.indexOf("String(");
@@ -101,14 +104,15 @@ public class ReadRules {
 				causeLine = causeLine.substring(1,causeLine.length()-1);
 				
 				cause = (Cause) CauseService.findName(causeLine, process_id);
+
 				VariableCause varCause = new VariableCause(variable.getVariable_id(), state, cause.getCause_id());
 				Object result = RulesService.newVariableCause(varCause);
 				if(result != null){
-					System.out.println(result);
+					JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}
-		
+
 		//get conjunta
 		else if(rule.get(1).contains("Conjunta")){
 			//cause
@@ -116,17 +120,17 @@ public class ReadRules {
 			while(!rule.get(i).contains("ProcesarDatos.insertarRespueta(")){
 				i++;
 			}
-			
+
 			String causeLine = rule.get(i--);
 			causeLine = causeLine.replace("ProcesarDatos.insertarRespueta(", "");
 			causeLine = causeLine.substring(1,causeLine.length()-3);
-			
+
 			if((Cause) CauseService.findName(causeLine, process_id) == null){
 				cause = new Cause(causeLine, process_id);
 				CauseService.newCause(cause);
 			}
 			cause = (Cause) CauseService.findName(causeLine, process_id);
-			
+
 			//variables
 			int poss = 3;
 			String line = rule.get(poss);
@@ -135,7 +139,7 @@ public class ReadRules {
 						line.contains("Valvula")){
 					int position = line.indexOf("matches ");
 					line = line.substring(position);
-					
+
 					String variable_name;
 					position = line.indexOf(",");
 					String line_name = line.substring(0, position);
@@ -187,19 +191,18 @@ public class ReadRules {
 						state = "Positivo";
 						break;
 					}
-					
-					System.out.println("Conjunta:" + " " + variable_name + " / " + causeLine);
+
 					VariableCause varCause = new VariableCause(variable.getVariable_id(), state, cause.getCause_id());
 					Object result = RulesService.newVariableCause(varCause);
 					if(result != null){
-						System.out.println(result);
+						JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				poss++;
 				line = rule.get(poss);
 			}
 		}
-		
+
 		//get cause-recomendation
 		else if(rule.get(1).contains("Causa")){
 			String line = rule.get(1);
@@ -207,9 +210,9 @@ public class ReadRules {
 			line = line.substring(position);
 			line = line.replace("matches ", "");
 			line = line.substring(1, line.length()-3);
-			
+
 			cause = (Cause) CauseService.findName(line, process_id);
-			
+
 			boolean rec = false; //recomendation
 			ArrayList<Integer> positionRecomendation = new ArrayList<>();
 			for(int i=0; i<rule.size(); i++){
@@ -219,7 +222,7 @@ public class ReadRules {
 					positionRecomendation.add(i);
 				}
 			}
-			
+
 			for(int i=0; i<positionRecomendation.size(); i++) {
 				String recLine = rule.get(positionRecomendation.get(i));
 				position = recLine.indexOf("String(");
@@ -229,13 +232,13 @@ public class ReadRules {
 				recLine = recLine.substring(0,position);
 				recLine = recLine.replace(")", "");
 				recLine = recLine.substring(1,recLine.length()-1);
-				
+
 				recomendation = (Recomendation) RecomendationService.findName(recLine, process_id);
 				CauseRecomendation causeRecomendation = new CauseRecomendation(cause.getCause_id(), 
 						recomendation.getRecomendation_id());
 				Object result = RulesService.newCauseRecomendation(causeRecomendation);
 				if(result != null){
-					System.out.println(result);
+					JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		}
