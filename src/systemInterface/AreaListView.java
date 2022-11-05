@@ -140,17 +140,13 @@ public class AreaListView extends JDialog {
 				if(area_name != null){
 					if(!area_name.isEmpty() && !area_name.replaceAll(" ", "").isEmpty()){
 						try {
-							String result = systemServices.AreaService.newArea(area_name);
+							String result = systemServices.AreaService.newArea(area_name,user, AccionTrace.creó_el, SystemClass.área, area_name, new Timestamp(Calendar.getInstance().getTime().getTime()));
 							if(result == null){
 								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
-								String result2 = TraceService.newTrace(user, AccionTrace.creó_el, SystemClass.área, area_name, new Timestamp(Calendar.getInstance().getTime().getTime()));
-								if(result2 != null){
-									JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
-								}
 								areasList = (ArrayList<Area>) AreaService.getAreas();
 								reloadTable(areasList);
 							}else{
-								JOptionPane.showMessageDialog(null, "El objeto que trata de crear ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 								btnNuevarea.doClick();
 							}
 						} catch (SQLException e) {

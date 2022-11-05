@@ -3,17 +3,26 @@ package systemServices;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import systemClass.Area;
+import systemEnums.AccionTrace;
+import systemEnums.SystemClass;
 
 public class AreaService {
 	
-	public static String newArea(String area_name) throws SQLException{
+	public static String newArea(String area_name, int trace_user, AccionTrace trace_accion,
+			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
-			String sqlSentenc = "INSERT INTO area VALUES (DEFAULT,?)";
+			String sqlSentenc = "{call public.insert_area(?,?,?,?,?,?)}";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, area_name);
+			cs.setInt(2, trace_user);
+			cs.setString(3, trace_accion.toString());
+			cs.setString(4, trace_class.toString());
+			cs.setString(5, trace_class_id);
+			cs.setTimestamp(6, trace_date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
