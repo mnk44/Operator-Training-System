@@ -35,7 +35,6 @@ import systemEnums.SystemClass;
 import systemLogic.FindObjects;
 import systemLogic.TablesInfo;
 import systemServices.AreaService;
-import systemServices.TraceService;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -140,7 +139,7 @@ public class AreaListView extends JDialog {
 				if(area_name != null){
 					if(!area_name.isEmpty() && !area_name.replaceAll(" ", "").isEmpty()){
 						try {
-							String result = systemServices.AreaService.newArea(area_name,user, AccionTrace.creó_el, SystemClass.área, area_name, new Timestamp(Calendar.getInstance().getTime().getTime()));
+							Object result = systemServices.AreaService.newArea(area_name,user, AccionTrace.creó_el, SystemClass.área, area_name, new Timestamp(Calendar.getInstance().getTime().getTime()));
 							if(result == null){
 								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
 								areasList = (ArrayList<Area>) AreaService.getAreas();
@@ -188,17 +187,13 @@ public class AreaListView extends JDialog {
 				if(name_area != null){
 					if(!name_area.isEmpty() && !name_area.replaceAll(" ", "").isEmpty()){
 						try {
-							String result = systemServices.AreaService.updateArea(id_area, name_area);
+							String result = systemServices.AreaService.updateArea(id_area, name_area, user, AccionTrace.modificó_el, SystemClass.área, name_area, new Timestamp(Calendar.getInstance().getTime().getTime()));
 							if(result == null){
 								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
-								String result2 = TraceService.newTrace(user, AccionTrace.modificó_el, SystemClass.área, name_area, new Timestamp(Calendar.getInstance().getTime().getTime()));
-								if(result2 !=null){
-									JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
-								}
-								areasList = (ArrayList<Area>) AreaService.getAreas();
+								areasList.get(table.getSelectedRow()).setArea_name(name_area);
 								reloadTable(areasList);
 							}else{
-								JOptionPane.showMessageDialog(null, "El objeto que trata de crear ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 							}
 						} catch (SQLException e) {
 							e.printStackTrace();
@@ -249,14 +244,11 @@ public class AreaListView extends JDialog {
 						JOptionPane.showMessageDialog(null, "No puede eliminar un área si existen usuarios en ella", "Error", JOptionPane.ERROR_MESSAGE);
 					}else{
 						try {
-							String result = systemServices.AreaService.deleteArea(id_area);
+							String result = systemServices.AreaService.deleteArea(id_area, user, AccionTrace.eliminó_el, SystemClass.área, (String) table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
 							if(result == null){
 								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
-								String result2 = TraceService.newTrace(user, AccionTrace.eliminó_el, SystemClass.área, (String) table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
-								if(result2 !=null){
-									JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
-								}
-								reloadTable((ArrayList<Area>) AreaService.getAreas());
+								areasList.remove(table.getSelectedRow());
+								reloadTable(areasList);
 							}else{
 								JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 							}
