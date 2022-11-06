@@ -11,15 +11,11 @@ import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import systemClass.Cause;
 import systemClass.Recomendation;
 import systemClass.Variable;
 import systemEnums.VariableTypes;
-import systemServices.CauseService;
-import systemServices.RecomendationService;
-import systemServices.VariableService;
+import systemServices.RulesService;
 
 public class LoadFiles {
 	
@@ -28,6 +24,10 @@ public class LoadFiles {
 		FileReader fr = new FileReader(anmFile);
 		BufferedReader fi = new BufferedReader(fr);	
 		String current = fi.readLine();
+		
+		ArrayList<Variable> variables = new ArrayList<>();
+		ArrayList<Cause> causes = new ArrayList<>();
+		ArrayList<Recomendation> recomendations = new ArrayList<>();
 		
 		//variables
 		while(!current.equalsIgnoreCase("*causa")){
@@ -46,10 +46,9 @@ public class LoadFiles {
 			}else{
 				variable = new Variable(name, VariableTypes.Discreta.toString(), process_id);
 			}
-			Object result = VariableService.newVariable(variable);
-			if(result != null){
-				JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
-			}
+			
+			variables.add(variable);
+			
 			current = fi.readLine();
 		}
 		
@@ -57,10 +56,9 @@ public class LoadFiles {
 		current = fi.readLine();
 		while(!current.equalsIgnoreCase("*recomendacion")){
 			Cause cause = new Cause(current, process_id);
-			Object result = CauseService.newCause(cause);
-			if(result != null){
-				JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
-			}
+			
+			causes.add(cause);
+			
 			current = fi.readLine();             
 		}
 		
@@ -68,14 +66,15 @@ public class LoadFiles {
 		current = fi.readLine();
 		while(!current.equals("-1")){
 			Recomendation recomendation = new Recomendation(current, process_id);
-			Object result = RecomendationService.newRecomendation(recomendation);
-			if(result != null){
-				JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
-			}
+			
+			recomendations.add(recomendation);
+			
 			current = fi.readLine();             
 		}
 		
 		fi.close();
+		
+		RulesService.insertAnmInfo(variables, causes, recomendations);
 	}
 	
 	public static void getDrlInfo(byte[] drl, int process_id) throws IOException, ClassNotFoundException, SQLException{

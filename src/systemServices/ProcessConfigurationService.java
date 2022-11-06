@@ -3,14 +3,22 @@ package systemServices;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import systemClass.ProcessConfiguration;
+import systemClass.User;
+import systemEnums.AccionTrace;
+import systemEnums.SystemClass;
+import systemLogic.MultiTableList;
 
 public class ProcessConfigurationService {
 	
-	public static String newConfiguration(ProcessConfiguration config) throws SQLException{
+	public static String newConfiguration(ProcessConfiguration config, int trace_user, AccionTrace trace_accion,
+			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
-			String sqlSentenc = "INSERT INTO process_configuration VALUES (DEFAULT,?,?,?,?,?,?,?)";
+			String sqlSentenc = "INSERT INTO process_configuration VALUES (DEFAULT,?,?,?,?,?,?,?)"
+					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, config.getProcess_id());
 			cs.setInt(2, config.getCant_try());
@@ -19,6 +27,11 @@ public class ProcessConfigurationService {
 			cs.setString(5, config.getVar_question().toString());
 			cs.setString(6, config.getCause_question().toString());
 			cs.setString(7, config.getRec_question().toString());
+			cs.setInt(8, trace_user);
+			cs.setString(9, trace_accion.toString());
+			cs.setString(10, trace_class.toString());
+			cs.setString(11, trace_class_id);
+			cs.setTimestamp(12, trace_date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
@@ -65,12 +78,16 @@ public class ProcessConfigurationService {
 		return process;
 	}
 	
-	public static String newProcessUser(int user_id, int process_id) throws SQLException{
+	public static String newProcessUser(ArrayList<User> users, int process_id) throws SQLException{
 		try{
-			String sqlSentenc = "INSERT INTO user_process VALUES (DEFAULT,?,?)";
+			int cont = 0;
+			String sqlSentenc = "INSERT INTO user_process VALUES "
+					+ MultiTableList.fillUser(users);
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
-			cs.setInt(1, user_id);
-			cs.setInt(2, process_id);
+			for (int i = 0; i < users.size(); i++) {
+				cs.setInt(cont++, users.get(i).getUser_id());
+				cs.setInt(cont++, process_id);
+			}
 			cs.execute();
 			cs.close();
 		}catch(Exception e){

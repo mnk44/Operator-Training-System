@@ -11,7 +11,7 @@ public class FactoryProcessService {
 	
 	public static String newProcess(FactoryProcess process) throws SQLException{
 		try{
-			String sqlSentenc = "INSERT INTO process VALUES (DEFAULT,?,?,?,?,?)";
+			String sqlSentenc = "INSERT INTO process VALUES (DEFAULT,?,?,?,?,?);";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, process.getProcess_name());
 			cs.setInt(2, process.getProcess_area());

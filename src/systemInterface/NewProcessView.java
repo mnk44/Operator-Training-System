@@ -154,7 +154,7 @@ public class NewProcessView extends JDialog {
 							consecutive.isSelected(), var.getSelectedItem().toString(), cause.getSelectedItem().toString(), 
 							rec.getSelectedItem().toString());
 					try {
-						String rsult = ProcessConfigurationService.newConfiguration(config);
+						String rsult = ProcessConfigurationService.newConfiguration(config, userG.getUser_id(), AccionTrace.creó_el, SystemClass.proceso, processName.getText(), new Timestamp(Calendar.getInstance().getTime().getTime()));
 						if(rsult != null){
 							JOptionPane.showMessageDialog(null, rsult, "Error", JOptionPane.ERROR_MESSAGE);
 						}
@@ -172,36 +172,36 @@ public class NewProcessView extends JDialog {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-
-						for(int i=0; i < u.size(); i++){
-							try {
-								String rsult = ProcessConfigurationService.newProcessUser(u.get(i).getUser_id(), processId);
-								if(rsult != null){
-									JOptionPane.showMessageDialog(null, rsult, "Error", JOptionPane.ERROR_MESSAGE);
-								}
-							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+						try {
+							String rsult = ProcessConfigurationService.newProcessUser(u, processId);
+							if(rsult != null){
+								JOptionPane.showMessageDialog(null, rsult, "Error", JOptionPane.ERROR_MESSAGE);
 							}
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
+
 					}else{
+						ArrayList<User> u = new ArrayList<>();
 						for(int i=0; i<usersA.size(); i++){
-							User u = null;
+							User uss = null;
 							try {
-								u = (User) UserService.getUsersName(usersA.get(i), userG.getUser_area());
+								uss = (User) UserService.getUsersName(usersA.get(i), userG.getUser_area());
+								u.add(uss);
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
-							try {
-								String rsult = ProcessConfigurationService.newProcessUser(u.getUser_id(), processId);
-								if(rsult != null){
-									JOptionPane.showMessageDialog(null, rsult, "Error", JOptionPane.ERROR_MESSAGE);
-								}
-							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+						}
+						try {
+							String rsult = ProcessConfigurationService.newProcessUser(u, processId);
+							if(rsult != null){
+								JOptionPane.showMessageDialog(null, rsult, "Error", JOptionPane.ERROR_MESSAGE);
 							}
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
 					}			
 
@@ -221,18 +221,6 @@ public class NewProcessView extends JDialog {
 							| SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-
-					//trace
-					String result2 = null;
-					try {
-						result2 = TraceService.newTrace(userG.getUser_id(), AccionTrace.creó_el, SystemClass.proceso, processName.getText(), new Timestamp(Calendar.getInstance().getTime().getTime()));
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					if(result2 != null){
-						JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}

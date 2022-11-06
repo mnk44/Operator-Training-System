@@ -5,8 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import systemClass.Cause;
 import systemClass.CauseRecomendation;
+import systemClass.Recomendation;
+import systemClass.Variable;
 import systemClass.VariableCause;
+import systemLogic.MultiTableList;
 
 public class RulesService {
 	
@@ -67,5 +71,35 @@ public class RulesService {
 			return e.getMessage();
 		}
 		return ruleList;
+	}
+	
+	public static String insertAnmInfo(ArrayList<Variable> vars, ArrayList<Cause> causes, ArrayList<Recomendation> recs){
+		int cont = 0;
+		try{
+			String sqlSentenc = "INSERT INTO variable VALUES " + MultiTableList.fillVariable(vars) +
+					"INSERT INTO cause VALUES " + MultiTableList.fillCause(causes) +
+					"INSERT INTO recomendation VALUES " + MultiTableList.fillRecomendations(recs);
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			for (int i = 0; i < vars.size(); i++) {
+				cs.setString(cont++, vars.get(i).getVariable_name());
+				cs.setString(cont++, vars.get(i).getVariable_type().toString());
+				cs.setInt(cont++, vars.get(i).getMin_value());
+				cs.setInt(cont++, vars.get(i).getMax_value());
+				cs.setInt(cont++, vars.get(i).getVariable_process());
+			}
+			for (int j = 0; j < causes.size(); j++) {
+				cs.setString(cont++, causes.get(j).getCause_name());
+				cs.setInt(cont++, causes.get(j).getCause_process());
+			}
+			for (int k = 0; k < recs.size(); k++) {
+				cs.setString(cont++, recs.get(k).getRecomendation_name());
+				cs.setInt(cont++, recs.get(k).getRecomendation_process());
+			}
+			cs.execute();
+			cs.close();
+		}catch(Exception e){
+			return e.getMessage();
+		}
+		return null;
 	}
 }
