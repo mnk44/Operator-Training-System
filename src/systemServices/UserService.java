@@ -3,20 +3,25 @@ package systemServices;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import systemClass.User;
+import systemEnums.AccionTrace;
 import systemEnums.RolesTypes;
 import systemEnums.SchoolarLevel;
+import systemEnums.SystemClass;
 
 public class UserService {
 	
 	public static String newUser(String user_name, String user_card,
 			SchoolarLevel user_academic, int user_experience,
 			int user_position_years, String user_nick, String user_password,
-			boolean user_active, int user_area, RolesTypes user_rol) throws SQLException{
+			boolean user_active, int user_area, RolesTypes user_rol, int trace_user, AccionTrace trace_accion,
+			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
-			String sqlSentenc = "INSERT INTO people VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?)";
+			String sqlSentenc = "INSERT INTO people VALUES (DEFAULT,?,?,?,?,?,?,?,?,?,?);"
+					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, user_name);
 			cs.setString(2, user_card);
@@ -28,6 +33,11 @@ public class UserService {
 			cs.setBoolean(8, user_active);
 			cs.setInt(9, user_area);
 			cs.setInt(10, user_rol.ordinal() + 1);
+			cs.setInt(11, trace_user);
+			cs.setString(12, trace_accion.toString());
+			cs.setString(13, trace_class.toString());
+			cs.setString(14, trace_class_id);
+			cs.setTimestamp(15, trace_date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
@@ -36,11 +46,13 @@ public class UserService {
 		return null;
 	}
 	
-	public static String updateUser(User user) throws SQLException{
+	public static String updateUser(User user, int trace_user, AccionTrace trace_accion,
+			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
 			String sqlSentenc = "UPDATE people SET user_name = ?, user_card = ?, user_academic = ?,"
 					+ "user_experience = ?, user_position_years = ?, user_nick = ?,"
-					+ "user_password = ?, user_active = ?, user_area = ?, user_rol = ? WHERE user_id = ?";
+					+ "user_password = ?, user_active = ?, user_area = ?, user_rol = ? WHERE user_id = ?;"
+					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, user.getUser_name());
 			cs.setString(2, user.getUser_card());
@@ -53,6 +65,11 @@ public class UserService {
 			cs.setInt(9, user.getUser_area());
 			cs.setInt(10, user.getUser_rol().ordinal() + 1);
 			cs.setInt(11, user.getUser_id());
+			cs.setInt(12, trace_user);
+			cs.setString(13, trace_accion.toString());
+			cs.setString(14, trace_class.toString());
+			cs.setString(15, trace_class_id);
+			cs.setTimestamp(16, trace_date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
@@ -61,11 +78,18 @@ public class UserService {
 		return null;
 	}
 	
-	public static String sleepUser(int user_id) throws SQLException{
+	public static String sleepUser(int user_id, int trace_user, AccionTrace trace_accion,
+			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
-			String sqlSentenc = "UPDATE people SET user_active = false WHERE user_id = ?";
+			String sqlSentenc = "UPDATE people SET user_active = false WHERE user_id = ?"
+					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_id);
+			cs.setInt(2, trace_user);
+			cs.setString(3, trace_accion.toString());
+			cs.setString(4, trace_class.toString());
+			cs.setString(5, trace_class_id);
+			cs.setTimestamp(6, trace_date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
@@ -74,11 +98,18 @@ public class UserService {
 		return null;
 	}
 	
-	public static String awakeUser(int user_id) throws SQLException{
+	public static String awakeUser(int user_id, int trace_user, AccionTrace trace_accion,
+			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
-			String sqlSentenc = "UPDATE people SET user_active = true WHERE user_id = ?";
+			String sqlSentenc = "UPDATE people SET user_active = true WHERE user_id = ?"
+					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_id);
+			cs.setInt(2, trace_user);
+			cs.setString(3, trace_accion.toString());
+			cs.setString(4, trace_class.toString());
+			cs.setString(5, trace_class_id);
+			cs.setTimestamp(6, trace_date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
@@ -87,12 +118,19 @@ public class UserService {
 		return null;
 	}
 	
-	public static String changePassword(int user_id, String new_pass) throws SQLException{
+	public static String changePassword(int user_id, String new_pass, int trace_user, AccionTrace trace_accion,
+			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
-			String sqlSentenc = "UPDATE people SET user_password = ? WHERE user_id = ?";
+			String sqlSentenc = "UPDATE people SET user_password = ? WHERE user_id = ?"
+					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, new_pass);
 			cs.setInt(2, user_id);
+			cs.setInt(3, trace_user);
+			cs.setString(4, trace_accion.toString());
+			cs.setString(5, trace_class.toString());
+			cs.setString(6, trace_class_id);
+			cs.setTimestamp(7, trace_date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){

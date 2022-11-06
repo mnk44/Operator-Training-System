@@ -19,7 +19,6 @@ import javax.swing.ImageIcon;
 import systemEnums.AccionTrace;
 import systemEnums.SystemClass;
 import systemLogic.Encrypting;
-import systemServices.TraceService;
 import systemServices.UserService;
 
 import java.awt.event.ActionListener;
@@ -99,7 +98,7 @@ public class CenterView {
 						}
 						String result = "No funciona";
 						try {
-							result = UserService.changePassword(userID, Encrypting.getEncript(new_pass));
+							result = UserService.changePassword(userID, Encrypting.getEncript(new_pass),userID, AccionTrace.cambió_su, SystemClass.contraseña, "", new Timestamp(Calendar.getInstance().getTime().getTime()));
 						} catch (UnsupportedEncodingException e) {
 							JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 						} catch (SQLException e) {
@@ -109,16 +108,6 @@ public class CenterView {
 							JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 						}else{
 							JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
-							String result2 = null;
-							try {
-								result2 = TraceService.newTrace(userID, AccionTrace.cambió_su, SystemClass.contraseña, "", new Timestamp(Calendar.getInstance().getTime().getTime()));
-							} catch (SQLException e2) {
-								// TODO Auto-generated catch block
-								e2.printStackTrace();
-							}
-							if(result2 != null){
-								JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
-							}
 						}
 					}
 				}

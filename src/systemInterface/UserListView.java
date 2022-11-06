@@ -12,15 +12,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -34,11 +30,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import systemClass.User;
-import systemEnums.AccionTrace;
-import systemEnums.SystemClass;
 import systemLogic.FindObjects;
 import systemLogic.TablesInfo;
-import systemServices.TraceService;
 import systemServices.UserService;
 
 public class UserListView extends JDialog {
@@ -47,7 +40,6 @@ public class UserListView extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JButton newUser;
 	private static JButton updateUser;
-	private static JButton sleepUser;
 	private JLabel lblNewLabel;
 	private static JTextField findUser;
 	private static DefaultTableModel date;
@@ -106,17 +98,8 @@ public class UserListView extends JDialog {
 
 				if (selected != -1) {
 					updateUser.setEnabled(true);
-					sleepUser.setEnabled(true);
-					if(table.getValueAt(selected, 5).equals("x")){
-						sleepUser.setText("Inactivar usuario");
-						sleepUser.setIcon(new ImageIcon(UserListView.class.getResource("/imgs/icons8_Sleeping_in_Bed_16.png")));
-					}else{
-						sleepUser.setText("Activar usuario");
-						sleepUser.setIcon(new ImageIcon(UserListView.class.getResource("/imgs/icons8_Insomnia_16.png")));
-					}
 				}else{
 					updateUser.setEnabled(false);
-					sleepUser.setEnabled(false);
 				}
 			}
 		});
@@ -201,92 +184,6 @@ public class UserListView extends JDialog {
 		updateUser.setBounds(817, 197, 202, 37);
 		contentPanel.add(updateUser);
 
-		sleepUser = new JButton("Inactivar usuario");
-		sleepUser.addActionListener(new ActionListener() {
-			@SuppressWarnings("unchecked")
-			public void actionPerformed(ActionEvent arg0) {
-				if(sleepUser.getText().equals("Inactivar usuario")){
-					try {
-						UserService.sleepUser((int) table.getValueAt(selected, 0));
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					String result2 = null;
-					try {
-						result2 = TraceService.newTrace(user, AccionTrace.desactivó_al, SystemClass.usuario, (String)table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
-					} catch (SQLException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					if(result2 != null){
-						JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
-					}
-					try {
-						userList = (ArrayList<User>) UserService.getUsers();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						reloadTable(userList);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}else{
-					try {
-						UserService.awakeUser((int) table.getValueAt(selected, 0));
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					String result2 = null;
-					try {
-						result2 = TraceService.newTrace(user, AccionTrace.activó_al, SystemClass.usuario, (String)table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
-					} catch (SQLException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					if(result2 != null){
-						JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
-					}
-					try {
-						userList = (ArrayList<User>) UserService.getUsers();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					try {
-						reloadTable(userList);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		});
-		sleepUser.setEnabled(false);
-		sleepUser.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				if(sleepUser.isEnabled()){
-					sleepUser.setBackground(new Color(239, 196, 159));
-				}
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				sleepUser.setBackground(new Color(244, 164, 96));
-			}
-		});
-		sleepUser.setIcon(new ImageIcon(UserListView.class.getResource("/imgs/icons8_Sleeping_in_Bed_16.png")));
-		sleepUser.setForeground(Color.WHITE);
-		sleepUser.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		sleepUser.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
-		sleepUser.setBackground(new Color(244, 164, 96));
-		sleepUser.setBounds(817, 287, 202, 37);
-		contentPanel.add(sleepUser);
-
 		lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(AreaListView.class.getResource("/imgs/search.png")));
 		lblNewLabel.setBounds(32, 16, 48, 48);
@@ -370,7 +267,6 @@ public class UserListView extends JDialog {
 		table.getColumnModel().getColumn(4).setMaxWidth(55);
 		table.getColumnModel().getColumn(5).setMaxWidth(60);
 		updateUser.setEnabled(false);
-		sleepUser.setEnabled(false);
 		if(findUser.getText().equals("Buscar usuario")){
 			findUser.setCaretPosition(0);
 		}

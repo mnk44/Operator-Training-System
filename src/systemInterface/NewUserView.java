@@ -35,7 +35,6 @@ import systemEnums.SchoolarLevel;
 import systemEnums.SystemClass;
 import systemLogic.Encrypting;
 import systemServices.AreaService;
-import systemServices.TraceService;
 import systemServices.UserService;
 
 import java.sql.SQLException;
@@ -396,7 +395,8 @@ public class NewUserView extends JDialog {
 					try {
 						result = UserService.newUser(nameUser.getText(), card.getText(), SchoolarLevel.valueOf(school.getSelectedItem().toString()), 
 								(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), Encrypting.getEncript(password), actve.isSelected(),
-								((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolesTypes.valueOf(rol.getSelectedItem().toString()));
+								((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolesTypes.valueOf(rol.getSelectedItem().toString()),
+								userId, AccionTrace.creó_el, SystemClass.usuario, nick.getText(), new Timestamp(Calendar.getInstance().getTime().getTime()));
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -406,16 +406,6 @@ public class NewUserView extends JDialog {
 					}
 					if(result == null){
 						JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
-						String result2 = null;
-						try {
-							result2 = TraceService.newTrace(userId, AccionTrace.creó_el, SystemClass.usuario, nick.getText(), new Timestamp(Calendar.getInstance().getTime().getTime()));
-						} catch (SQLException e2) {
-							// TODO Auto-generated catch block
-							e2.printStackTrace();
-						}
-						if(result2 != null){
-							JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
-						}
 						try {
 							UserListView.reloadTable((ArrayList<User>) UserService.getUsers());
 						} catch (SQLException e) {
@@ -449,23 +439,13 @@ public class NewUserView extends JDialog {
 					}
 					String result = "No funciona";
 					try {
-						result = UserService.updateUser(ret);
+						result = UserService.updateUser(ret, userId, AccionTrace.modificó_el, SystemClass.usuario, nick.getText(), new Timestamp(Calendar.getInstance().getTime().getTime()));
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					if(result == null){
 						JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
-						String result2 = null;
-						try {
-							result2 = TraceService.newTrace(userId, AccionTrace.modificó_el, SystemClass.usuario, nick.getText(), new Timestamp(Calendar.getInstance().getTime().getTime()));
-						} catch (SQLException e2) {
-							// TODO Auto-generated catch block
-							e2.printStackTrace();
-						}
-						if(result2 != null){
-							JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
-						}
 						try {
 							UserListView.reloadTable((ArrayList<User>) UserService.getUsers());
 						} catch (SQLException e) {
