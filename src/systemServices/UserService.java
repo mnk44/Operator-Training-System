@@ -78,46 +78,6 @@ public class UserService {
 		return null;
 	}
 	
-	public static String sleepUser(int user_id, int trace_user, AccionTrace trace_accion,
-			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
-		try{
-			String sqlSentenc = "UPDATE people SET user_active = false WHERE user_id = ?"
-					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?,?)";
-			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
-			cs.setInt(1, user_id);
-			cs.setInt(2, trace_user);
-			cs.setString(3, trace_accion.toString());
-			cs.setString(4, trace_class.toString());
-			cs.setString(5, trace_class_id);
-			cs.setTimestamp(6, trace_date);
-			cs.execute();
-			cs.close();
-		}catch(Exception e){
-			return e.getMessage();
-		}
-		return null;
-	}
-	
-	public static String awakeUser(int user_id, int trace_user, AccionTrace trace_accion,
-			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
-		try{
-			String sqlSentenc = "UPDATE people SET user_active = true WHERE user_id = ?"
-					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?,?)";
-			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
-			cs.setInt(1, user_id);
-			cs.setInt(2, trace_user);
-			cs.setString(3, trace_accion.toString());
-			cs.setString(4, trace_class.toString());
-			cs.setString(5, trace_class_id);
-			cs.setTimestamp(6, trace_date);
-			cs.execute();
-			cs.close();
-		}catch(Exception e){
-			return e.getMessage();
-		}
-		return null;
-	}
-	
 	public static String changePassword(int user_id, String new_pass, int trace_user, String trace_accion, String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
 			String sqlSentenc = "UPDATE people SET user_password = ? WHERE user_id = ?;"

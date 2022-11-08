@@ -141,7 +141,7 @@ public class UserListView extends JDialog {
 				newUser.setBackground(new Color(244, 164, 96));
 			}
 		});
-		newUser.setIcon(new ImageIcon(AreaListView.class.getResource("/imgs/icons8_Plus_16.png")));
+		newUser.setIcon(new ImageIcon(UserListView.class.getResource("/imgs/icons8_Plus_16.png")));
 		newUser.setForeground(Color.WHITE);
 		newUser.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		newUser.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
@@ -176,7 +176,7 @@ public class UserListView extends JDialog {
 				updateUser.setBackground(new Color(244, 164, 96));
 			}
 		});
-		updateUser.setIcon(new ImageIcon(AreaListView.class.getResource("/imgs/icons8_Pencil_16.png")));
+		updateUser.setIcon(new ImageIcon(UserListView.class.getResource("/imgs/icons8_Pencil_16.png")));
 		updateUser.setForeground(Color.WHITE);
 		updateUser.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		updateUser.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(244, 164, 96)));
@@ -185,7 +185,7 @@ public class UserListView extends JDialog {
 		contentPanel.add(updateUser);
 
 		lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(AreaListView.class.getResource("/imgs/search.png")));
+		lblNewLabel.setIcon(new ImageIcon(UserListView.class.getResource("/imgs/search.png")));
 		lblNewLabel.setBounds(32, 16, 48, 48);
 		contentPanel.add(lblNewLabel);
 

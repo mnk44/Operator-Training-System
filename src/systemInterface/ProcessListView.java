@@ -198,7 +198,7 @@ public class ProcessListView extends JDialog {
 		contentPanel.add(deleteProcess);
 
 		lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(AreaListView.class.getResource("/imgs/search.png")));
+		lblNewLabel.setIcon(new ImageIcon(ProcessListView.class.getResource("/imgs/search.png")));
 		lblNewLabel.setBounds(32, 16, 48, 48);
 		contentPanel.add(lblNewLabel);
 

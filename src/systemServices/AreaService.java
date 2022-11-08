@@ -7,22 +7,20 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import systemClass.Area;
-import systemEnums.AccionTrace;
-import systemEnums.SystemClass;
 
 public class AreaService {
-	
-	public static String newArea(String area_name, int trace_user, AccionTrace trace_accion,
-			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
+
+	public static String newArea(String area_name, int trace_user, String trace_accion,
+			String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
-			String sqlSentenc = "{call public.insert_area(?,?,?,?,?,?)}";
+			String sqlSentenc = "INSERT INTO area VALUES (DEFAULT,?);"
+					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, area_name);
 			cs.setInt(2, trace_user);
-			cs.setString(3, trace_accion.toString());
-			cs.setString(4, trace_class.toString());
-			cs.setString(5, trace_class_id);
-			cs.setTimestamp(6, trace_date);
+			cs.setString(3, trace_accion);;
+			cs.setString(4, trace_class_id);
+			cs.setTimestamp(5, trace_date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
@@ -31,18 +29,18 @@ public class AreaService {
 		return null;
 	}
 	
-	public static String updateArea(int area_id, String area_name, int trace_user, AccionTrace trace_accion,
-			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
+	public static String updateArea(int area_id, String area_name, int trace_user, String trace_accion,
+			String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
-			String sqlSentenc = "{call public.update_area(?,?,?,?,?,?,?)}";
+			String sqlSentenc = "UPDATE area SET area_name = ? WHERE area_id = ?;"
+					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, area_name);
 			cs.setInt(2, area_id);
 			cs.setInt(3, trace_user);
-			cs.setString(4, trace_accion.toString());
-			cs.setString(5, trace_class.toString());
-			cs.setString(6, trace_class_id);
-			cs.setTimestamp(7, trace_date);
+			cs.setString(4, trace_accion);
+			cs.setString(5, trace_class_id);
+			cs.setTimestamp(6, trace_date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
@@ -51,17 +49,17 @@ public class AreaService {
 		return null;
 	}
 	
-	public static String deleteArea(int area_id, int trace_user, AccionTrace trace_accion,
-			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
+	public static String deleteArea(int area_id, int trace_user, String trace_accion,
+		 String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
-			String sqlSentenc = "{call public.delete_area(?,?,?,?,?,?)}";
+			String sqlSentenc = "DELETE FROM area WHERE area_id = ?;"
+					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, area_id);
 			cs.setInt(2, trace_user);
-			cs.setString(3, trace_accion.toString());
-			cs.setString(4, trace_class.toString());
-			cs.setString(5, trace_class_id);
-			cs.setTimestamp(6, trace_date);
+			cs.setString(3, trace_accion);
+			cs.setString(4, trace_class_id);
+			cs.setTimestamp(5, trace_date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){

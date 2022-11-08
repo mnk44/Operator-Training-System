@@ -18,21 +18,13 @@ import javax.swing.ImageIcon;
 
 import systemClass.Area;
 import systemClass.User;
-import systemEnums.AccionTrace;
-import systemEnums.RolesTypes;
-import systemEnums.SystemClass;
-import systemLogic.Encrypting;
+import systemLogic.TablesInfo;
 import systemServices.AreaService;
-import systemServices.UserService;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -42,18 +34,22 @@ import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 
 import javax.swing.JPanel;
-import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.JSeparator;
 import javax.swing.JButton;
-import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JTextField;
 
 public class CenterView {
 
 	private JFrame principal_view;
 
 	User user_conected;
-	public boolean faild_change = false;
+	public static boolean faild_change = false;
+
+	@SuppressWarnings("unchecked")
+	ArrayList<Area> areasList = (ArrayList<Area>) AreaService.getAreas();
 
 	private JMenuBar menu;
 	private JMenu user_options;
@@ -65,6 +61,10 @@ public class CenterView {
 	private JMenuItem personal_info;
 	private JMenuItem close_sesion;
 	private JPanel personal_infor_panel;
+	private JMenuItem area_management_button;
+	private JPanel area_manage;
+
+	private static DefaultTableModel date;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -134,7 +134,7 @@ public class CenterView {
 		change_pass.setBackground(new Color(243,193,67));
 		change_pass.setForeground(Color.WHITE);
 		user_options.add(change_pass);
-		
+
 		{
 			personal_infor_panel = new JPanel();
 			personal_infor_panel.setVisible(false);
@@ -142,6 +142,15 @@ public class CenterView {
 			personal_infor_panel.setBounds(249, 16, 579, 536);
 			principal_view.getContentPane().add(personal_infor_panel);
 			personal_infor_panel.setLayout(null);
+		}
+
+		{
+			area_manage = new JPanel();
+			area_manage.setVisible(false);
+			area_manage.setBackground(Color.WHITE);
+			area_manage.setBounds(29, 16, 1014, 536);
+			principal_view.getContentPane().add(area_manage);
+			area_manage.setLayout(null);
 		}
 
 		personal_info = new JMenuItem("Informaci\u00F3n personal");
@@ -180,43 +189,36 @@ public class CenterView {
 		user_options.add(close_sesion);
 
 		admin_options = new JMenu("Administrador");
-		admin_options.setBackground(new Color(244, 164, 96));
+		admin_options.setBackground(new Color(243,193,67));
 		admin_options.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		admin_options.setForeground(Color.WHITE);
 		menu.add(admin_options);
 
-		JMenuItem mntmGestinDereas = new JMenuItem("Gesti\u00F3n de \u00E1reas");
-		mntmGestinDereas.addActionListener(new ActionListener() {
+		area_management_button = new JMenuItem("Gesti\u00F3n de \u00E1reas");
+		area_management_button.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
+		area_management_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				AreaListView areaView = null;
+				area_manage.setVisible(true);
 				try {
-					areaView = new AreaListView(userID.getUser_id());
+					ChargeComponents.areaManagement(area_manage, areasList, user_conected);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				areaView.setLocationRelativeTo(principal_view);
-				areaView.setVisible(true);
 			}
 		});
-		mntmGestinDereas.setIcon(new ImageIcon(CenterView.class.getResource("/imgs/icons8_Unit_16.png")));
-		mntmGestinDereas.setFont(new Font("Segoe UI", Font.BOLD, 19));
-		mntmGestinDereas.setBackground(new Color(244, 164, 96));
-		mntmGestinDereas.setForeground(Color.WHITE);
-		admin_options.add(mntmGestinDereas);
+		area_management_button.setIcon(new ImageIcon(CenterView.class.getResource("/images/areas.png")));
+		area_management_button.setFont(new Font("Segoe UI", Font.BOLD, 19));
+		area_management_button.setBackground(new Color(243,193,67));
+		area_management_button.setForeground(Color.WHITE);
+		admin_options.add(area_management_button);
 
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
 		JMenuItem mntmGestinDeUsuarios = new JMenuItem("Gesti\u00F3n de usuarios");
 		mntmGestinDeUsuarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				UserListView u = null;
-				try {
-					u = new UserListView(userID.getUser_id());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				u.setLocationRelativeTo(principal_view);
-				u.setVisible(true);
+
 			}
 		});
 		mntmGestinDeUsuarios.setIcon(new ImageIcon(CenterView.class.getResource("/imgs/icons8_User_Groups_16.png")));
@@ -284,5 +286,19 @@ public class CenterView {
 
 	public static void failValue(){
 		faild_change = true;
+	}
+
+	public static void areaTable(ArrayList<Area> areas, JTable table, JButton update_area, JButton delete_area, JTextField find_field) throws SQLException{
+		TablesInfo.getAreas(date, table, areas);
+		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(1).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(0).setMaxWidth(50);
+		update_area.setEnabled(false);
+		delete_area.setEnabled(false);
+		if(find_field.getText().equals("Buscar")){
+			find_field.setCaretPosition(0);
+		}
 	}
 }

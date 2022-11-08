@@ -102,7 +102,7 @@ public class NewUserView extends JDialog {
 		}
 		setResizable(false);
 		setForeground(Color.BLACK);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(AreaListView.class.getResource("/imgs/logo.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(NewUserView.class.getResource("/imgs/logo.png")));
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().setBackground(Color.WHITE);
 		contentPanel.setBackground(Color.WHITE);
