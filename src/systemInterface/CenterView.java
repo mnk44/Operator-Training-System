@@ -16,31 +16,45 @@ import java.awt.Font;
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
 
+import systemClass.Area;
 import systemClass.User;
 import systemEnums.AccionTrace;
+import systemEnums.RolesTypes;
 import systemEnums.SystemClass;
 import systemLogic.Encrypting;
+import systemServices.AreaService;
 import systemServices.UserService;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.KeyStroke;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
+
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.JSeparator;
+import javax.swing.JButton;
+import javax.swing.border.MatteBorder;
 
 public class CenterView {
 
 	private JFrame principal_view;
-	
+
 	User user_conected;
 	public boolean faild_change = false;
-	
+
 	private JMenuBar menu;
 	private JMenu user_options;
 	private JMenu admin_options;
@@ -50,6 +64,7 @@ public class CenterView {
 	private JMenuItem change_pass;
 	private JMenuItem personal_info;
 	private JMenuItem close_sesion;
+	private JPanel personal_infor_panel;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -65,23 +80,24 @@ public class CenterView {
 		});
 	}
 
-	public CenterView(User user) {
+	public CenterView(User user) throws SQLException {
 		initialize(user);
 	}
 
-	private void initialize(User user) {
+	private void initialize(User user) throws SQLException {
 		user_conected = user;
 		principal_view = new JFrame();
 		principal_view.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				int option = JOptionPane.showConfirmDialog(null, "¿Quiere salir del sistema?", "Salir", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+				int option = JOptionPane.showConfirmDialog(null, "¿Desea salir del sistema?", "Salir", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if(option == 0){
 					System.exit(0);
 				}
 			}
 		});
 		principal_view.getContentPane().setBackground(Color.WHITE);
+		principal_view.getContentPane().setLayout(null);		
 		principal_view.setTitle("Sistema de entrenamiento SECPROIT");
 		principal_view.setIconImage(Toolkit.getDefaultToolkit().getImage(CenterView.class.getResource("/images/mini-logo.png")));
 		principal_view.setResizable(false);
@@ -89,17 +105,17 @@ public class CenterView {
 		principal_view.setForeground(Color.BLACK);
 		principal_view.setBounds(100, 100, 1064, 639);
 		principal_view.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		
+
 		menu = new JMenuBar();
 		menu.setBackground(new Color(243,193,67));
 		principal_view.setJMenuBar(menu);
-		
+
 		user_options = new JMenu("Usuario");
 		user_options.setBackground(new Color(243,193,67));
 		user_options.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		user_options.setForeground(Color.WHITE);
 		menu.add(user_options);
-		
+
 		change_pass = new JMenuItem("Cambiar contrase\u00F1a");
 		change_pass.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
 		change_pass.addActionListener(new ActionListener() {
@@ -119,27 +135,34 @@ public class CenterView {
 		change_pass.setForeground(Color.WHITE);
 		user_options.add(change_pass);
 		
+		{
+			personal_infor_panel = new JPanel();
+			personal_infor_panel.setVisible(false);
+			personal_infor_panel.setBackground(Color.WHITE);
+			personal_infor_panel.setBounds(249, 16, 579, 536);
+			principal_view.getContentPane().add(personal_infor_panel);
+			personal_infor_panel.setLayout(null);
+		}
+
 		personal_info = new JMenuItem("Informaci\u00F3n personal");
 		personal_info.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_MASK));
 		personal_info.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PersonalInfoView piv = null;
+				personal_infor_panel.setVisible(true);
 				try {
-					piv = new PersonalInfoView(userID.getUser_id());
+					ChargeComponents.personalInfo(personal_infor_panel, user_conected);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				piv.setLocationRelativeTo(principal_view);
-				piv.setVisible(true);
 			}
 		});
 		personal_info.setFont(new Font("Segoe UI", Font.BOLD, 19));
 		personal_info.setIcon(new ImageIcon(CenterView.class.getResource("/images/personal-info.png")));
-		personal_info.setBackground(new Color(244, 164, 96));
+		personal_info.setBackground(new Color(243,193,67));
 		personal_info.setForeground(Color.WHITE);
 		user_options.add(personal_info);
-		
+
 		close_sesion = new JMenuItem("Cerrar sesi\u00F3n");
 		close_sesion.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK));
 		close_sesion.addActionListener(new ActionListener() {
@@ -155,13 +178,13 @@ public class CenterView {
 		close_sesion.setBackground(new Color(244, 164, 96));
 		close_sesion.setForeground(Color.WHITE);
 		user_options.add(close_sesion);
-		
+
 		admin_options = new JMenu("Administrador");
 		admin_options.setBackground(new Color(244, 164, 96));
 		admin_options.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		admin_options.setForeground(Color.WHITE);
 		menu.add(admin_options);
-		
+
 		JMenuItem mntmGestinDereas = new JMenuItem("Gesti\u00F3n de \u00E1reas");
 		mntmGestinDereas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -181,7 +204,7 @@ public class CenterView {
 		mntmGestinDereas.setBackground(new Color(244, 164, 96));
 		mntmGestinDereas.setForeground(Color.WHITE);
 		admin_options.add(mntmGestinDereas);
-		
+
 		JMenuItem mntmGestinDeUsuarios = new JMenuItem("Gesti\u00F3n de usuarios");
 		mntmGestinDeUsuarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -201,39 +224,39 @@ public class CenterView {
 		mntmGestinDeUsuarios.setBackground(new Color(244, 164, 96));
 		mntmGestinDeUsuarios.setForeground(Color.WHITE);
 		admin_options.add(mntmGestinDeUsuarios);
-		
+
 		boss_options = new JMenu("Jefe de \u00E1rea");
 		boss_options.setBackground(new Color(244, 164, 96));
 		boss_options.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		boss_options.setForeground(Color.WHITE);
 		menu.add(boss_options);
-		
+
 		JMenuItem mntmGestinDeProcesos = new JMenuItem("Gesti\u00F3n de procesos");
 		mntmGestinDeProcesos.setIcon(new ImageIcon(CenterView.class.getResource("/imgs/icons8_Compose_16.png")));
 		mntmGestinDeProcesos.setFont(new Font("Segoe UI", Font.BOLD, 19));
 		mntmGestinDeProcesos.setBackground(new Color(244, 164, 96));
 		mntmGestinDeProcesos .setForeground(Color.WHITE);
 		boss_options.add(mntmGestinDeProcesos);
-		
+
 		oper_options = new JMenu("Operario");
 		oper_options.setBackground(new Color(244, 164, 96));
 		oper_options.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		oper_options.setForeground(Color.WHITE);
 		menu.add(oper_options);
-		
+
 		JMenuItem mntmRealizarEntrenamiento = new JMenuItem("Realizar entrenamiento");
 		mntmRealizarEntrenamiento.setIcon(new ImageIcon(CenterView.class.getResource("/imgs/icons8_Pass_Fail_16.png")));
 		mntmRealizarEntrenamiento.setFont(new Font("Segoe UI", Font.BOLD, 19));
 		mntmRealizarEntrenamiento.setBackground(new Color(244, 164, 96));
 		mntmRealizarEntrenamiento.setForeground(Color.WHITE);
 		oper_options.add(mntmRealizarEntrenamiento);
-		
+
 		reports_options = new JMenu("Reportes");
 		reports_options.setForeground(Color.WHITE);
 		reports_options.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		reports_options.setBackground(new Color(244, 164, 96));
 		menu.add(reports_options);
-		
+
 		JMenuItem mntmControlDeAcciones = new JMenuItem("Control de acciones");
 		mntmControlDeAcciones.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -254,7 +277,7 @@ public class CenterView {
 		mntmControlDeAcciones.setBackground(new Color(244, 164, 96));
 		reports_options.add(mntmControlDeAcciones);
 	}
-	
+
 	public JFrame getFrame() {
 		return principal_view;
 	}
