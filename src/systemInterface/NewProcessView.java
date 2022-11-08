@@ -47,7 +47,6 @@ import systemEnums.SystemClass;
 import systemLogic.Convert;
 import systemServices.FactoryProcessService;
 import systemServices.ProcessConfigurationService;
-import systemServices.TraceService;
 import systemServices.UserService;
 
 public class NewProcessView extends JDialog {
