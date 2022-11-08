@@ -1,4 +1,4 @@
-package systemInterface;
+package interfaces;
 
 import java.awt.EventQueue;
 
@@ -16,10 +16,7 @@ import java.awt.Font;
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
 
-import systemClass.Area;
-import systemClass.User;
-import systemLogic.TablesInfo;
-import systemServices.AreaService;
+import services.AreaService;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -40,6 +37,10 @@ import javax.swing.JButton;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
+
+import assistants.TablesInfo;
+import classes.Area;
+import classes.User;
 
 public class CenterView {
 
@@ -100,7 +101,6 @@ public class CenterView {
 		principal_view.getContentPane().setLayout(null);		
 		principal_view.setTitle("Sistema de entrenamiento SECPROIT");
 		principal_view.setIconImage(Toolkit.getDefaultToolkit().getImage(CenterView.class.getResource("/images/mini-logo.png")));
-		principal_view.setResizable(false);
 		principal_view.setBackground(Color.WHITE);
 		principal_view.setForeground(Color.BLACK);
 		principal_view.setBounds(100, 100, 1064, 639);

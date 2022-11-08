@@ -1,11 +1,11 @@
-package systemServices;
+package services;
 
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import systemClass.Variable;
+import classes.Variable;
 
 public class VariableService {
 	

@@ -1,11 +1,11 @@
-package systemLogic;
+package assistants;
 
 import java.util.ArrayList;
 
-import systemClass.Cause;
-import systemClass.Recomendation;
-import systemClass.User;
-import systemClass.Variable;
+import classes.Cause;
+import classes.Recomendation;
+import classes.User;
+import classes.Variable;
 
 public class MultiTableList {
 	

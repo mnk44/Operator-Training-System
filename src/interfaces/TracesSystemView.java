@@ -1,4 +1,4 @@
-package systemInterface;
+package interfaces;
 
 import java.awt.BorderLayout;
 
@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,9 +31,9 @@ import java.util.ArrayList;
 
 import javax.swing.ListSelectionModel;
 
-import systemClass.Trace;
-import systemLogic.TablesInfo;
-import systemServices.TraceService;
+import services.TraceService;
+import assistants.TablesInfo;
+import classes.Trace;
 
 import com.toedter.calendar.JDateChooser;
 

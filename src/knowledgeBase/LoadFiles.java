@@ -11,11 +11,11 @@ import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import systemClass.Cause;
-import systemClass.Recomendation;
-import systemClass.Variable;
-import systemEnums.VariableTypes;
-import systemServices.RulesService;
+import classes.Cause;
+import classes.Recomendation;
+import classes.Variable;
+import enums.VariableTypes;
+import services.RulesService;
 
 public class LoadFiles {
 	

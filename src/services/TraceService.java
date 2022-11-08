@@ -1,4 +1,4 @@
-package systemServices;
+package services;
 
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import systemClass.Trace;
-import systemEnums.AccionTrace;
-import systemEnums.SystemClass;
+import classes.Trace;
+import enums.AccionTrace;
+import enums.SystemClass;
 
 public class TraceService {
 	

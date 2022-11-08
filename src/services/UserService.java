@@ -1,4 +1,4 @@
-package systemServices;
+package services;
 
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
@@ -6,11 +6,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import systemClass.User;
-import systemEnums.AccionTrace;
-import systemEnums.RolesTypes;
-import systemEnums.SchoolarLevel;
-import systemEnums.SystemClass;
+import classes.User;
+import enums.AccionTrace;
+import enums.RolesTypes;
+import enums.SchoolarLevel;
+import enums.SystemClass;
 
 public class UserService {
 	

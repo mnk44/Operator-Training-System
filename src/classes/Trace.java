@@ -1,9 +1,9 @@
-package systemClass;
+package classes;
 
 import java.sql.Timestamp;
 
-import systemEnums.AccionTrace;
-import systemEnums.SystemClass;
+import enums.AccionTrace;
+import enums.SystemClass;
 
 public class Trace {
 	int trace_id;

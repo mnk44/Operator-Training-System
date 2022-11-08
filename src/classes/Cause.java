@@ -1,4 +1,4 @@
-package systemClass;
+package classes;
 
 public class Cause {
 	int cause_id;

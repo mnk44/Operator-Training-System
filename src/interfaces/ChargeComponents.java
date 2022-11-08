@@ -1,4 +1,4 @@
-package systemInterface;
+package interfaces;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -28,11 +28,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
-import systemClass.Area;
-import systemClass.User;
-import systemEnums.RolesTypes;
-import systemLogic.FindObjects;
-import systemServices.AreaService;
+
+import assistants.FindObjects;
+import classes.Area;
+import classes.User;
+import enums.RolesTypes;
+import services.AreaService;
 
 public class ChargeComponents {
 	static int selected = -1;
@@ -333,10 +334,10 @@ public class ChargeComponents {
 				if(area_name != null){
 					if(!area_name.isEmpty() && !area_name.replaceAll(" ", "").isEmpty()){
 						try {
-							Object result = systemServices.AreaService.newArea(area_name,user_conected.getUser_id(), "Agregar área nueva", area_name, new Timestamp(Calendar.getInstance().getTime().getTime()));
+							Object result = services.AreaService.newArea(area_name,user_conected.getUser_id(), "Agregar área nueva", area_name, new Timestamp(Calendar.getInstance().getTime().getTime()));
 							if(result == null){
 								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);						
-								areasList.add((Area)systemServices.AreaService.findName(area_name));
+								areasList.add((Area)services.AreaService.findName(area_name));
 								CenterView.areaTable(areasList, table, update_area, delete_area, find_field);
 							}else{
 								JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
@@ -379,7 +380,7 @@ public class ChargeComponents {
 				if(name_area != null){
 					if(!name_area.isEmpty() && !name_area.replaceAll(" ", "").isEmpty()){
 						try {
-							String result = systemServices.AreaService.updateArea(id_area, name_area, user_conected.getUser_id(), "Modificar área", name_area, new Timestamp(Calendar.getInstance().getTime().getTime()));
+							String result = services.AreaService.updateArea(id_area, name_area, user_conected.getUser_id(), "Modificar área", name_area, new Timestamp(Calendar.getInstance().getTime().getTime()));
 							if(result == null){
 								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
 								areasList.get(table.getSelectedRow()).setArea_name(name_area);
@@ -425,7 +426,7 @@ public class ChargeComponents {
 				if(option == 0){
 					String result = null;
 					try {
-						result = systemServices.AreaService.deleteArea(id_area, user_conected.getUser_id(), "Eliminar área", (String) table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
+						result = services.AreaService.deleteArea(id_area, user_conected.getUser_id(), "Eliminar área", (String) table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

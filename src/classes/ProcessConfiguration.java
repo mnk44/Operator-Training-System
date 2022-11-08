@@ -1,6 +1,6 @@
-package systemClass;
+package classes;
 
-import systemEnums.QuestionsTypes;
+import enums.QuestionsTypes;
 
 public class ProcessConfiguration {
 	int class_id;

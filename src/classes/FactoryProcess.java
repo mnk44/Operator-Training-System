@@ -1,4 +1,4 @@
-package systemClass;
+package classes;
 
 public class FactoryProcess {
 	int process_id;

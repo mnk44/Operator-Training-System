@@ -1,4 +1,4 @@
-package systemClass;
+package classes;
 
 public class Area {
 	int area_id;

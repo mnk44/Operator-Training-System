@@ -1,6 +1,6 @@
-package systemClass;
+package classes;
 
-import systemEnums.VariableTypes;
+import enums.VariableTypes;
 
 public class Variable {
 	int variable_id;

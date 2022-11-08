@@ -1,6 +1,6 @@
-package systemClass;
+package classes;
 
-import systemEnums.VariableState;
+import enums.VariableState;
 
 public class VariableCause {
 	int table_id;

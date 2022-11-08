@@ -1,4 +1,4 @@
-package systemInterface;
+package interfaces;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -13,6 +13,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -29,10 +30,10 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import systemClass.User;
-import systemLogic.FindObjects;
-import systemLogic.TablesInfo;
-import systemServices.UserService;
+import assistants.FindObjects;
+import assistants.TablesInfo;
+import classes.User;
+import services.UserService;
 
 public class UserListView extends JDialog {
 

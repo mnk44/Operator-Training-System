@@ -1,4 +1,4 @@
-package systemClass;
+package classes;
 
 public class Recomendation {
 	int recomendation_id;

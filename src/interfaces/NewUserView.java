@@ -1,4 +1,4 @@
-package systemInterface;
+package interfaces;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,15 +27,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.border.MatteBorder;
 import javax.swing.JComboBox;
 
-import systemClass.Area;
-import systemClass.User;
-import systemEnums.AccionTrace;
-import systemEnums.RolesTypes;
-import systemEnums.SchoolarLevel;
-import systemEnums.SystemClass;
-import systemLogic.Encrypting;
-import systemServices.AreaService;
-import systemServices.UserService;
+import services.AreaService;
+import services.UserService;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -45,6 +38,14 @@ import java.util.Calendar;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JRadioButton;
+
+import assistants.Encrypting;
+import classes.Area;
+import classes.User;
+import enums.AccionTrace;
+import enums.RolesTypes;
+import enums.SchoolarLevel;
+import enums.SystemClass;
 
 public class NewUserView extends JDialog {
 

@@ -1,4 +1,4 @@
-package systemLogic;
+package assistants;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

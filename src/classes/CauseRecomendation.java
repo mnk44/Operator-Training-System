@@ -1,4 +1,4 @@
-package systemClass;
+package classes;
 
 public class CauseRecomendation {
 	int table_id;

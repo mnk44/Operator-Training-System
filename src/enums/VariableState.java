@@ -1,4 +1,4 @@
-package systemEnums;
+package enums;
 
 public enum VariableState {
 	Alto,

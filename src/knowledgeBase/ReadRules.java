@@ -5,15 +5,15 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import systemClass.Cause;
-import systemClass.CauseRecomendation;
-import systemClass.Recomendation;
-import systemClass.Variable;
-import systemClass.VariableCause;
-import systemServices.CauseService;
-import systemServices.RecomendationService;
-import systemServices.RulesService;
-import systemServices.VariableService;
+import classes.Cause;
+import classes.CauseRecomendation;
+import classes.Recomendation;
+import classes.Variable;
+import classes.VariableCause;
+import services.CauseService;
+import services.RecomendationService;
+import services.RulesService;
+import services.VariableService;
 
 public class ReadRules {
 

@@ -1,7 +1,7 @@
-package systemClass;
+package classes;
 
-import systemEnums.RolesTypes;
-import systemEnums.SchoolarLevel;
+import enums.RolesTypes;
+import enums.SchoolarLevel;
 
 public class User {
 	int user_id;

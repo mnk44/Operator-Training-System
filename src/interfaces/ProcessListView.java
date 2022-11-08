@@ -1,4 +1,4 @@
-package systemInterface;
+package interfaces;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,10 +30,10 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import systemClass.FactoryProcess;
-import systemLogic.FindObjects;
-import systemLogic.TablesInfo;
-import systemServices.FactoryProcessService;
+import assistants.FindObjects;
+import assistants.TablesInfo;
+import classes.FactoryProcess;
+import services.FactoryProcessService;
 
 public class ProcessListView extends JDialog {
 

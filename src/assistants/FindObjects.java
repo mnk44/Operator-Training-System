@@ -1,13 +1,13 @@
-package systemLogic;
+package assistants;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import systemClass.Area;
-import systemClass.FactoryProcess;
-import systemClass.Trace;
-import systemClass.User;
-import systemServices.UserService;
+import classes.Area;
+import classes.FactoryProcess;
+import classes.Trace;
+import classes.User;
+import services.UserService;
 
 public class FindObjects {
 

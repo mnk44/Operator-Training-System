@@ -1,6 +1,7 @@
-package systemInterface;
+package interfaces;
 
 import java.awt.BorderLayout;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -22,9 +23,9 @@ import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import javax.swing.border.MatteBorder;
 
-import systemClass.User;
-import systemLogic.Encrypting;
-import systemServices.UserService;
+import assistants.Encrypting;
+import classes.User;
+import services.UserService;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

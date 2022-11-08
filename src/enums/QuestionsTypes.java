@@ -1,4 +1,4 @@
-package systemEnums;
+package enums;
 
 public enum QuestionsTypes {
 	Completar_espacios_en_blanco,

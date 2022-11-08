@@ -1,4 +1,4 @@
-package systemInterface;
+package interfaces;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -36,18 +36,18 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JComboBox;
 
+import assistants.Convert;
+import classes.FactoryProcess;
+import classes.ProcessConfiguration;
+import classes.User;
+import enums.AccionTrace;
+import enums.QuestionsTypes;
+import enums.RolesTypes;
+import enums.SystemClass;
 import knowledgeBase.LoadFiles;
-import systemClass.FactoryProcess;
-import systemClass.ProcessConfiguration;
-import systemClass.User;
-import systemEnums.AccionTrace;
-import systemEnums.QuestionsTypes;
-import systemEnums.RolesTypes;
-import systemEnums.SystemClass;
-import systemLogic.Convert;
-import systemServices.FactoryProcessService;
-import systemServices.ProcessConfigurationService;
-import systemServices.UserService;
+import services.FactoryProcessService;
+import services.ProcessConfigurationService;
+import services.UserService;
 
 public class NewProcessView extends JDialog {
 

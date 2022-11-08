@@ -1,4 +1,4 @@
-package dataBaseConnection;
+package dbConnection;
 
 import java.io.IOException;
 import java.sql.DriverManager;

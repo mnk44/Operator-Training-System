@@ -1,4 +1,4 @@
-package systemServices;
+package services;
 
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
@@ -6,11 +6,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import systemClass.ProcessConfiguration;
-import systemClass.User;
-import systemEnums.AccionTrace;
-import systemEnums.SystemClass;
-import systemLogic.MultiTableList;
+import assistants.MultiTableList;
+import classes.ProcessConfiguration;
+import classes.User;
+import enums.AccionTrace;
+import enums.SystemClass;
 
 public class ProcessConfigurationService {
 	
