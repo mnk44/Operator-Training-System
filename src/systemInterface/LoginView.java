@@ -42,7 +42,7 @@ public class LoginView extends JDialog {
 		}
 	}
 
-	private JButton acept_button;
+	private JButton accept_button;
 	private JTextField user_name;
 	private JPasswordField user_pass;
 	private JLabel view_pass;
@@ -60,8 +60,8 @@ public class LoginView extends JDialog {
 		setResizable(false);
 		setBounds(100, 100, 693, 631);
 		
-		acept_button = new JButton("Aceptar");
-		acept_button.addActionListener(new ActionListener() {
+		accept_button = new JButton("Aceptar");
+		accept_button.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
 				if(user_name.getText().isEmpty() || user_pass.getText().isEmpty()){
@@ -103,22 +103,22 @@ public class LoginView extends JDialog {
 				}
 			}
 		});
-		acept_button.addMouseListener(new MouseAdapter() {
+		accept_button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				acept_button.setBackground(new Color(184, 225, 243));
+				accept_button.setBackground(new Color(184, 225, 243));
 			}
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				acept_button.setBackground(new Color(74, 154, 190));
+				accept_button.setBackground(new Color(74, 154, 190));
 			}
 		});
-		acept_button.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(74, 154, 190)));
-		acept_button.setForeground(new Color(255, 255, 255));
-		acept_button.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		acept_button.setBackground(new Color(74, 154, 190));
-		acept_button.setBounds(264, 526, 153, 37);
-		getContentPane().add(acept_button);
+		accept_button.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(74, 154, 190)));
+		accept_button.setForeground(new Color(255, 255, 255));
+		accept_button.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		accept_button.setBackground(new Color(74, 154, 190));
+		accept_button.setBounds(264, 526, 153, 37);
+		getContentPane().add(accept_button);
 		
 		user_name = new JTextField();
 		user_name.addKeyListener(new KeyAdapter() {
@@ -162,7 +162,7 @@ public class LoginView extends JDialog {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 				if(KeyEvent.VK_ENTER == arg0.getKeyChar()){
-					acept_button.doClick();
+					accept_button.doClick();
 				}
 			}
 		});
@@ -178,7 +178,7 @@ public class LoginView extends JDialog {
 		title.setBounds(0, 316, 687, 45);
 		getContentPane().add(title);
 		
-		view_pass = new JLabel("");
+		view_pass = new JLabel();
 		view_pass.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
