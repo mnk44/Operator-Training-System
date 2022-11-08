@@ -1,4 +1,4 @@
-package systemInterface;
+package interfaces;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -23,9 +23,9 @@ import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 import javax.swing.SwingConstants;
 
-import systemClass.User;
-import systemLogic.Encrypting;
-import systemServices.UserService;
+import assistants.Encrypting;
+import classes.User;
+import services.UserService;
 
 public class LoginView extends JDialog {
 
@@ -50,7 +50,7 @@ public class LoginView extends JDialog {
 	private int error = 0;
 
 	public LoginView() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/images/mini-logo.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/images/logo.png")));
 		setBackground(new Color(173, 216, 230));
 		setFont(new Font("Microsoft YaHei", Font.BOLD, 14));
 		setForeground(Color.BLACK);
@@ -58,9 +58,81 @@ public class LoginView extends JDialog {
 		getContentPane().setLayout(null);
 		setTitle("Sistema de entrenamiento SECPROIT");
 		setResizable(false);
-		setBounds(100, 100, 693, 631);
+		setBounds(100, 100, 901, 484);
+		
+		JLabel title = new JLabel("Sistema de Experto para el Control de");
+		title.setBounds(450, 68, 445, 49);
+		getContentPane().add(title);
+		title.setForeground(new Color(99, 68, 55));
+		title.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		JLabel user_label = new JLabel("Usuario:");
+		user_label.setBounds(491, 157, 109, 37);
+		getContentPane().add(user_label);
+		user_label.setForeground(new Color(255, 113, 19));
+		user_label.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
+		
+		user_name = new JTextField();
+		user_name.setBounds(491, 197, 339, 29);
+		getContentPane().add(user_name);
+		user_name.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char key = e.getKeyChar();
+
+				if(KeyEvent.VK_ENTER == key){
+					user_name.setFocusable(false);
+					user_name.setFocusable(true);
+				}else if(Character.isWhitespace(key)){
+					e.consume();
+					getToolkit().beep();
+				}
+			}
+		});
+		user_name.setFont(new Font("Corbel", Font.PLAIN, 20));
+		user_name.setColumns(10);
+		
+		JLabel pass_label = new JLabel("Contrase\u00F1a:");
+		pass_label.setBounds(491, 242, 182, 37);
+		getContentPane().add(pass_label);
+		pass_label.setForeground(new Color(255, 113, 19));
+		pass_label.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
+		
+		user_pass = new JPasswordField();
+		user_pass.setBounds(491, 285, 339, 29);
+		getContentPane().add(user_pass);
+		user_pass.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				if(KeyEvent.VK_ENTER == arg0.getKeyChar()){
+					accept_button.doClick();
+				}
+			}
+		});
+		user_pass.setEchoChar('*');
+		user_pass.setFont(new Font("Segoe UI", Font.PLAIN, 20));
+		
+		view_pass = new JLabel();
+		view_pass.setBounds(836, 285, 32, 29);
+		getContentPane().add(view_pass);
+		view_pass.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				user_pass.setEchoChar((char)0);
+				view_pass.setIcon(new ImageIcon(LoginView.class.getResource("/images/icons8_Invisible_32.png")));
+			}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				user_pass.setEchoChar('*');
+				view_pass.setIcon(new ImageIcon(LoginView.class.getResource("/images/icons8_Eye_32.png")));
+			}
+		});
+		view_pass.setIcon(new ImageIcon(LoginView.class.getResource("/images/icons8_Eye_32.png")));
 		
 		accept_button = new JButton("Aceptar");
+		accept_button.setBounds(600, 374, 153, 37);
+		getContentPane().add(accept_button);
 		accept_button.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent arg0) {
@@ -98,7 +170,7 @@ public class LoginView extends JDialog {
 					}
 				}
 				if(error > 5){
-					JOptionPane.showMessageDialog(null, "Demasiados intentos fallidos", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Demasiados intentos fallidos, contacte con un administrador", "Error", JOptionPane.WARNING_MESSAGE);
 					dispose();
 				}
 			}
@@ -106,93 +178,35 @@ public class LoginView extends JDialog {
 		accept_button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				accept_button.setBackground(new Color(184, 225, 243));
+				accept_button.setBackground(new Color(248, 159, 101));
 			}
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				accept_button.setBackground(new Color(74, 154, 190));
+				accept_button.setBackground(new Color(255, 113, 19));
 			}
 		});
-		accept_button.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(74, 154, 190)));
+		accept_button.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 113, 19)));
 		accept_button.setForeground(new Color(255, 255, 255));
 		accept_button.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		accept_button.setBackground(new Color(74, 154, 190));
-		accept_button.setBounds(264, 526, 153, 37);
-		getContentPane().add(accept_button);
+		accept_button.setBackground(new Color(255, 113, 19));
 		
-		user_name = new JTextField();
-		user_name.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char key = e.getKeyChar();
-
-				if(KeyEvent.VK_ENTER == key){
-					user_name.setFocusable(false);
-					user_name.setFocusable(true);
-				}else if(Character.isWhitespace(key)){
-					e.consume();
-					getToolkit().beep();
-				}
-			}
-		});
-		user_name.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		user_name.setBounds(228, 400, 275, 29);
-		getContentPane().add(user_name);
-		user_name.setColumns(10);
+		JLabel lblNewLabel = new JLabel();
+		lblNewLabel.setIcon(new ImageIcon(LoginView.class.getResource("/images/secproit.png")));
+		lblNewLabel.setBounds(0, 0, 450, 450);
+		getContentPane().add(lblNewLabel);
 		
-		JLabel logo = new JLabel();
-		logo.setIcon(new ImageIcon(LoginView.class.getResource("/images/logo-inicial.png")));
-		logo.setBounds(136, 0, 428, 312);
-		getContentPane().add(logo);
+		JLabel lblSecproit = new JLabel("SECPROIT");
+		lblSecproit.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSecproit.setForeground(new Color(255, 113, 19));
+		lblSecproit.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 30));
+		lblSecproit.setBounds(450, 38, 445, 49);
+		getContentPane().add(lblSecproit);
 		
-		JLabel user_label = new JLabel("Usuario:");
-		user_label.setForeground(Color.BLACK);
-		user_label.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		user_label.setBounds(136, 396, 85, 37);
-		getContentPane().add(user_label);
-		
-		JLabel pass_label = new JLabel("Contrase\u00F1a:");
-		pass_label.setForeground(Color.BLACK);
-		pass_label.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		pass_label.setBounds(98, 445, 133, 37);
-		getContentPane().add(pass_label);
-		
-		user_pass = new JPasswordField();
-		user_pass.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				if(KeyEvent.VK_ENTER == arg0.getKeyChar()){
-					accept_button.doClick();
-				}
-			}
-		});
-		user_pass.setEchoChar('*');
-		user_pass.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		user_pass.setBounds(228, 449, 275, 29);
-		getContentPane().add(user_pass);
-		
-		JLabel title = new JLabel("Sistema Experto para el Control de Procesos Qu\u00EDmicos");
-		title.setForeground(new Color(243,193,67));
-		title.setFont(new Font("Segoe UI Black", Font.PLAIN, 24));
-		title.setHorizontalAlignment(SwingConstants.CENTER);
-		title.setBounds(0, 316, 687, 45);
-		getContentPane().add(title);
-		
-		view_pass = new JLabel();
-		view_pass.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				user_pass.setEchoChar((char)0);
-				view_pass.setIcon(new ImageIcon(LoginView.class.getResource("/images/dont-view.png")));
-			}
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				user_pass.setEchoChar('*');
-				view_pass.setIcon(new ImageIcon(LoginView.class.getResource("/images/view.png")));
-			}
-		});
-		view_pass.setIcon(new ImageIcon(LoginView.class.getResource("/images/view.png")));
-		view_pass.setBounds(511, 445, 37, 37);
-		getContentPane().add(view_pass);
+		JLabel lblProcesosQumicos = new JLabel("Procesos Qu\u00EDmicos");
+		lblProcesosQumicos.setHorizontalAlignment(SwingConstants.CENTER);
+		lblProcesosQumicos.setForeground(new Color(99, 68, 55));
+		lblProcesosQumicos.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
+		lblProcesosQumicos.setBounds(450, 92, 445, 49);
+		getContentPane().add(lblProcesosQumicos);
 	}
 }
