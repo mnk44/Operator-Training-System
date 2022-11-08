@@ -175,7 +175,7 @@ public class CenterView {
 		});
 		close_sesion.setIcon(new ImageIcon(CenterView.class.getResource("/images/exit.png")));
 		close_sesion.setFont(new Font("Segoe UI", Font.BOLD, 19));
-		close_sesion.setBackground(new Color(244, 164, 96));
+		close_sesion.setBackground(new Color(243,193,67));
 		close_sesion.setForeground(Color.WHITE);
 		user_options.add(close_sesion);
 
