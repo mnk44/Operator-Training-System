@@ -36,7 +36,7 @@ import java.awt.event.WindowStateListener;
 
 public class PrincipalView {
 
-	private JFrame frame;
+	JFrame frame;
 	private JMenuItem changePass;
 	
 	User user_active = null;
@@ -47,7 +47,7 @@ public class PrincipalView {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PrincipalView window = new PrincipalView();
+					PrincipalView window = new PrincipalView(null);
 					window.frame.setLocationRelativeTo(null);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
@@ -57,7 +57,8 @@ public class PrincipalView {
 		});
 	}
 
-	public PrincipalView() {
+	public PrincipalView(User uss) {
+		user_active = uss;
 		initialize();
 	}
 
@@ -129,7 +130,7 @@ public class PrincipalView {
 			}
 		});
 		changePass.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/change-pass.png")));
-		changePass.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.ALT_MASK));
+		changePass.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.ALT_MASK));
 		changePass.setForeground(Color.WHITE);
 		changePass.setBackground(new Color(255, 113, 19));
 		changePass.setFont(new Font("Dubai", Font.BOLD, 19));
@@ -154,11 +155,26 @@ public class PrincipalView {
 			}
 		});
 		mntmInformacinPersonal.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/personal-info.png")));
-		mntmInformacinPersonal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_MASK));
+		mntmInformacinPersonal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.ALT_MASK));
 		mntmInformacinPersonal.setForeground(Color.WHITE);
 		mntmInformacinPersonal.setFont(new Font("Dubai", Font.BOLD, 19));
 		mntmInformacinPersonal.setBackground(new Color(255, 113, 19));
 		mnNewMenu.add(mntmInformacinPersonal);
+		
+		JMenuItem mntmCerrarSesin = new JMenuItem("Cerrar sesi\u00F3n");
+		mntmCerrarSesin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				LoginView log = new LoginView();
+				log.setLocationRelativeTo(frame);
+				log.setVisible(true);
+				frame.setVisible(false);
+			}
+		});
+		mntmCerrarSesin.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/exit.png")));
+		mntmCerrarSesin.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.ALT_MASK));
+		mntmCerrarSesin.setForeground(Color.WHITE);
+		mntmCerrarSesin.setFont(new Font("Dubai", Font.BOLD, 19));
+		mntmCerrarSesin.setBackground(new Color(255, 113, 19));
+		mnNewMenu.add(mntmCerrarSesin);
 	}
-
 }

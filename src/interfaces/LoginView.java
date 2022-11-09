@@ -10,6 +10,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
@@ -59,6 +61,12 @@ public class LoginView extends JDialog {
 		setTitle("Sistema de entrenamiento SECPROIT");
 		setResizable(false);
 		setBounds(100, 100, 901, 484);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				System.exit(0);
+			}
+		});
 		
 		JLabel title = new JLabel("Sistema de Experto para el Control de");
 		title.setBounds(450, 68, 445, 49);
@@ -148,10 +156,10 @@ public class LoginView extends JDialog {
 									JOptionPane.showMessageDialog(null, "Usuario desactivado", "Error", JOptionPane.ERROR_MESSAGE);
 									error++;
 								}else{
-									CenterView center = new CenterView(user);
+									PrincipalView center = new PrincipalView(user);
 									LoginView.this.setVisible(false);
-									center.getFrame().setLocationRelativeTo(null);
-									center.getFrame().setVisible(true);
+									center.frame.setLocationRelativeTo(null);
+									center.frame.setVisible(true);
 								}
 							}else{
 								JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
