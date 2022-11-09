@@ -52,7 +52,7 @@ public class LoginView extends JDialog {
 	public LoginView() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/images/logo.png")));
 		setBackground(new Color(173, 216, 230));
-		setFont(new Font("Microsoft YaHei", Font.BOLD, 14));
+		setFont(new Font("Copperplate Gothic Light", Font.BOLD, 14));
 		setForeground(Color.BLACK);
 		getContentPane().setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
@@ -141,9 +141,9 @@ public class LoginView extends JDialog {
 					error++;
 				}else{
 					try {
-						User user = (User) UserService.findNick(user_name.getText());
+						User user = (User) UserService.searchNick(user_name.getText());
 						if(user != null){
-							if(user.getUser_password().equals(Encrypting.getEncript(user_pass.getText()))){
+							if(user.getUser_pass().equals(Encrypting.getEncript(user_pass.getText()))){
 								if(!user.isUser_active()){
 									JOptionPane.showMessageDialog(null, "Usuario desactivado", "Error", JOptionPane.ERROR_MESSAGE);
 									error++;

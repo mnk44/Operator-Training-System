@@ -1,12 +1,14 @@
 package enums;
 
-public enum SchoolarLevel {
+public enum AcademicLevel {
+	Preescolar,
 	Primaria,
 	Secundaria,
 	Preuniversitario,
-	Tecnológico,
 	Técnico_medio,
 	Universitario,
+	Ingeniero,
+	Licenciado,
 	Máster,
 	Doctor
 }

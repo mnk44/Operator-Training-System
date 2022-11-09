@@ -8,14 +8,12 @@ import java.util.ArrayList;
 
 import classes.ProcessConfiguration;
 import classes.User;
-import enums.AccionTrace;
-import enums.SystemClass;
 import extras.MultiTableList;
 
 public class ProcessConfigurationService {
 	
-	public static String newConfiguration(ProcessConfiguration config, int trace_user, AccionTrace trace_accion,
-			SystemClass trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
+	public static String newConfiguration(ProcessConfiguration config, int trace_user, String trace_accion,
+			String trace_class, String trace_class_id, Timestamp trace_date) throws SQLException{
 		try{
 			String sqlSentenc = "INSERT INTO process_configuration VALUES (DEFAULT,?,?,?,?,?,?,?)"
 					+ "INSERT INTO system_trace VALUES (DEFAULT,?,?,?,?,?)";

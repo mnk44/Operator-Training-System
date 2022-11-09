@@ -42,8 +42,8 @@ import javax.swing.JRadioButton;
 import classes.Area;
 import classes.User;
 import enums.AccionTrace;
-import enums.RolesTypes;
-import enums.SchoolarLevel;
+import enums.RolType;
+import enums.AcademicLevel;
 import enums.SystemClass;
 import extras.Encrypting;
 
@@ -348,7 +348,7 @@ public class NewUserView extends JDialog {
 		lblNivelEscolar.setBounds(28, 172, 333, 48);
 		personalInfo.add(lblNivelEscolar);
 
-		school = new JComboBox<Object>(SchoolarLevel.values());
+		school = new JComboBox<Object>(AcademicLevel.values());
 		school.setBounds(365, 182, 263, 29);
 		school.setSelectedIndex(5);
 		school.setFont(new Font("Segoe UI", Font.PLAIN, 20));
@@ -394,9 +394,9 @@ public class NewUserView extends JDialog {
 					String result = "No funciona";
 					password = nameUser.getText().substring(0, 1).toLowerCase() + card.getText();
 					try {
-						result = UserService.newUser(nameUser.getText(), card.getText(), SchoolarLevel.valueOf(school.getSelectedItem().toString()), 
+						result = UserService.newUser(nameUser.getText(), card.getText(), AcademicLevel.valueOf(school.getSelectedItem().toString()), 
 								(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), Encrypting.getEncript(password), actve.isSelected(),
-								((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolesTypes.valueOf(rol.getSelectedItem().toString()),
+								((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolType.valueOf(rol.getSelectedItem().toString()),
 								userId, AccionTrace.creó_el, SystemClass.usuario, nick.getText(), new Timestamp(Calendar.getInstance().getTime().getTime()));
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
@@ -421,18 +421,18 @@ public class NewUserView extends JDialog {
 					User ret = null;
 					if(rest){
 						try {
-							ret = new User(uss.getUser_id(), nameUser.getText(), card.getText(), SchoolarLevel.valueOf(school.getSelectedItem().toString()), 
+							ret = new User(uss.getUser_id(), nameUser.getText(), card.getText(), AcademicLevel.valueOf(school.getSelectedItem().toString()), 
 									(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), Encrypting.getEncript(password), actve.isSelected(),
-									((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolesTypes.valueOf(rol.getSelectedItem().toString()));
+									((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolType.valueOf(rol.getSelectedItem().toString()));
 						} catch (SQLException | UnsupportedEncodingException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}else{
 						try {
-							ret = new User(uss.getUser_id(), nameUser.getText(), card.getText(), SchoolarLevel.valueOf(school.getSelectedItem().toString()), 
+							ret = new User(uss.getUser_id(), nameUser.getText(), card.getText(), AcademicLevel.valueOf(school.getSelectedItem().toString()), 
 									(int)experience.getValue(), (int)jefe.getValue(), nick.getText(), uss.getUser_password(), actve.isSelected(),
-									((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolesTypes.valueOf(rol.getSelectedItem().toString()));
+									((Area) AreaService.findName(areaSelect.getSelectedItem().toString())).getArea_id(), RolType.valueOf(rol.getSelectedItem().toString()));
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -477,7 +477,7 @@ public class NewUserView extends JDialog {
 		button.setBounds(353, 498, 153, 37);
 		contentPanel.add(button);
 
-		rol = new JComboBox<Object>(RolesTypes.values());
+		rol = new JComboBox<Object>(RolType.values());
 		rol.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(rol.getSelectedIndex() != 1){

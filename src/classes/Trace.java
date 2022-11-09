@@ -2,35 +2,20 @@ package classes;
 
 import java.sql.Timestamp;
 
-import enums.AccionTrace;
-import enums.SystemClass;
-
 public class Trace {
 	int trace_id;
-	int trace_user;
-	AccionTrace trace_accion;
-	SystemClass trace_class;
-	String trace_class_id;
+	String user_nick;
+	String trace_accion;
+	String change_class;
 	Timestamp trace_date;
 	
-	public Trace(int trace_id, int trace_user, AccionTrace trace_accion,
-			SystemClass trace_class, String trace_class_id, Timestamp trace_date) {
+	public Trace(int trace_id, String user_nick, String trace_accion,
+			String change_class, Timestamp trace_date) {
 		super();
 		this.trace_id = trace_id;
-		this.trace_user = trace_user;
+		this.user_nick = user_nick;
 		this.trace_accion = trace_accion;
-		this.trace_class = trace_class;
-		this.trace_class_id = trace_class_id;
-		this.trace_date = trace_date;
-	}
-	
-	public Trace(int trace_user, AccionTrace trace_accion,
-			SystemClass trace_class, String trace_class_id, Timestamp trace_date) {
-		super();
-		this.trace_user = trace_user;
-		this.trace_accion = trace_accion;
-		this.trace_class = trace_class;
-		this.trace_class_id = trace_class_id;
+		this.change_class = change_class;
 		this.trace_date = trace_date;
 	}
 	
@@ -40,29 +25,23 @@ public class Trace {
 	public void setTrace_id(int trace_id) {
 		this.trace_id = trace_id;
 	}
-	public int getTrace_user() {
-		return trace_user;
+	public String getUser_nick() {
+		return user_nick;
 	}
-	public void setTrace_user(int trace_user) {
-		this.trace_user = trace_user;
+	public void setUser_nick(String user_nick) {
+		this.user_nick = user_nick;
 	}
-	public AccionTrace getTrace_accion() {
+	public String getTrace_accion() {
 		return trace_accion;
 	}
-	public void setTrace_accion(AccionTrace trace_accion) {
+	public void setTrace_accion(String trace_accion) {
 		this.trace_accion = trace_accion;
 	}
-	public SystemClass getTrace_class() {
-		return trace_class;
+	public String getChange_class() {
+		return change_class;
 	}
-	public void setTrace_class(SystemClass trace_class) {
-		this.trace_class = trace_class;
-	}
-	public String getTrace_class_id() {
-		return trace_class_id;
-	}
-	public void setTrace_class_id(String trace_class_id) {
-		this.trace_class_id = trace_class_id;
+	public void setChange_class(String change_class) {
+		this.change_class = change_class;
 	}
 	public Timestamp getTrace_date() {
 		return trace_date;

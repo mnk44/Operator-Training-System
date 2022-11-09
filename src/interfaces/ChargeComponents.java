@@ -31,7 +31,7 @@ import javax.swing.border.MatteBorder;
 
 import classes.Area;
 import classes.User;
-import enums.RolesTypes;
+import enums.RolType;
 import extras.FindObjects;
 import services.AreaService;
 
@@ -140,7 +140,7 @@ public class ChargeComponents {
 		personal_infor_panel.add(area);
 		
 		JLabel boss = new JLabel();
-		if(user_conected.getUser_rol().equals(RolesTypes.Jefe_de_área)){
+		if(user_conected.getUser_rol().equals(RolType.Jefe_de_área)){
 			boss.setText(Integer.toString(user_conected.getUser_position_years()));
 		}else{
 			boss.setText("-");

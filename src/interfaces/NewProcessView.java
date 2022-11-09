@@ -41,7 +41,7 @@ import classes.ProcessConfiguration;
 import classes.User;
 import enums.AccionTrace;
 import enums.QuestionsTypes;
-import enums.RolesTypes;
+import enums.RolType;
 import enums.SystemClass;
 import extras.Convert;
 import knowledgeBase.LoadFiles;
@@ -673,7 +673,7 @@ public class NewProcessView extends JDialog {
 		ArrayList<User> usersL = (ArrayList<User>) UserService.getUsers();
 
 		for(int i=0; i<usersL.size(); i++){
-			if(usersL.get(i).getUser_rol().equals(RolesTypes.Operario) && usersL.get(i).getUser_area() == userG.getUser_area()){
+			if(usersL.get(i).getUser_rol().equals(RolType.Operario) && usersL.get(i).getUser_area() == userG.getUser_area()){
 				names.add(usersL.get(i));
 			}
 		}
@@ -687,7 +687,7 @@ public class NewProcessView extends JDialog {
 		ArrayList<User> usersL = (ArrayList<User>) UserService.getUsers();
 
 		for(int i=0; i<usersL.size(); i++){
-			if(usersL.get(i).getUser_rol().equals(RolesTypes.Operario) && usersL.get(i).getUser_area() == userG.getUser_area()){
+			if(usersL.get(i).getUser_rol().equals(RolType.Operario) && usersL.get(i).getUser_area() == userG.getUser_area()){
 				names.add(usersL.get(i).getUser_name());
 			}
 		}
