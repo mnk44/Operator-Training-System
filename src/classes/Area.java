@@ -1,30 +1,33 @@
 package classes;
 
 public class Area {
-	int area_id;
-	String area_name;
+	int id_area;
+	String name_area;
+	boolean area_empty;
 	
-	public Area(String area_name) {
+	public Area(int id_area, String name_area, boolean area_empty) {
 		super();
-		this.area_name = area_name;
+		this.id_area = id_area;
+		this.name_area = name_area;
+		this.area_empty = area_empty;
 	}
 	
-	public Area(int area_id, String area_name) {
-		super();
-		this.area_id = area_id;
-		this.area_name = area_name;
+	public int getId_area() {
+		return id_area;
 	}
-	
-	public int getArea_id() {
-		return area_id;
+	public void setId_area(int id_area) {
+		this.id_area = id_area;
 	}
-	public void setArea_id(int area_id) {
-		this.area_id = area_id;
+	public String getName_area() {
+		return name_area;
 	}
-	public String getArea_name() {
-		return area_name;
+	public void setName_area(String name_area) {
+		this.name_area = name_area;
 	}
-	public void setArea_name(String area_name) {
-		this.area_name = area_name;
+	public boolean isArea_empty() {
+		return area_empty;
+	}
+	public void setArea_empty(boolean area_empty) {
+		this.area_empty = area_empty;
 	}
 }
