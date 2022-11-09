@@ -6,11 +6,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import assistants.MultiTableList;
 import classes.ProcessConfiguration;
 import classes.User;
 import enums.AccionTrace;
 import enums.SystemClass;
+import extras.MultiTableList;
 
 public class ProcessConfigurationService {
 	

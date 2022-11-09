@@ -29,10 +29,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.MatteBorder;
 
-import assistants.FindObjects;
 import classes.Area;
 import classes.User;
 import enums.RolesTypes;
+import extras.FindObjects;
 import services.AreaService;
 
 public class ChargeComponents {

@@ -5,12 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import assistants.MultiTableList;
 import classes.Cause;
 import classes.CauseRecomendation;
 import classes.Recomendation;
 import classes.Variable;
 import classes.VariableCause;
+import extras.MultiTableList;
 
 public class RulesService {
 	

@@ -23,8 +23,8 @@ import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
 import javax.swing.border.MatteBorder;
 
-import assistants.Encrypting;
 import classes.User;
+import extras.Encrypting;
 import services.UserService;
 
 import java.awt.event.ActionListener;

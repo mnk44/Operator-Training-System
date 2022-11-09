@@ -38,9 +38,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
 
-import assistants.TablesInfo;
 import classes.Area;
 import classes.User;
+import extras.TablesInfo;
 
 public class CenterView {
 

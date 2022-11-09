@@ -30,9 +30,9 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import assistants.FindObjects;
-import assistants.TablesInfo;
 import classes.User;
+import extras.FindObjects;
+import extras.TablesInfo;
 import services.UserService;
 
 public class UserListView extends JDialog {

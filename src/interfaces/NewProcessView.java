@@ -36,7 +36,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JComboBox;
 
-import assistants.Convert;
 import classes.FactoryProcess;
 import classes.ProcessConfiguration;
 import classes.User;
@@ -44,6 +43,7 @@ import enums.AccionTrace;
 import enums.QuestionsTypes;
 import enums.RolesTypes;
 import enums.SystemClass;
+import extras.Convert;
 import knowledgeBase.LoadFiles;
 import services.FactoryProcessService;
 import services.ProcessConfigurationService;

@@ -23,8 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.border.MatteBorder;
 import javax.swing.SwingConstants;
 
-import assistants.Encrypting;
 import classes.User;
+import extras.Encrypting;
 import services.UserService;
 
 public class LoginView extends JDialog {

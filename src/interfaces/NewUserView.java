@@ -39,13 +39,13 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JRadioButton;
 
-import assistants.Encrypting;
 import classes.Area;
 import classes.User;
 import enums.AccionTrace;
 import enums.RolesTypes;
 import enums.SchoolarLevel;
 import enums.SystemClass;
+import extras.Encrypting;
 
 public class NewUserView extends JDialog {
 

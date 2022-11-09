@@ -32,10 +32,11 @@ import java.util.ArrayList;
 import javax.swing.ListSelectionModel;
 
 import services.TraceService;
-import assistants.TablesInfo;
 import classes.Trace;
 
 import com.toedter.calendar.JDateChooser;
+
+import extras.TablesInfo;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
