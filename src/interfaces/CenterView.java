@@ -100,7 +100,6 @@ public class CenterView {
 		principal_view.getContentPane().setBackground(Color.WHITE);
 		principal_view.getContentPane().setLayout(null);		
 		principal_view.setTitle("Sistema de entrenamiento SECPROIT");
-		principal_view.setIconImage(Toolkit.getDefaultToolkit().getImage(CenterView.class.getResource("/images/mini-logo.png")));
 		principal_view.setBackground(Color.WHITE);
 		principal_view.setForeground(Color.BLACK);
 		principal_view.setBounds(100, 100, 1064, 639);
@@ -167,7 +166,7 @@ public class CenterView {
 			}
 		});
 		personal_info.setFont(new Font("Segoe UI", Font.BOLD, 19));
-		personal_info.setIcon(new ImageIcon(CenterView.class.getResource("/images/personal-info.png")));
+		//personal_info.setIcon(new ImageIcon(CenterView.class.getResource("/images/personal-info.png")));
 		personal_info.setBackground(new Color(243,193,67));
 		personal_info.setForeground(Color.WHITE);
 		user_options.add(personal_info);
@@ -182,7 +181,7 @@ public class CenterView {
 				CenterView.this.principal_view.setVisible(false);
 			}
 		});
-		close_sesion.setIcon(new ImageIcon(CenterView.class.getResource("/images/exit.png")));
+		//close_sesion.setIcon(new ImageIcon(CenterView.class.getResource("/images/exit.png")));
 		close_sesion.setFont(new Font("Segoe UI", Font.BOLD, 19));
 		close_sesion.setBackground(new Color(243,193,67));
 		close_sesion.setForeground(Color.WHITE);
@@ -207,7 +206,7 @@ public class CenterView {
 				}
 			}
 		});
-		area_management_button.setIcon(new ImageIcon(CenterView.class.getResource("/images/areas.png")));
+		//area_management_button.setIcon(new ImageIcon(CenterView.class.getResource("/images/areas.png")));
 		area_management_button.setFont(new Font("Segoe UI", Font.BOLD, 19));
 		area_management_button.setBackground(new Color(243,193,67));
 		area_management_button.setForeground(Color.WHITE);

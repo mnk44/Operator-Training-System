@@ -10,8 +10,7 @@ import classes.User;
 
 public class UserService {
 	
-	public static Object newUser(User user, String user_nick, String action,
-			String action_class, Timestamp date) throws SQLException{
+	public static Object newUser(User user, String user_nick, Timestamp date) throws SQLException{
 		int id = -1;
 		try{
 			String sqlSentenc = "{call public.new_user(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
@@ -40,7 +39,7 @@ public class UserService {
 		return id;
 	}
 	
-	public static String updateUser(User user, String user_nick, String trace_accion, Timestamp trace_date) throws SQLException{
+	public static String updateUser(User user, String user_nick, Timestamp trace_date) throws SQLException{
 		try{
 			String sqlSentenc = "UPDATE users SET user_name = ?, user_sex = ?, user_card = ?, user_experience = ?,"
 					+ "user_level = ?, user_boss = ?, user_nick = ?, user_pass = ?, user_active = ?, user_area = ?,"
@@ -70,7 +69,7 @@ public class UserService {
 		return null;
 	}
 	
-	public static Object changePassword(int user_id, String pass, String user_nick, String trace_accion, String nick, Timestamp trace_date) throws SQLException{
+	public static String changePassword(int user_id, String pass, String user_nick, String nick, Timestamp trace_date) throws SQLException{
 		try{
 			String sqlSentenc = "UPDATE users SET user_pass = ? WHERE user_id = ?;"
 					+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?)";
@@ -89,7 +88,7 @@ public class UserService {
 		return null;
 	}
 	
-	public static Object changeStatus(int user_id, boolean status, String user_nick, String trace_accion, String nick, Timestamp trace_date) throws SQLException{
+	public static String changeStatus(int user_id, boolean status, String user_nick, String nick, Timestamp trace_date) throws SQLException{
 		try{
 			String sqlSentenc = "UPDATE users SET user_active = ? WHERE user_id = ?;"
 					+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?)";
