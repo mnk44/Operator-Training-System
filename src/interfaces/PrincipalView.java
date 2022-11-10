@@ -54,6 +54,10 @@ public class PrincipalView {
 	private JLabel title1;
 	private JLabel title2;
 	private JLabel title3;
+	private JMenuItem processMana;
+	private JMenuItem userMana;
+	private JMenuItem areaMana;
+	private JMenu options;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -201,7 +205,7 @@ public class PrincipalView {
 			}
 		});
 		mntmInformacinPersonal.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/personal-info.png")));
-		mntmInformacinPersonal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.ALT_MASK));
+		mntmInformacinPersonal.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_MASK));
 		mntmInformacinPersonal.setForeground(Color.WHITE);
 		mntmInformacinPersonal.setFont(new Font("Dubai", Font.BOLD, 19));
 		mntmInformacinPersonal.setBackground(new Color(255, 113, 19));
@@ -223,13 +227,13 @@ public class PrincipalView {
 		mntmCerrarSesin.setBackground(new Color(255, 113, 19));
 		mnNewMenu.add(mntmCerrarSesin);
 		
-		JMenu mnAdministrador = new JMenu("Opciones");
-		mnAdministrador.setForeground(Color.WHITE);
-		mnAdministrador.setFont(new Font("Dubai", Font.BOLD, 20));
-		menuBar.add(mnAdministrador);
+		options = new JMenu("Opciones");
+		options.setForeground(Color.WHITE);
+		options.setFont(new Font("Dubai", Font.BOLD, 20));
+		menuBar.add(options);
 		
-		JMenuItem mntmGestinDereas = new JMenuItem("Gesti\u00F3n de \u00E1reas");
-		mntmGestinDereas.addActionListener(new ActionListener() {
+		areaMana = new JMenuItem("Gesti\u00F3n de \u00E1reas");
+		areaMana.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.remove(panel);
 				frame.remove(title);
@@ -252,15 +256,15 @@ public class PrincipalView {
 				}
 			}
 		});
-		mntmGestinDereas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.ALT_MASK));
-		mntmGestinDereas.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/areas.png")));
-		mntmGestinDereas.setForeground(Color.WHITE);
-		mntmGestinDereas.setFont(new Font("Dubai", Font.BOLD, 19));
-		mntmGestinDereas.setBackground(new Color(255, 113, 19));
-		mnAdministrador.add(mntmGestinDereas);
+		areaMana.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.ALT_MASK));
+		areaMana.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/areas.png")));
+		areaMana.setForeground(Color.WHITE);
+		areaMana.setFont(new Font("Dubai", Font.BOLD, 19));
+		areaMana.setBackground(new Color(255, 113, 19));
+		options.add(areaMana);
 		
-		JMenuItem mntmGestinDeUsuarios = new JMenuItem("Gesti\u00F3n de usuarios");
-		mntmGestinDeUsuarios.addActionListener(new ActionListener() {
+		userMana = new JMenuItem("Gesti\u00F3n de usuarios");
+		userMana.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.remove(panel);
 				frame.remove(title);
@@ -284,11 +288,28 @@ public class PrincipalView {
 				}
 			}
 		});
-		mntmGestinDeUsuarios.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/user_management.png")));
-		mntmGestinDeUsuarios.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.ALT_MASK));
-		mntmGestinDeUsuarios.setForeground(Color.WHITE);
-		mntmGestinDeUsuarios.setFont(new Font("Dubai", Font.BOLD, 19));
-		mntmGestinDeUsuarios.setBackground(new Color(255, 113, 19));
-		mnAdministrador.add(mntmGestinDeUsuarios);
+		userMana.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/user_management.png")));
+		userMana.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.ALT_MASK));
+		userMana.setForeground(Color.WHITE);
+		userMana.setFont(new Font("Dubai", Font.BOLD, 19));
+		userMana.setBackground(new Color(255, 113, 19));
+		options.add(userMana);
+		
+		processMana = new JMenuItem("Gesti\u00F3n de procesos");
+		processMana.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/procesos.png")));
+		processMana.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.ALT_MASK));
+		processMana.setForeground(Color.WHITE);
+		processMana.setFont(new Font("Dubai", Font.BOLD, 19));
+		processMana.setBackground(new Color(255, 113, 19));
+		options.add(processMana);
+		
+		if(user_active.getUser_rol() == 1){
+			processMana.setVisible(false);
+		}else if(user_active.getUser_rol() == 2){
+			userMana.setVisible(false);
+			areaMana.setVisible(false);
+		}else{
+			options.setVisible(false);
+		}
 	}
 }

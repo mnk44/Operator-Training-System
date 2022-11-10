@@ -36,7 +36,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JComboBox;
 
-import classes.FactoryProcess;
+import classes.Process;
 import classes.ProcessConfiguration;
 import classes.User;
 import enums.AccionTrace;
@@ -113,17 +113,17 @@ public class NewProcessView extends JDialog {
 					JOptionPane.showMessageDialog(null, "La cantidad de intentos debe ser mayor que la cantidad intentos aprobados", "Error", JOptionPane.ERROR_MESSAGE);
 				}else{
 					//insert process into database
-					FactoryProcess process = null;
+					Process process = null;
 					if(image.getText().isEmpty()){
 						try {
-							process = new FactoryProcess(processName.getText(), userG.getUser_area(), null, Convert.toBytes(new File(anmRoute)), Convert.toBytes(new File(drlRoute)));
+							process = new Process(processName.getText(), userG.getUser_area(), null, Convert.toBytes(new File(anmRoute)), Convert.toBytes(new File(drlRoute)));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}else{
 						try {
-							process = new FactoryProcess(processName.getText(), userG.getUser_area(), Convert.toBytes(new File(imageRoute)), Convert.toBytes(new File(anmRoute)), Convert.toBytes(new File(drlRoute)));
+							process = new Process(processName.getText(), userG.getUser_area(), Convert.toBytes(new File(imageRoute)), Convert.toBytes(new File(anmRoute)), Convert.toBytes(new File(drlRoute)));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -142,7 +142,7 @@ public class NewProcessView extends JDialog {
 
 					int processId = 0;
 					try {
-						processId = ((FactoryProcess)FactoryProcessService.findName(processName.getText())).getProcess_id();
+						processId = ((Process)FactoryProcessService.findName(processName.getText())).getProcess_id();
 					} catch (SQLException e2) {
 						// TODO Auto-generated catch block
 						e2.printStackTrace();

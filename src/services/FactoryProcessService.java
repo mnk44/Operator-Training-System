@@ -5,11 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import classes.FactoryProcess;
+import classes.Process;
 
 public class FactoryProcessService {
 	
-	public static String newProcess(FactoryProcess process) throws SQLException{
+	public static String newProcess(Process process) throws SQLException{
 		try{
 			String sqlSentenc = "INSERT INTO process VALUES (DEFAULT,?,?,?,?,?);";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
@@ -26,7 +26,7 @@ public class FactoryProcessService {
 		return null;
 	}
 
-	public static String updateProcess(FactoryProcess process) throws SQLException{
+	public static String updateProcess(Process process) throws SQLException{
 		try{
 			String sqlSentenc = "UPDATE process SET process_name = ?, process_area = ?"
 					+ "process_img = ?, process_anm = ?, process_drl = ? WHERE process_id = ?";
@@ -59,14 +59,14 @@ public class FactoryProcessService {
 	}
 
 	public static Object findId(int process_id) throws SQLException {
-		FactoryProcess process = null;
+		Process process = null;
 		try{
 			String sqlSentenc = "SELECT * FROM process WHERE process_id = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, process_id);
 			ResultSet rs = cs.executeQuery();
 			if(rs.next()){
-				process = new FactoryProcess(rs.getInt("process_id"),rs.getString("process_name"), rs.getInt("process_area"),
+				process = new Process(rs.getInt("process_id"),rs.getString("process_name"), rs.getInt("process_area"),
 						rs.getBytes("process_img"), rs.getBytes("process_anm"), rs.getBytes("process_drl"));
 			}
 		}catch (Exception e){
@@ -76,14 +76,14 @@ public class FactoryProcessService {
 	}
 
 	public static Object findName(String process_name) throws SQLException {
-		FactoryProcess process = null;
+		Process process = null;
 		try{
 			String sqlSentenc = "SELECT * FROM process WHERE process_name = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, process_name);
 			ResultSet rs = cs.executeQuery();
 			if(rs.next()){
-				process = new FactoryProcess(rs.getInt("process_id"),rs.getString("process_name"), rs.getInt("process_area"),
+				process = new Process(rs.getInt("process_id"),rs.getString("process_name"), rs.getInt("process_area"),
 						rs.getBytes("process_img"), rs.getBytes("process_anm"), rs.getBytes("process_drl"));
 			}
 		}catch (Exception e){
@@ -93,11 +93,11 @@ public class FactoryProcessService {
 	}
 
 	public static Object getProcess() throws SQLException{
-		ArrayList<FactoryProcess> processList = new ArrayList<FactoryProcess>();
+		ArrayList<Process> processList = new ArrayList<Process>();
 		try{
 			ResultSet rs = ConnectionService.getConnection().createStatement().executeQuery("SELECT * FROM process");
 			while(rs.next()){
-				FactoryProcess process = new FactoryProcess(rs.getInt("process_id"),rs.getString("process_name"), rs.getInt("process_area"),
+				Process process = new Process(rs.getInt("process_id"),rs.getString("process_name"), rs.getInt("process_area"),
 						rs.getBytes("process_img"), rs.getBytes("process_anm"), rs.getBytes("process_drl"));
 				processList.add(process);
 			}
@@ -108,14 +108,14 @@ public class FactoryProcessService {
 	}
 	
 	public static Object findArea(int process_area) throws SQLException{
-		ArrayList<FactoryProcess> processList = new ArrayList<FactoryProcess>();
+		ArrayList<Process> processList = new ArrayList<Process>();
 		try{
 			String sqlSentenc = "SELECT * FROM process WHERE process_area = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, process_area);
 			ResultSet rs = cs.executeQuery();
 			if(rs.next()){
-				FactoryProcess process = new FactoryProcess(rs.getInt("process_id"),rs.getString("process_name"), rs.getInt("process_area"),
+				Process process = new Process(rs.getInt("process_id"),rs.getString("process_name"), rs.getInt("process_area"),
 						rs.getBytes("process_img"), rs.getBytes("process_anm"), rs.getBytes("process_drl"));
 				processList.add(process);
 			}
@@ -126,14 +126,14 @@ public class FactoryProcessService {
 	}
 
 	public static Object findUser(int user_id) throws SQLException{
-		ArrayList<FactoryProcess> processList = new ArrayList<FactoryProcess>();
+		ArrayList<Process> processList = new ArrayList<Process>();
 		try{
 			String sqlSentenc = "SELECT * FROM user_process WHERE user_id = ?";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, user_id);
 			ResultSet rs = cs.executeQuery();
 			if(rs.next()){
-				FactoryProcess process = (FactoryProcess) findId(rs.getInt("process_id"));
+				Process process = (Process) findId(rs.getInt("process_id"));
 				processList.add(process);
 			}
 		}catch (Exception e){

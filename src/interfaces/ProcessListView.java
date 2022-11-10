@@ -30,7 +30,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import classes.FactoryProcess;
+import classes.Process;
 import extras.Search;
 import extras.DataTable;
 import services.FactoryProcessService;
@@ -50,7 +50,7 @@ public class ProcessListView extends JDialog {
 	private int selected = -1;
 	
 	@SuppressWarnings("unchecked")
-	ArrayList<FactoryProcess> processList = (ArrayList<FactoryProcess>) FactoryProcessService.getProcess();
+	ArrayList<Process> processList = (ArrayList<Process>) FactoryProcessService.getProcess();
 
 	public static void main(String[] args) {
 		try {
@@ -266,7 +266,7 @@ public class ProcessListView extends JDialog {
 		reloadTable(processList);
 	}
 
-	public static void reloadTable(ArrayList<FactoryProcess> processList) throws SQLException{
+	public static void reloadTable(ArrayList<Process> processList) throws SQLException{
 		DataTable.getProcess(date, table, processList);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);

@@ -1,6 +1,6 @@
 package classes;
 
-public class FactoryProcess {
+public class Process {
 	int process_id;
 	String process_name;
 	int process_area;
@@ -8,7 +8,7 @@ public class FactoryProcess {
 	byte[] process_anm;
 	byte[] process_drl;
 	
-	public FactoryProcess(int process_id, String process_name,
+	public Process(int process_id, String process_name,
 			int process_area, byte[] process_img,
 			byte[] process_anm, byte[] process_drl) {
 		super();
@@ -20,7 +20,7 @@ public class FactoryProcess {
 		this.process_drl = process_drl;
 	}
 	
-	public FactoryProcess(String process_name, int process_area,
+	public Process(String process_name, int process_area,
 		    byte[] process_img, byte[] process_anm,
 			byte[] process_drl) {
 		super();
