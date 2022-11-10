@@ -281,7 +281,7 @@ public class AreaManagementPanel extends JPanel {
 						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}else{
-					JOptionPane.showMessageDialog(null, "No se puede eliminar un área si esta contiene usuarios", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "No se puede eliminar un área si contiene usuarios", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

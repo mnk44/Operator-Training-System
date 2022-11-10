@@ -37,6 +37,8 @@ import javax.swing.JPanel;
 
 import java.awt.event.WindowStateListener;
 import java.awt.Dimension;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 public class PrincipalView {
 
@@ -48,6 +50,10 @@ public class PrincipalView {
 	ArrayList<User> usersList = UserService.getUsers();
 	
 	JPanel panel = new JPanel();
+	private JLabel title;
+	private JLabel title1;
+	private JLabel title2;
+	private JLabel title3;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -90,6 +96,32 @@ public class PrincipalView {
 		frame.setForeground(Color.BLACK);
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.getContentPane().setLayout(null);
+		
+		title3 = new JLabel("");
+		title3.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/quimica.png")));
+		title3.setBounds(43, 26, 299, 368);
+		frame.getContentPane().add(title3);
+		
+		title = new JLabel("SECPROIT");
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		title.setForeground(new Color(255, 113, 19));
+		title.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 32));
+		title.setBounds(377, 107, 445, 49);
+		frame.getContentPane().add(title);
+		
+		title1 = new JLabel("Sistema Experto para el Control");
+		title1.setHorizontalAlignment(SwingConstants.CENTER);
+		title1.setForeground(new Color(99, 68, 55));
+		title1.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 26));
+		title1.setBounds(335, 156, 513, 49);
+		frame.getContentPane().add(title1);
+		
+		title2 = new JLabel("de Procesos Qu\u00EDmicos");
+		title2.setHorizontalAlignment(SwingConstants.CENTER);
+		title2.setForeground(new Color(99, 68, 55));
+		title2.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 26));
+		title2.setBounds(335, 196, 513, 49);
+		frame.getContentPane().add(title2);
 		frame.setTitle("Sistema de entrenamiento SECPROIT");
 		frame.setBounds(100, 100, 901, 514);
 		frame.addWindowListener(new WindowAdapter() {
@@ -148,6 +180,10 @@ public class PrincipalView {
 		mntmInformacinPersonal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.remove(panel);
+				frame.remove(title);
+				frame.remove(title1);
+				frame.remove(title2);
+				frame.remove(title3);
 				panel = new JPanel();
 				try {
 					panel = new PersonalInfPanel(user_active);
@@ -196,6 +232,10 @@ public class PrincipalView {
 		mntmGestinDereas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.remove(panel);
+				frame.remove(title);
+				frame.remove(title1);
+				frame.remove(title2);
+				frame.remove(title3);
 				panel = new JPanel();
 				try {
 					panel = new AreaManagementPanel(user_active, areasList, usersList);
@@ -223,6 +263,10 @@ public class PrincipalView {
 		mntmGestinDeUsuarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.remove(panel);
+				frame.remove(title);
+				frame.remove(title1);
+				frame.remove(title2);
+				frame.remove(title3);
 				panel = new JPanel();
 				try {
 					panel = new UserManagementPanel(user_active, usersList, areasList);

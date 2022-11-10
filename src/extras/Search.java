@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import classes.Area;
+import classes.User;
 
 public class Search {
 
@@ -49,22 +50,22 @@ public class Search {
 //		return result;
 //	}
 //	
-//	public static ArrayList<User> findUsers (ArrayList<User> user, String name) throws SQLException{
-//		ArrayList<User> result = new ArrayList<>();
-//		
-//		for(int i=0; i<user.size(); i++){
-//			String userName = user.get(i).getUser_name().toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
-//			String nickName = user.get(i).getUser_nick().toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
-//			String findingName = name.toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
-//			if(userName.contains(findingName)){
-//				result.add(user.get(i));
-//			}else if(nickName.contains(findingName)){
-//				result.add(user.get(i));
-//			}else if(user.get(i).getUser_card().contains(findingName)){
-//				result.add(user.get(i));
-//			}
-//		}
-//		
-//		return result;
-//	}
+	public static ArrayList<User> searchUsers (ArrayList<User> user, String name) throws SQLException{
+		ArrayList<User> result = new ArrayList<>();
+		
+		for(int i=0; i<user.size(); i++){
+			String userName = user.get(i).getUser_name().toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			String nickName = user.get(i).getUser_nick().toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			String findingName = name.toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			if(userName.contains(findingName)){ //nombre
+				result.add(user.get(i));
+			}else if(nickName.contains(findingName)){ //nick
+				result.add(user.get(i));
+			}else if(user.get(i).getUser_card().contains(findingName)){ //carnet
+				result.add(user.get(i));
+			}
+		}
+		
+		return result;
+	}
 }

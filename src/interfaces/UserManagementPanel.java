@@ -3,10 +3,15 @@ package interfaces;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.JPanel;
 
@@ -18,6 +23,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -26,7 +32,10 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 
+import services.UserService;
 import extras.DataTable;
+import extras.Encrypting;
+import extras.Search;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -34,10 +43,10 @@ import java.awt.event.ActionEvent;
 public class UserManagementPanel extends JPanel {
 
 	private static final long serialVersionUID = 7029954910417287576L;
-	
+
 	private static JTable table;
 	private static DefaultTableModel date;
-	
+
 	static ArrayList<Area> areasList = null;
 	static User user = null;
 
@@ -51,17 +60,17 @@ public class UserManagementPanel extends JPanel {
 	public UserManagementPanel(final User urr, final ArrayList<User> usersList, final ArrayList<Area> al) throws SQLException {
 		areasList = al;
 		user = urr;
-		
-		setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+
+		setBorder(null);
 		setBackground(Color.WHITE);
 		setBounds(100, 100, 838, 433);
 		setLayout(null);
-		
+
 		JLabel label = new JLabel();
 		label.setIcon(new ImageIcon(UserManagementPanel.class.getResource("/images/search.png")));
 		label.setBounds(54, 0, 48, 76);
 		add(label);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
@@ -88,6 +97,13 @@ public class UserManagementPanel extends JPanel {
 					btnModificarUsuario.setBackground(new Color(255, 113, 19));
 					btnInactivarUsuario.setEnabled(true);
 					btnInactivarUsuario.setBackground(new Color(255, 113, 19));
+					if(usersList.get(selected).isUser_active()){
+						btnInactivarUsuario.setText("Inactivar usuario");
+						btnInactivarUsuario.setIcon(new ImageIcon(UserManagementPanel.class.getResource("/images/icons8_Delete_User_Male_16.png")));
+					}else{
+						btnInactivarUsuario.setText("Activar usuario");
+						btnInactivarUsuario.setIcon(new ImageIcon(UserManagementPanel.class.getResource("/images/icons8_Checked_User_Male_16.png")));
+					}
 				}else{
 					btnModificarUsuario.setEnabled(false);
 					btnReiniciarClave.setEnabled(false);
@@ -111,7 +127,7 @@ public class UserManagementPanel extends JPanel {
 		table.setIntercellSpacing(new Dimension(2, 2));
 		scrollPane.setColumnHeaderView(table);		
 		scrollPane.setViewportView(table);
-		
+
 		btnNuevoUsuario = new JButton("Nuevo usuario");
 		btnNuevoUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -137,7 +153,7 @@ public class UserManagementPanel extends JPanel {
 		btnNuevoUsuario.setBackground(new Color(255, 113, 19));
 		btnNuevoUsuario.setBounds(611, 119, 199, 37);
 		add(btnNuevoUsuario);
-		
+
 		btnModificarUsuario = new JButton("Modificar usuario");
 		btnModificarUsuario.addMouseListener(new MouseAdapter() {
 			@Override
@@ -161,8 +177,33 @@ public class UserManagementPanel extends JPanel {
 		btnModificarUsuario.setBackground(new Color(248, 159, 101));
 		btnModificarUsuario.setBounds(611, 185, 199, 37);
 		add(btnModificarUsuario);
-		
+
 		btnReiniciarClave = new JButton("Restablecer clave");
+		btnReiniciarClave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String new_pass = "secproit123*";
+				selected = table.getSelectedRow();
+				String result = null;
+				try {
+					result = UserService.changePassword(user.getUser_id(), Encrypting.getEncript(new_pass), user.getUser_nick(), usersList.get(selected).getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+				} catch (UnsupportedEncodingException e) {
+					JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				if(result != null){
+					JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+				}else{
+					JOptionPane.showMessageDialog(null, "La nueva contraseña es: secproit123*", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+					try {
+						reload(usersList);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 		btnReiniciarClave.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -185,8 +226,34 @@ public class UserManagementPanel extends JPanel {
 		btnReiniciarClave.setBackground(new Color(248, 159, 101));
 		btnReiniciarClave.setBounds(611, 249, 199, 37);
 		add(btnReiniciarClave);
-		
+
 		btnInactivarUsuario = new JButton("Inactivar usuario");
+		btnInactivarUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selected = table.getSelectedRow();
+				String result = null;
+				try {
+					result = UserService.changeStatus(usersList.get(selected).getUser_id(), !usersList.get(selected).isUser_active(), usersList.get(selected).getUser_nick(), user.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				if(result == null){
+					JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "", JOptionPane.INFORMATION_MESSAGE);
+					User u = usersList.get(selected);
+					u.setUser_active(!u.isUser_active());
+					usersList.set(selected, u);
+					try {
+						reload(usersList);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		btnInactivarUsuario.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -209,21 +276,62 @@ public class UserManagementPanel extends JPanel {
 		btnInactivarUsuario.setBackground(new Color(248, 159, 101));
 		btnInactivarUsuario.setBounds(611, 311, 199, 37);
 		add(btnInactivarUsuario);
-		
+
 		JLabel lblGestinDeUsuarios = new JLabel("Gesti\u00F3n de usuarios:");
 		lblGestinDeUsuarios.setHorizontalAlignment(SwingConstants.CENTER);
 		lblGestinDeUsuarios.setForeground(new Color(255, 113, 19));
 		lblGestinDeUsuarios.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
 		lblGestinDeUsuarios.setBounds(25, 69, 571, 37);
 		add(lblGestinDeUsuarios);
-		
+
 		searchFile = new JTextField();
+		searchFile.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				if(searchFile.getText().length()==1 && arg0.getKeyChar()==KeyEvent.VK_BACK_SPACE){
+					try {
+						reload(usersList);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(arg0.getKeyChar()==KeyEvent.VK_BACK_SPACE){
+					ArrayList<User> s = null;
+					try {
+						s = Search.searchUsers(usersList, searchFile.getText().substring(0,searchFile.getText().length()-1));
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						reload(s);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					ArrayList<User> s = null;
+					try {
+						s = Search.searchUsers(usersList, (searchFile.getText()+ arg0.getKeyChar()));
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						reload(s);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 		searchFile.setToolTipText("Buscar usuario");
 		searchFile.setFont(new Font("Corbel", Font.PLAIN, 20));
 		searchFile.setColumns(10);
 		searchFile.setBounds(105, 26, 436, 29);
 		add(searchFile);
-		
+
 		reload(usersList);
 	}
 
