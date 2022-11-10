@@ -6,6 +6,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+
 import java.awt.Color;
 import java.awt.Toolkit;
 
@@ -61,10 +62,12 @@ public class UserView extends JDialog {
 	private JSpinner boss;
 	private JSpinner experience;
 	private JLabel lblAosDeExperiencia_1;
+	
+	User modificated = null;
 
 	public static void main(String[] args) {
 		try {
-			UserView dialog = new UserView(null, null, null);
+			UserView dialog = new UserView(null, null, null, -1);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setLocationRelativeTo(null);
 			dialog.setVisible(true);
@@ -74,10 +77,8 @@ public class UserView extends JDialog {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public UserView(final ArrayList<Area> areas, final ArrayList<User> users, final User uss) {
+	public UserView(final ArrayList<Area> areas, final ArrayList<User> users, final User user_act, final int id) {
 		getContentPane().setBackground(Color.WHITE);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(UserView.class.getResource("/images/icons8_Add_User_Male_32.png")));
-		setTitle("Nuevo usuario");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setResizable(false);
@@ -338,27 +339,52 @@ public class UserView extends JDialog {
 				}else if((int)experience.getValue() < (int)boss.getValue()){
 					JOptionPane.showMessageDialog(null, "La cantidad de años como jefe no puede ser mayor a los años de experiencia", "Error", JOptionPane.ERROR_MESSAGE);
 				}else{
-					try {
-						User newUser = new User(name.getText(), sex.getSelectedIndex(), card.getText(), (int)experience.getValue(),
-								(String)level.getSelectedItem(), (int)boss.getValue(), nick.getText(), pass.getText(), active.isSelected(), 
-								areas.get(areasCB.getSelectedIndex()).getId_area(), rol.getSelectedIndex()+1);
+					if(id == -1){
 						try {
-							Object result = UserService.newUser(newUser, uss.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
-							if(!result.toString().contains("e")){
-								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);						
-								newUser.setUser_id((int) result);
-								users.add(newUser);
-								UserManagementPanel.reload(users);
-								UserManagementPanel.searchFile.setText("");
-								UserView.this.dispose();
-							}else{
-								JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+							User newUser = new User(name.getText(), sex.getSelectedIndex(), card.getText(), (int)experience.getValue(),
+									(String)level.getSelectedItem(), (int)boss.getValue(), nick.getText(), pass.getText(), active.isSelected(), 
+									areas.get(areasCB.getSelectedIndex()).getId_area(), rol.getSelectedIndex()+1);
+							try {
+								Object result = UserService.newUser(newUser, user_act.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+								if(!result.toString().contains("e")){
+									JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);						
+									newUser.setUser_id((int) result);
+									users.add(newUser);
+									UserManagementPanel.reload(users);
+									UserManagementPanel.searchFile.setText("");
+									UserView.this.dispose();
+								}else{
+									JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+								}
+							} catch (SQLException e) {
+								JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 							}
-						} catch (SQLException e) {
+						} catch (UnsupportedEncodingException e) {
 							JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 						}
-					} catch (UnsupportedEncodingException e) {
-						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+					}else{
+						try {
+							User newUser = new User(name.getText(), sex.getSelectedIndex(), card.getText(), (int)experience.getValue(),
+									(String)level.getSelectedItem(), (int)boss.getValue(), nick.getText(), pass.getText(), active.isSelected(), 
+									areas.get(areasCB.getSelectedIndex()).getId_area(), rol.getSelectedIndex()+1);
+							try {
+								String result = UserService.updateUser(newUser, user_act.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+								if(result == null){
+									JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);						
+									newUser.setUser_id(modificated.getUser_id());
+									users.set(id, newUser);
+									UserManagementPanel.reload(users);
+									UserManagementPanel.searchFile.setText("");
+									UserView.this.dispose();
+								}else{
+									JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+								}
+							} catch (SQLException e) {
+								JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						} catch (UnsupportedEncodingException e) {
+							JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				}
 			}
@@ -379,5 +405,34 @@ public class UserView extends JDialog {
 		button.setBackground(new Color(255, 113, 19));
 		button.setBounds(233, 320, 153, 37);
 		getContentPane().add(button);
+		
+		if(id == -1){
+			setIconImage(Toolkit.getDefaultToolkit().getImage(UserView.class.getResource("/images/icons8_Add_User_Male_32.png")));
+			setTitle("Nuevo usuario");
+		}else{
+			modificated = users.get(id);
+			setIconImage(Toolkit.getDefaultToolkit().getImage(UserView.class.getResource("/images/icons8_Edit_32.png")));
+			setTitle("Modificar usuario");
+			fillView(areas);
+		}
+	}
+	
+	public void fillView(ArrayList<Area> areas){
+		name.setText(modificated.getUser_name());
+		sex.setSelectedIndex(modificated.getUser_sex());
+		card.setText(modificated.getUser_card());
+		experience.setValue(modificated.getUser_experience());
+		level.setSelectedItem(modificated.getUser_level());
+		boss.setValue(modificated.getUser_boss());
+		nick.setText(modificated.getUser_nick());
+		active.setSelected(modificated.isUser_active());
+		rol.setSelectedIndex(modificated.getUser_rol()-1);
+		boolean x = true;
+		for(int i=0; i<areas.size() && x; i++){
+			if(areas.get(i).getId_area() == modificated.getUser_area()){
+				areasCB.setSelectedItem(areas.get(i).getName_area());
+				x = false;
+			}
+		}
 	}
 }

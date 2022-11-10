@@ -48,7 +48,7 @@ public class UserManagementPanel extends JPanel {
 	private static DefaultTableModel date;
 
 	static ArrayList<Area> areasList = null;
-	static User user = null;
+	static User user_act = null;
 
 	int selected = -1;
 	static JTextField searchFile;
@@ -59,7 +59,7 @@ public class UserManagementPanel extends JPanel {
 
 	public UserManagementPanel(final User urr, final ArrayList<User> usersList, final ArrayList<Area> al) throws SQLException {
 		areasList = al;
-		user = urr;
+		user_act = urr;
 
 		setBorder(null);
 		setBackground(Color.WHITE);
@@ -131,7 +131,7 @@ public class UserManagementPanel extends JPanel {
 		btnNuevoUsuario = new JButton("Nuevo usuario");
 		btnNuevoUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				UserView uv = new UserView(areasList, usersList, user);
+				UserView uv = new UserView(areasList, usersList, user_act, -1);
 				uv.setLocationRelativeTo(UserManagementPanel.this);
 				uv.setVisible(true);
 			}
@@ -155,6 +155,22 @@ public class UserManagementPanel extends JPanel {
 		add(btnNuevoUsuario);
 
 		btnModificarUsuario = new JButton("Modificar usuario");
+		btnModificarUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selected = table.getSelectedRow();
+				boolean x = true;
+				int y = -1;
+				for (int i = 0; i < usersList.size() && x; i++) {
+					if((int) table.getValueAt(selected, 0) == usersList.get(i).getUser_id()){
+						y = i;
+						x = false;
+					}
+				}
+				UserView uv = new UserView(areasList, usersList, user_act, y);
+				uv.setLocationRelativeTo(UserManagementPanel.this);
+				uv.setVisible(true);
+			}
+		});
 		btnModificarUsuario.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -185,7 +201,7 @@ public class UserManagementPanel extends JPanel {
 				selected = table.getSelectedRow();
 				String result = null;
 				try {
-					result = UserService.changePassword(user.getUser_id(), Encrypting.getEncript(new_pass), user.getUser_nick(), usersList.get(selected).getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+					result = UserService.changePassword((int) table.getValueAt(selected, 0), Encrypting.getEncript(new_pass), user_act.getUser_nick(), (String) table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
 				} catch (UnsupportedEncodingException e) {
 					JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 				} catch (SQLException e) {
@@ -233,7 +249,7 @@ public class UserManagementPanel extends JPanel {
 				selected = table.getSelectedRow();
 				String result = null;
 				try {
-					result = UserService.changeStatus(usersList.get(selected).getUser_id(), !usersList.get(selected).isUser_active(), usersList.get(selected).getUser_nick(), user.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+					result = UserService.changeStatus((int) table.getValueAt(selected, 0), !usersList.get(selected).isUser_active(), user_act.getUser_nick(), (String) table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -336,7 +352,7 @@ public class UserManagementPanel extends JPanel {
 	}
 
 	public static void reload(ArrayList<User> users) throws SQLException{
-		DataTable.fillUsers(date, table, users, areasList, user.getUser_id());
+		DataTable.fillUsers(date, table, users, areasList, user_act.getUser_id());
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);

@@ -57,10 +57,11 @@ public class UserService {
 			cs.setBoolean(9, user.isUser_active());
 			cs.setInt(10, user.getUser_area());
 			cs.setInt(11, user.getUser_rol());
-			cs.setString(12, user_nick);
-			cs.setString(13, "modificó el usuario");
-			cs.setString(14, user.getUser_nick());
-			cs.setTimestamp(15, trace_date);
+			cs.setInt(12, user.getUser_id());
+			cs.setString(13, user_nick);
+			cs.setString(14, "modificó el usuario");
+			cs.setString(15, user.getUser_nick());
+			cs.setTimestamp(16, trace_date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
