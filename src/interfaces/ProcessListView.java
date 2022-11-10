@@ -31,8 +31,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import classes.FactoryProcess;
-import extras.FindObjects;
-import extras.TablesInfo;
+import extras.Search;
+import extras.DataTable;
 import services.FactoryProcessService;
 
 public class ProcessListView extends JDialog {
@@ -222,7 +222,7 @@ public class ProcessListView extends JDialog {
 						findProcess.setText("");
 						findProcess.setForeground(Color.BLACK);
 						try {
-							reloadTable(FindObjects.findProcess(processList, findProcess.getText() + arg0.getKeyChar()));
+							reloadTable(Search.findProcess(processList, findProcess.getText() + arg0.getKeyChar()));
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -241,14 +241,14 @@ public class ProcessListView extends JDialog {
 					}
 				}else if(arg0.getKeyChar() == KeyEvent.VK_BACK_SPACE){
 					try {
-						reloadTable(FindObjects.findProcess(processList, findProcess.getText().substring(0, findProcess.getText().length()-1)));
+						reloadTable(Search.findProcess(processList, findProcess.getText().substring(0, findProcess.getText().length()-1)));
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}else{
 					try {
-						reloadTable(FindObjects.findProcess(processList, findProcess.getText() + arg0.getKeyChar()));
+						reloadTable(Search.findProcess(processList, findProcess.getText() + arg0.getKeyChar()));
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -267,7 +267,7 @@ public class ProcessListView extends JDialog {
 	}
 
 	public static void reloadTable(ArrayList<FactoryProcess> processList) throws SQLException{
-		TablesInfo.getProcess(date, table, processList);
+		DataTable.getProcess(date, table, processList);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);

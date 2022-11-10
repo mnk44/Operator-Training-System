@@ -10,7 +10,7 @@ import classes.Area;
 
 public class AreaService {
 
-	public static Object newArea(String area_name, String user_nick, String action, Timestamp date) throws SQLException{
+	public static Object newArea(String area_name, String user_nick, Timestamp date) throws SQLException{
 		int id = -1;
 		try{
 			String sqlSentenc = "{call public.new_area(?,?,?,?)}";
@@ -29,7 +29,7 @@ public class AreaService {
 		return id;
 	}
 	
-	public static String updateArea(int area_id, String area_name, String user_nick, String trace_accion, Timestamp trace_date) throws SQLException{
+	public static String updateArea(int area_id, String area_name, String user_nick, Timestamp trace_date) throws SQLException{
 		try{
 			String sqlSentenc = "UPDATE area SET name_area = ? WHERE id_area = ?;"
 					+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?)";
@@ -48,8 +48,7 @@ public class AreaService {
 		return null;
 	}
 	
-	public static String deleteArea(int area_id, String user_nick, String trace_accion,
-		 String area_name, Timestamp trace_date) throws SQLException{
+	public static String deleteArea(int area_id, String user_nick, String area_name, Timestamp trace_date) throws SQLException{
 		try{
 			String sqlSentenc = "DELETE FROM area WHERE id_area = ?;"
 					+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?)";
@@ -75,7 +74,7 @@ public class AreaService {
 			cs.setInt(1, area_id);
 			ResultSet rs = cs.executeQuery();
 			if(rs.next()){
-				area = new Area(rs.getInt("id_area"),rs.getString("name_area"),rs.getBoolean("area_empty"));
+				area = new Area(rs.getInt("id_area"),rs.getString("name_area"));
 			}
 		}catch (Exception e){
 			return e.getMessage();
@@ -83,16 +82,16 @@ public class AreaService {
 		return area;
 	}
 	
-	public static Object getAreas() throws SQLException{
+	public static ArrayList<Area> getAreas(){
 		ArrayList<Area> areasList = new ArrayList<Area>();
 		try{
 			ResultSet rs = ConnectionService.getConnection().createStatement().executeQuery("SELECT * FROM area");
 			while(rs.next()){
-				Area area = new Area(rs.getInt("id_area"),rs.getString("name_area"),rs.getBoolean("area_empty"));
+				Area area = new Area(rs.getInt("id_area"),rs.getString("name_area"));
 				areasList.add(area);
 			}
 		}catch (Exception e){
-			return e.getMessage();
+			System.out.println(e.getMessage());
 		}
 		return areasList;
 	}

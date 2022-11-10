@@ -143,7 +143,7 @@ public class UserService {
 		return user;
 	}
 	
-	public static Object getUsers() throws SQLException{
+	public static ArrayList<User> getUsers() throws SQLException{
 		ArrayList<User> usersList = new ArrayList<User>();
 		try{
 			ResultSet rs = ConnectionService.getConnection().createStatement().executeQuery("SELECT * FROM users");
@@ -154,12 +154,12 @@ public class UserService {
 				usersList.add(user);
 			}
 		}catch (Exception e){
-			return e.getMessage();
+			System.out.println(e.getMessage());
 		}
 		return usersList;
 	}
 	
-	public static Object getUsersArea(int user_area) throws SQLException{
+	public static ArrayList<User> getUsersArea(int user_area) throws SQLException{
 		ArrayList<User> usersList = new ArrayList<User>();
 		try{
 			String sqlSentenc = "SELECT * FROM users WHERE user_area = ?";
@@ -173,7 +173,7 @@ public class UserService {
 				usersList.add(user);
 			}
 		}catch (Exception e){
-			return e.getMessage();
+			System.out.println(e.getMessage());
 		}
 		return usersList;
 	}

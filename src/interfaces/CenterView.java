@@ -40,7 +40,7 @@ import javax.swing.JTextField;
 
 import classes.Area;
 import classes.User;
-import extras.TablesInfo;
+import extras.DataTable;
 
 public class CenterView {
 
@@ -288,7 +288,7 @@ public class CenterView {
 	}
 
 	public static void areaTable(ArrayList<Area> areas, JTable table, JButton update_area, JButton delete_area, JTextField find_field) throws SQLException{
-		TablesInfo.getAreas(date, table, areas);
+		DataTable.getAreas(date, table, areas);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);

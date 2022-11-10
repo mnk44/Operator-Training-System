@@ -36,7 +36,7 @@ import classes.Trace;
 
 import com.toedter.calendar.JDateChooser;
 
-import extras.TablesInfo;
+import extras.DataTable;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
@@ -195,7 +195,7 @@ public class TracesSystemView extends JDialog {
 	}
 	
 	public static void reloadTable(ArrayList<Trace> trace, String fecha) throws SQLException{
-		TablesInfo.getTraces(date, table, trace, fecha);
+		DataTable.getTraces(date, table, trace, fecha);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);

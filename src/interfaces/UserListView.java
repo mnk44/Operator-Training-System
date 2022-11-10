@@ -31,8 +31,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import classes.User;
-import extras.FindObjects;
-import extras.TablesInfo;
+import extras.Search;
+import extras.DataTable;
 import services.UserService;
 
 public class UserListView extends JDialog {
@@ -83,7 +83,7 @@ public class UserListView extends JDialog {
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(Color.WHITE);
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBounds(26, 74, 776, 480);
+		scrollPane.setBounds(26, 74, 505, 384);
 		contentPanel.add(scrollPane);
 
 		table = new JTable();
@@ -210,7 +210,7 @@ public class UserListView extends JDialog {
 						findUser.setText("");
 						findUser.setForeground(Color.BLACK);
 						try {
-							reloadTable(FindObjects.findUsers(userList, findUser.getText() + arg0.getKeyChar()));
+							reloadTable(Search.findUsers(userList, findUser.getText() + arg0.getKeyChar()));
 						} catch (SQLException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -229,14 +229,14 @@ public class UserListView extends JDialog {
 					}
 				}else if(arg0.getKeyChar() == KeyEvent.VK_BACK_SPACE){
 					try {
-						reloadTable(FindObjects.findUsers(userList, findUser.getText().substring(0, findUser.getText().length()-1)));
+						reloadTable(Search.findUsers(userList, findUser.getText().substring(0, findUser.getText().length()-1)));
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}else{
 					try {
-						reloadTable(FindObjects.findUsers(userList, findUser.getText() + arg0.getKeyChar()));
+						reloadTable(Search.findUsers(userList, findUser.getText() + arg0.getKeyChar()));
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -255,7 +255,7 @@ public class UserListView extends JDialog {
 	}
 
 	public static void reloadTable(ArrayList<User> users) throws SQLException{
-		TablesInfo.getUsers(date, table, users, user);
+		DataTable.getUsers(date, table, users, user);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);

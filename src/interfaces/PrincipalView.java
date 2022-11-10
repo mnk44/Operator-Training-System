@@ -19,8 +19,10 @@ import java.awt.event.InputEvent;
 
 import javax.swing.ImageIcon;
 
+import classes.Area;
 import classes.User;
 import extras.Encrypting;
+import services.AreaService;
 import services.UserService;
 
 import java.awt.event.ActionListener;
@@ -28,11 +30,13 @@ import java.awt.event.ActionEvent;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.JPanel;
 
 import java.awt.event.WindowStateListener;
+import java.awt.Dimension;
 
 public class PrincipalView {
 
@@ -40,6 +44,7 @@ public class PrincipalView {
 	private JMenuItem changePass;
 	
 	User user_active = null;
+	ArrayList<Area> areasList = AreaService.getAreas();
 	
 	JPanel panel = new JPanel();
 
@@ -64,6 +69,8 @@ public class PrincipalView {
 
 	private void initialize() {
 		frame = new JFrame();
+		frame.setMaximumSize(new Dimension(901, 514));
+		frame.setMinimumSize(new Dimension(901, 514));
 		frame.addWindowStateListener(new WindowStateListener() {
 			public void windowStateChanged(WindowEvent arg0) {
 				int x = (frame.getWidth()-panel.getWidth())/2;
@@ -139,6 +146,7 @@ public class PrincipalView {
 		JMenuItem mntmInformacinPersonal = new JMenuItem("Informaci\u00F3n personal");
 		mntmInformacinPersonal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				frame.remove(panel);
 				try {
 					panel = new PersonalInfPanel(user_active);
 				} catch (SQLException e) {
@@ -176,5 +184,36 @@ public class PrincipalView {
 		mntmCerrarSesin.setFont(new Font("Dubai", Font.BOLD, 19));
 		mntmCerrarSesin.setBackground(new Color(255, 113, 19));
 		mnNewMenu.add(mntmCerrarSesin);
+		
+		JMenu mnAdministrador = new JMenu("Opciones");
+		mnAdministrador.setForeground(Color.WHITE);
+		mnAdministrador.setFont(new Font("Dubai", Font.BOLD, 20));
+		menuBar.add(mnAdministrador);
+		
+		JMenuItem mntmGestinDereas = new JMenuItem("Gesti\u00F3n de \u00E1reas");
+		mntmGestinDereas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.remove(panel);
+				try {
+					panel = new AreaManagementPanel(user_active, areasList);
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				frame.getContentPane().add(panel);
+				int x = (frame.getWidth()-panel.getWidth())/2;
+				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
+					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
+			    	panel.setLocation(x, y);
+				}else if(frame.getExtendedState() == JFrame.NORMAL){
+			    	panel.setLocation(x, 0);
+				}
+			}
+		});
+		mntmGestinDereas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.ALT_MASK));
+		mntmGestinDereas.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/areas.png")));
+		mntmGestinDereas.setForeground(Color.WHITE);
+		mntmGestinDereas.setFont(new Font("Dubai", Font.BOLD, 19));
+		mntmGestinDereas.setBackground(new Color(255, 113, 19));
+		mnAdministrador.add(mntmGestinDereas);
 	}
 }

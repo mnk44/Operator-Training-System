@@ -3,13 +3,11 @@ package classes;
 public class Area {
 	int id_area;
 	String name_area;
-	boolean area_empty;
 	
-	public Area(int id_area, String name_area, boolean area_empty) {
+	public Area(int id_area, String name_area) {
 		super();
 		this.id_area = id_area;
 		this.name_area = name_area;
-		this.area_empty = area_empty;
 	}
 	
 	public int getId_area() {
@@ -23,11 +21,5 @@ public class Area {
 	}
 	public void setName_area(String name_area) {
 		this.name_area = name_area;
-	}
-	public boolean isArea_empty() {
-		return area_empty;
-	}
-	public void setArea_empty(boolean area_empty) {
-		this.area_empty = area_empty;
 	}
 }
