@@ -143,7 +143,7 @@ public class UserService {
 		return user;
 	}
 	
-	public static ArrayList<User> getUsers() throws SQLException{
+	public static ArrayList<User> getUsers() {
 		ArrayList<User> usersList = new ArrayList<User>();
 		try{
 			ResultSet rs = ConnectionService.getConnection().createStatement().executeQuery("SELECT * FROM users");

@@ -45,6 +45,7 @@ public class PrincipalView {
 	
 	User user_active = null;
 	ArrayList<Area> areasList = AreaService.getAreas();
+	ArrayList<User> usersList = UserService.getUsers();
 	
 	JPanel panel = new JPanel();
 
@@ -147,6 +148,7 @@ public class PrincipalView {
 		mntmInformacinPersonal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.remove(panel);
+				panel = new JPanel();
 				try {
 					panel = new PersonalInfPanel(user_active);
 				} catch (SQLException e) {
@@ -194,6 +196,7 @@ public class PrincipalView {
 		mntmGestinDereas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.remove(panel);
+				panel = new JPanel();
 				try {
 					panel = new AreaManagementPanel(user_active, areasList);
 				} catch (SQLException e) {
@@ -215,5 +218,28 @@ public class PrincipalView {
 		mntmGestinDereas.setFont(new Font("Dubai", Font.BOLD, 19));
 		mntmGestinDereas.setBackground(new Color(255, 113, 19));
 		mnAdministrador.add(mntmGestinDereas);
+		
+		JMenuItem mntmGestinDeUsuarios = new JMenuItem("Gesti\u00F3n de usuarios");
+		mntmGestinDeUsuarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.remove(panel);
+				panel = new JPanel();
+				panel = new UserManagementPanel(user_active, usersList);
+				frame.getContentPane().add(panel);
+				int x = (frame.getWidth()-panel.getWidth())/2;
+				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
+					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
+			    	panel.setLocation(x, y);
+				}else if(frame.getExtendedState() == JFrame.NORMAL){
+			    	panel.setLocation(x, 0);
+				}
+			}
+		});
+		mntmGestinDeUsuarios.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/user_management.png")));
+		mntmGestinDeUsuarios.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.ALT_MASK));
+		mntmGestinDeUsuarios.setForeground(Color.WHITE);
+		mntmGestinDeUsuarios.setFont(new Font("Dubai", Font.BOLD, 19));
+		mntmGestinDeUsuarios.setBackground(new Color(255, 113, 19));
+		mnAdministrador.add(mntmGestinDeUsuarios);
 	}
 }
