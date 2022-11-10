@@ -198,7 +198,7 @@ public class PrincipalView {
 				frame.remove(panel);
 				panel = new JPanel();
 				try {
-					panel = new AreaManagementPanel(user_active, areasList);
+					panel = new AreaManagementPanel(user_active, areasList, usersList);
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 				}
@@ -224,7 +224,12 @@ public class PrincipalView {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.remove(panel);
 				panel = new JPanel();
-				panel = new UserManagementPanel(user_active, usersList);
+				try {
+					panel = new UserManagementPanel(user_active, usersList, areasList);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				frame.getContentPane().add(panel);
 				int x = (frame.getWidth()-panel.getWidth())/2;
 				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){

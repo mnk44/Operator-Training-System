@@ -5,13 +5,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import classes.Area;
 import classes.User;
 
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
@@ -23,21 +26,32 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 
+import extras.DataTable;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class UserManagementPanel extends JPanel {
 
 	private static final long serialVersionUID = 7029954910417287576L;
 	
-	private JTable table;
-	private DefaultTableModel date;
+	private static JTable table;
+	private static DefaultTableModel date;
+	
+	static ArrayList<Area> areasList = null;
+	static User user = null;
 
 	int selected = -1;
-	private JTextField textField;
+	static JTextField searchFile;
 	private JButton btnNuevoUsuario;
-	private JButton btnModificarUsuario;
-	private JButton btnReiniciarClave;
-	private JButton btnInactivarUsuario;
+	private static JButton btnModificarUsuario;
+	private static JButton btnReiniciarClave;
+	private static JButton btnInactivarUsuario;
 
-	public UserManagementPanel(final User user, final ArrayList<User> usersList) {
+	public UserManagementPanel(final User urr, final ArrayList<User> usersList, final ArrayList<Area> al) throws SQLException {
+		areasList = al;
+		user = urr;
+		
 		setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		setBackground(Color.WHITE);
 		setBounds(100, 100, 838, 433);
@@ -99,6 +113,13 @@ public class UserManagementPanel extends JPanel {
 		scrollPane.setViewportView(table);
 		
 		btnNuevoUsuario = new JButton("Nuevo usuario");
+		btnNuevoUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				UserView uv = new UserView(areasList, usersList, user);
+				uv.setLocationRelativeTo(UserManagementPanel.this);
+				uv.setVisible(true);
+			}
+		});
 		btnNuevoUsuario.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -196,12 +217,32 @@ public class UserManagementPanel extends JPanel {
 		lblGestinDeUsuarios.setBounds(25, 69, 571, 37);
 		add(lblGestinDeUsuarios);
 		
-		textField = new JTextField();
-		textField.setToolTipText("Buscar usuario");
-		textField.setFont(new Font("Corbel", Font.PLAIN, 20));
-		textField.setColumns(10);
-		textField.setBounds(105, 26, 436, 29);
-		add(textField);
+		searchFile = new JTextField();
+		searchFile.setToolTipText("Buscar usuario");
+		searchFile.setFont(new Font("Corbel", Font.PLAIN, 20));
+		searchFile.setColumns(10);
+		searchFile.setBounds(105, 26, 436, 29);
+		add(searchFile);
+		
+		reload(usersList);
 	}
 
+	public static void reload(ArrayList<User> users) throws SQLException{
+		DataTable.fillUsers(date, table, users, areasList, user.getUser_id());
+		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(1).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(2).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(3).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(4).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(0).setMaxWidth(45);
+		table.getColumnModel().getColumn(4).setMaxWidth(60);
+		btnInactivarUsuario.setEnabled(false);
+		btnInactivarUsuario.setBackground(new Color(248, 159, 101));
+		btnModificarUsuario.setEnabled(false);
+		btnModificarUsuario.setBackground(new Color(248, 159, 101));
+		btnReiniciarClave.setEnabled(false);
+		btnReiniciarClave.setBackground(new Color(248, 159, 101));
+	}
 }

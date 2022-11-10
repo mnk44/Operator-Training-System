@@ -28,7 +28,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import services.AreaService;
-import services.UserService;
 import classes.Area;
 import classes.User;
 import extras.DataTable;
@@ -49,7 +48,7 @@ public class AreaManagementPanel extends JPanel {
 
 	int selected = -1;
 
-	public AreaManagementPanel(final User user, final ArrayList<Area> areas) throws SQLException {
+	public AreaManagementPanel(final User user, final ArrayList<Area> areas, final ArrayList<User> usersList) throws SQLException {
 		setBorder(null);
 		setBackground(Color.WHITE);
 		setBounds(100, 100, 789, 428);
@@ -261,14 +260,13 @@ public class AreaManagementPanel extends JPanel {
 		btnEliminarrea.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				selected = table.getSelectedRow();
-				ArrayList<User> users = new ArrayList<>();
-				try {
-					users = UserService.getUsersArea(areas.get(selected).getId_area());
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				boolean exist = false;
+				for(int i=0;i<usersList.size() && !exist;i++){
+					if(usersList.get(i).getUser_area() == areas.get(selected).getId_area()){
+						exist = true;
+					}
 				}
-				if(users.isEmpty()){
+				if(!exist){
 					try {
 						String result = AreaService.deleteArea(areas.get(selected).getId_area(), user.getUser_nick(), areas.get(selected).getName_area(), new Timestamp(Calendar.getInstance().getTime().getTime()));
 						if(result == null){
