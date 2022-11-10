@@ -76,7 +76,7 @@ public class UserManagementPanel extends JPanel {
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(Color.WHITE);
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBounds(25, 104, 571, 274);
+		scrollPane.setBounds(25, 104, 571, 313);
 		add(scrollPane);
 
 		table = new JTable();
