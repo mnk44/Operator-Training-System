@@ -45,7 +45,7 @@ import enums.RolType;
 import enums.SystemClass;
 import extras.Convert;
 import knowledgeBase.LoadFiles;
-import services.FactoryProcessService;
+import services.ProcessService;
 import services.ProcessConfigurationService;
 import services.UserService;
 
@@ -131,7 +131,7 @@ public class NewProcessView extends JDialog {
 					}
 					String result = null;
 					try {
-						result = FactoryProcessService.newProcess(process);
+						result = ProcessService.newProcess(process);
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -142,7 +142,7 @@ public class NewProcessView extends JDialog {
 
 					int processId = 0;
 					try {
-						processId = ((Process)FactoryProcessService.findName(processName.getText())).getProcess_id();
+						processId = ((Process)ProcessService.findName(processName.getText())).getProcess_id();
 					} catch (SQLException e2) {
 						// TODO Auto-generated catch block
 						e2.printStackTrace();

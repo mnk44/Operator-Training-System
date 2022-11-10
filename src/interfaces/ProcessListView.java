@@ -33,7 +33,7 @@ import javax.swing.table.DefaultTableModel;
 import classes.Process;
 import extras.Search;
 import extras.DataTable;
-import services.FactoryProcessService;
+import services.ProcessService;
 
 public class ProcessListView extends JDialog {
 
@@ -50,7 +50,7 @@ public class ProcessListView extends JDialog {
 	private int selected = -1;
 	
 	@SuppressWarnings("unchecked")
-	ArrayList<Process> processList = (ArrayList<Process>) FactoryProcessService.getProcess();
+	ArrayList<Process> processList = (ArrayList<Process>) ProcessService.getProcess();
 
 	public static void main(String[] args) {
 		try {

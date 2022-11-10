@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import classes.Process;
 
-public class FactoryProcessService {
+public class ProcessService {
 	
 	public static String newProcess(Process process) throws SQLException{
 		try{
