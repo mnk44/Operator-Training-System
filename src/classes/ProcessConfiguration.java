@@ -1,49 +1,47 @@
 package classes;
 
-import enums.QuestionsTypes;
-
 public class ProcessConfiguration {
-	int class_id;
+	int table_id;
 	int process_id;
-	int cant_try;
-	int try_aprove;
-	boolean consecutive;
-	QuestionsTypes var_question;
-	QuestionsTypes cause_question;
-	QuestionsTypes rec_question;
+	int time_limit;
+	int cant_questions;
+	int cant_aprov;
+	String type_var;
+	String type_cause;
+	String type_rec;
 	
-	public ProcessConfiguration(int process_id, int cant_try, int try_aprove,
-			boolean consecutive, String var_question,
-			String cause_question, String rec_question) {
+	public ProcessConfiguration(int process_id, int time_limit,
+			int cant_questions, int cant_aprov, String type_var,
+			String type_cause, String type_rec) {
 		super();
 		this.process_id = process_id;
-		this.cant_try = cant_try;
-		this.try_aprove = try_aprove;
-		this.consecutive = consecutive;
-		this.var_question = QuestionsTypes.valueOf(var_question.replace(" ", "_"));
-		this.cause_question = QuestionsTypes.valueOf(cause_question.replace(" ", "_"));
-		this.rec_question = QuestionsTypes.valueOf(rec_question.replace(" ", "_"));
+		this.time_limit = time_limit;
+		this.cant_questions = cant_questions;
+		this.cant_aprov = cant_aprov;
+		this.type_var = type_var;
+		this.type_cause = type_cause;
+		this.type_rec = type_rec;
 	}
 	
-	public ProcessConfiguration(int class_id, int process_id, int cant_try,
-			int try_aprove, boolean consecutive, String var_question,
-			String cause_question, String rec_question) {
+	public ProcessConfiguration(int table_id, int process_id, int time_limit,
+			int cant_questions, int cant_aprov, String type_var,
+			String type_cause, String type_rec) {
 		super();
-		this.class_id = class_id;
+		this.table_id = table_id;
 		this.process_id = process_id;
-		this.cant_try = cant_try;
-		this.try_aprove = try_aprove;
-		this.consecutive = consecutive;
-		this.var_question = QuestionsTypes.valueOf(var_question.replace(" ", "_"));
-		this.cause_question = QuestionsTypes.valueOf(cause_question.replace(" ", "_"));
-		this.rec_question = QuestionsTypes.valueOf(rec_question.replace(" ", "_"));
+		this.time_limit = time_limit;
+		this.cant_questions = cant_questions;
+		this.cant_aprov = cant_aprov;
+		this.type_var = type_var;
+		this.type_cause = type_cause;
+		this.type_rec = type_rec;
 	}
 	
-	public int getClass_id() {
-		return class_id;
+	public int getTable_id() {
+		return table_id;
 	}
-	public void setClass_id(int class_id) {
-		this.class_id = class_id;
+	public void setTable_id(int table_id) {
+		this.table_id = table_id;
 	}
 	public int getProcess_id() {
 		return process_id;
@@ -51,40 +49,40 @@ public class ProcessConfiguration {
 	public void setProcess_id(int process_id) {
 		this.process_id = process_id;
 	}
-	public int getCant_try() {
-		return cant_try;
+	public int getTime_limit() {
+		return time_limit;
 	}
-	public void setCant_try(int cant_try) {
-		this.cant_try = cant_try;
+	public void setTime_limit(int time_limit) {
+		this.time_limit = time_limit;
 	}
-	public int getTry_aprove() {
-		return try_aprove;
+	public int getCant_questions() {
+		return cant_questions;
 	}
-	public void setTry_aprove(int try_aprove) {
-		this.try_aprove = try_aprove;
+	public void setCant_questions(int cant_questions) {
+		this.cant_questions = cant_questions;
 	}
-	public boolean isConsecutive() {
-		return consecutive;
+	public int getCant_aprov() {
+		return cant_aprov;
 	}
-	public void setConsecutive(boolean consecutive) {
-		this.consecutive = consecutive;
+	public void setCant_aprov(int cant_aprov) {
+		this.cant_aprov = cant_aprov;
 	}
-	public QuestionsTypes getVar_question() {
-		return var_question;
+	public String getType_var() {
+		return type_var;
 	}
-	public void setVar_question(QuestionsTypes var_question) {
-		this.var_question = var_question;
+	public void setType_var(String type_var) {
+		this.type_var = type_var;
 	}
-	public QuestionsTypes getCause_question() {
-		return cause_question;
+	public String getType_cause() {
+		return type_cause;
 	}
-	public void setCause_question(QuestionsTypes cause_question) {
-		this.cause_question = cause_question;
+	public void setType_cause(String type_cause) {
+		this.type_cause = type_cause;
 	}
-	public QuestionsTypes getRec_question() {
-		return rec_question;
+	public String getType_rec() {
+		return type_rec;
 	}
-	public void setRec_question(QuestionsTypes rec_question) {
-		this.rec_question = rec_question;
+	public void setType_rec(String type_rec) {
+		this.type_rec = type_rec;
 	}
 }

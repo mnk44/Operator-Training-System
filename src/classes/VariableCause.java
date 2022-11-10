@@ -1,26 +1,19 @@
 package classes;
 
-import enums.VariableState;
-
 public class VariableCause {
 	int table_id;
-	int variable_id;
-	VariableState state;
+	int proces_id;
+	int var_id;
+	String state_var;
 	int cause_id;
 	
-	public VariableCause(int variable_id, String state, int cause_id) {
-		super();
-		this.variable_id = variable_id;
-		this.state = VariableState.valueOf(state);
-		this.cause_id = cause_id;
-	}
-
-	public VariableCause(int table_id, int variable_id, String state,
-			int cause_id) {
+	public VariableCause(int table_id, int proces_id, int var_id,
+			String state_var, int cause_id) {
 		super();
 		this.table_id = table_id;
-		this.variable_id = variable_id;
-		this.state = VariableState.valueOf(state);
+		this.proces_id = proces_id;
+		this.var_id = var_id;
+		this.state_var = state_var;
 		this.cause_id = cause_id;
 	}
 	
@@ -30,17 +23,23 @@ public class VariableCause {
 	public void setTable_id(int table_id) {
 		this.table_id = table_id;
 	}
-	public int getVariable_id() {
-		return variable_id;
+	public int getProces_id() {
+		return proces_id;
 	}
-	public void setVariable_id(int variable_id) {
-		this.variable_id = variable_id;
+	public void setProces_id(int proces_id) {
+		this.proces_id = proces_id;
 	}
-	public VariableState getState() {
-		return state;
+	public int getVar_id() {
+		return var_id;
 	}
-	public void setState(VariableState state) {
-		this.state = state;
+	public void setVar_id(int var_id) {
+		this.var_id = var_id;
+	}
+	public String getState_var() {
+		return state_var;
+	}
+	public void setState_var(String state_var) {
+		this.state_var = state_var;
 	}
 	public int getCause_id() {
 		return cause_id;

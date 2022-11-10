@@ -296,6 +296,10 @@ public class PrincipalView {
 		options.add(userMana);
 		
 		processMana = new JMenuItem("Gesti\u00F3n de procesos");
+		processMana.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
 		processMana.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/procesos.png")));
 		processMana.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.ALT_MASK));
 		processMana.setForeground(Color.WHITE);

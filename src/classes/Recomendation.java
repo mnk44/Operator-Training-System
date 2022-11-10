@@ -1,44 +1,33 @@
 package classes;
 
 public class Recomendation {
-	int recomendation_id;
-	String recomendation_name;
-	int recomendation_process;
+	int rec_id;
+	int process_id;
+	String rec_name;
 	
-	public Recomendation(String recomendation_name, int recomendation_process) {
+	public Recomendation(int rec_id, int process_id, String rec_name) {
 		super();
-		this.recomendation_name = recomendation_name;
-		this.recomendation_process = recomendation_process;
+		this.rec_id = rec_id;
+		this.process_id = process_id;
+		this.rec_name = rec_name;
 	}
 	
-	public Recomendation(int recomendation_id, String recomendation_name, int recomendation_process) {
-		super();
-		this.recomendation_id = recomendation_id;
-		this.recomendation_name = recomendation_name;
-		this.recomendation_process = recomendation_process;
+	public int getRec_id() {
+		return rec_id;
 	}
-
-	public int getRecomendation_id() {
-		return recomendation_id;
+	public void setRec_id(int rec_id) {
+		this.rec_id = rec_id;
 	}
-
-	public void setRecomendation_id(int recomendation_id) {
-		this.recomendation_id = recomendation_id;
+	public int getProcess_id() {
+		return process_id;
 	}
-
-	public String getRecomendation_name() {
-		return recomendation_name;
+	public void setProcess_id(int process_id) {
+		this.process_id = process_id;
 	}
-
-	public void setRecomendation_name(String recomendation_name) {
-		this.recomendation_name = recomendation_name;
+	public String getRec_name() {
+		return rec_name;
 	}
-
-	public int getRecomendation_process() {
-		return recomendation_process;
-	}
-
-	public void setRecomendation_process(int recomendation_process) {
-		this.recomendation_process = recomendation_process;
+	public void setRec_name(String rec_name) {
+		this.rec_name = rec_name;
 	}
 }

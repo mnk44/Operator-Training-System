@@ -3,19 +3,16 @@ package classes;
 public class CauseRecomendation {
 	int table_id;
 	int cause_id;
-	int recomendation_id;
+	int rec_id;
+	int process_id;
 	
-	public CauseRecomendation(int cause_id, int recomendation_id) {
-		super();
-		this.cause_id = cause_id;
-		this.recomendation_id = recomendation_id;
-	}
-
-	public CauseRecomendation(int table_id, int cause_id, int recomendation_id) {
+	public CauseRecomendation(int table_id, int cause_id, int rec_id,
+			int process_id) {
 		super();
 		this.table_id = table_id;
 		this.cause_id = cause_id;
-		this.recomendation_id = recomendation_id;
+		this.rec_id = rec_id;
+		this.process_id = process_id;
 	}
 	
 	public int getTable_id() {
@@ -30,10 +27,16 @@ public class CauseRecomendation {
 	public void setCause_id(int cause_id) {
 		this.cause_id = cause_id;
 	}
-	public int getRecomendation_id() {
-		return recomendation_id;
+	public int getRec_id() {
+		return rec_id;
 	}
-	public void setRecomendation_id(int recomendation_id) {
-		this.recomendation_id = recomendation_id;
+	public void setRec_id(int rec_id) {
+		this.rec_id = rec_id;
+	}
+	public int getProcess_id() {
+		return process_id;
+	}
+	public void setProcess_id(int process_id) {
+		this.process_id = process_id;
 	}
 }
