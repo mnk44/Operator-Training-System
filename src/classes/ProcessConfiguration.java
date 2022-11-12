@@ -10,11 +10,10 @@ public class ProcessConfiguration {
 	String type_cause;
 	String type_rec;
 	
-	public ProcessConfiguration(int process_id, int time_limit,
+	public ProcessConfiguration(int time_limit,
 			int cant_questions, int cant_aprov, String type_var,
 			String type_cause, String type_rec) {
 		super();
-		this.process_id = process_id;
 		this.time_limit = time_limit;
 		this.cant_questions = cant_questions;
 		this.cant_aprov = cant_aprov;

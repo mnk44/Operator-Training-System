@@ -18,9 +18,12 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JSeparator;
+
+import classes.User;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 
 public class ProcessManagementPanel extends JPanel {
 	
@@ -37,7 +40,7 @@ public class ProcessManagementPanel extends JPanel {
 //	private JButton btnArchivoanm;
 //	private JButton btnArchivodrl;
  
-	public ProcessManagementPanel() {
+	public ProcessManagementPanel(final ArrayList<User> op, final User user_active) {
 		setBorder(null);
 		setBackground(Color.WHITE);
 		setBounds(100, 100, 838, 433);
@@ -48,7 +51,7 @@ public class ProcessManagementPanel extends JPanel {
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(Color.WHITE);
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBounds(25, 104, 571, 313);
+		scrollPane.setBounds(35, 104, 561, 313);
 		add(scrollPane);
 
 		table = new JTable();
@@ -122,7 +125,7 @@ public class ProcessManagementPanel extends JPanel {
 		btnNuevoProceso = new JButton("Nuevo proceso");
 		btnNuevoProceso.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ProcessView p = new ProcessView();
+				ProcessView p = new ProcessView(op, user_active);
 				p.setLocationRelativeTo(ProcessManagementPanel.this);
 				p.setVisible(true);
 			}

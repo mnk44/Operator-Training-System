@@ -9,11 +9,14 @@ import java.io.ObjectOutputStream;
 public class Convert {
 
 	public static byte[] toBytes(Object object) throws IOException{ 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
-		ObjectOutputStream oos = new ObjectOutputStream(baos); 
-		oos.writeObject(object); 
+		if(object != null){
+			ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+			ObjectOutputStream oos = new ObjectOutputStream(baos); 
+			oos.writeObject(object); 
 
-		return baos.toByteArray(); 
+			return baos.toByteArray(); 
+		}
+		return null;
 	} 
 
 	public static Object toObject(byte[] bytes) throws IOException, ClassNotFoundException{ 

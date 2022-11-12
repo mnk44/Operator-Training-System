@@ -37,6 +37,7 @@ import javax.swing.JPanel;
 
 import java.awt.event.WindowStateListener;
 import java.awt.Dimension;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
@@ -304,7 +305,8 @@ public class PrincipalView {
 				frame.remove(title2);
 				frame.remove(title3);
 				panel = new JPanel();
-				panel = new ProcessManagementPanel();
+				ArrayList<User> op = getOperators();
+				panel = new ProcessManagementPanel(op, user_active);
 				frame.getContentPane().add(panel);
 				int x = (frame.getWidth()-panel.getWidth())/2;
 				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
@@ -330,5 +332,17 @@ public class PrincipalView {
 		}else{
 			options.setVisible(false);
 		}
+	}
+	
+	public ArrayList<User> getOperators(){
+		ArrayList<User> operators = new ArrayList<>();
+		
+		for(int i=0; i<usersList.size(); i++){
+			if(usersList.get(i).getUser_rol()==3 && usersList.get(i).getUser_area()==user_active.getUser_area()){
+				operators.add(usersList.get(i));
+			}
+		}
+		
+		return operators;
 	}
 }
