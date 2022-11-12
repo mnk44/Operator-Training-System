@@ -44,11 +44,11 @@ public class PrincipalView {
 
 	JFrame frame;
 	private JMenuItem changePass;
-	
+
 	User user_active = null;
 	ArrayList<Area> areasList = AreaService.getAreas();
 	ArrayList<User> usersList = UserService.getUsers();
-	
+
 	JPanel panel = new JPanel();
 	private JLabel title;
 	private JLabel title1;
@@ -87,9 +87,9 @@ public class PrincipalView {
 				int x = (frame.getWidth()-panel.getWidth())/2;
 				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
 					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
-			    	panel.setLocation(x, y);
+					panel.setLocation(x, y);
 				}else if(frame.getExtendedState() == JFrame.NORMAL){
-			    	panel.setLocation(x, 0);
+					panel.setLocation(x, 0);
 				}
 			}
 		});
@@ -100,26 +100,26 @@ public class PrincipalView {
 		frame.setForeground(Color.BLACK);
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.getContentPane().setLayout(null);
-		
+
 		title3 = new JLabel("");
 		title3.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/quimica.png")));
 		title3.setBounds(43, 26, 299, 368);
 		frame.getContentPane().add(title3);
-		
+
 		title = new JLabel("SECPROIT");
 		title.setHorizontalAlignment(SwingConstants.CENTER);
 		title.setForeground(new Color(255, 113, 19));
 		title.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 32));
 		title.setBounds(377, 107, 445, 49);
 		frame.getContentPane().add(title);
-		
+
 		title1 = new JLabel("Sistema Experto para el Control");
 		title1.setHorizontalAlignment(SwingConstants.CENTER);
 		title1.setForeground(new Color(99, 68, 55));
 		title1.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 26));
 		title1.setBounds(335, 156, 513, 49);
 		frame.getContentPane().add(title1);
-		
+
 		title2 = new JLabel("de Procesos Qu\u00EDmicos");
 		title2.setHorizontalAlignment(SwingConstants.CENTER);
 		title2.setForeground(new Color(99, 68, 55));
@@ -179,7 +179,7 @@ public class PrincipalView {
 		changePass.setBackground(new Color(255, 113, 19));
 		changePass.setFont(new Font("Dubai", Font.BOLD, 19));
 		mnNewMenu.add(changePass);
-		
+
 		JMenuItem mntmInformacinPersonal = new JMenuItem("Informaci\u00F3n personal");
 		mntmInformacinPersonal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -198,9 +198,9 @@ public class PrincipalView {
 				int x = (frame.getWidth()-panel.getWidth())/2;
 				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
 					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
-			    	panel.setLocation(x, y);
+					panel.setLocation(x, y);
 				}else if(frame.getExtendedState() == JFrame.NORMAL){
-			    	panel.setLocation(x, 0);
+					panel.setLocation(x, 0);
 				}
 			}
 		});
@@ -210,7 +210,7 @@ public class PrincipalView {
 		mntmInformacinPersonal.setFont(new Font("Dubai", Font.BOLD, 19));
 		mntmInformacinPersonal.setBackground(new Color(255, 113, 19));
 		mnNewMenu.add(mntmInformacinPersonal);
-		
+
 		JMenuItem mntmCerrarSesin = new JMenuItem("Cerrar sesi\u00F3n");
 		mntmCerrarSesin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -226,12 +226,12 @@ public class PrincipalView {
 		mntmCerrarSesin.setFont(new Font("Dubai", Font.BOLD, 19));
 		mntmCerrarSesin.setBackground(new Color(255, 113, 19));
 		mnNewMenu.add(mntmCerrarSesin);
-		
+
 		options = new JMenu("Opciones");
 		options.setForeground(Color.WHITE);
 		options.setFont(new Font("Dubai", Font.BOLD, 20));
 		menuBar.add(options);
-		
+
 		areaMana = new JMenuItem("Gesti\u00F3n de \u00E1reas");
 		areaMana.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -250,9 +250,9 @@ public class PrincipalView {
 				int x = (frame.getWidth()-panel.getWidth())/2;
 				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
 					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
-			    	panel.setLocation(x, y);
+					panel.setLocation(x, y);
 				}else if(frame.getExtendedState() == JFrame.NORMAL){
-			    	panel.setLocation(x, 0);
+					panel.setLocation(x, 0);
 				}
 			}
 		});
@@ -262,7 +262,7 @@ public class PrincipalView {
 		areaMana.setFont(new Font("Dubai", Font.BOLD, 19));
 		areaMana.setBackground(new Color(255, 113, 19));
 		options.add(areaMana);
-		
+
 		userMana = new JMenuItem("Gesti\u00F3n de usuarios");
 		userMana.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -282,9 +282,9 @@ public class PrincipalView {
 				int x = (frame.getWidth()-panel.getWidth())/2;
 				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
 					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
-			    	panel.setLocation(x, y);
+					panel.setLocation(x, y);
 				}else if(frame.getExtendedState() == JFrame.NORMAL){
-			    	panel.setLocation(x, 0);
+					panel.setLocation(x, 0);
 				}
 			}
 		});
@@ -294,10 +294,25 @@ public class PrincipalView {
 		userMana.setFont(new Font("Dubai", Font.BOLD, 19));
 		userMana.setBackground(new Color(255, 113, 19));
 		options.add(userMana);
-		
+
 		processMana = new JMenuItem("Gesti\u00F3n de procesos");
 		processMana.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				frame.remove(panel);
+				frame.remove(title);
+				frame.remove(title1);
+				frame.remove(title2);
+				frame.remove(title3);
+				panel = new JPanel();
+				panel = new ProcessManagementPanel();
+				frame.getContentPane().add(panel);
+				int x = (frame.getWidth()-panel.getWidth())/2;
+				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
+					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
+					panel.setLocation(x, y);
+				}else if(frame.getExtendedState() == JFrame.NORMAL){
+					panel.setLocation(x, 0);
+				}
 			}
 		});
 		processMana.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/procesos.png")));
@@ -306,7 +321,7 @@ public class PrincipalView {
 		processMana.setFont(new Font("Dubai", Font.BOLD, 19));
 		processMana.setBackground(new Color(255, 113, 19));
 		options.add(processMana);
-		
+
 		if(user_active.getUser_rol() == 1){
 			processMana.setVisible(false);
 		}else if(user_active.getUser_rol() == 2){
