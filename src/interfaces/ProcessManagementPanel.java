@@ -3,6 +3,8 @@ package interfaces;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -26,6 +28,7 @@ import classes.Area;
 import classes.User;
 import classes.Process;
 import extras.DataTable;
+import extras.Search;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -116,6 +119,47 @@ public class ProcessManagementPanel extends JPanel {
 		add(label);
 		
 		searchField = new JTextField();
+		searchField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				if(searchField.getText().length()==1 && arg0.getKeyChar()==KeyEvent.VK_BACK_SPACE){
+					try {
+						reload(process);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(arg0.getKeyChar()==KeyEvent.VK_BACK_SPACE){
+					ArrayList<Process> s = null;
+					try {
+						s = Search.searchProcess(process, searchField.getText().substring(0,searchField.getText().length()-1));
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						reload(s);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					ArrayList<Process> s = null;
+					try {
+						s = Search.searchProcess(process, (searchField.getText()+ arg0.getKeyChar()));
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					try {
+						reload(s);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 		searchField.setToolTipText("Buscar usuario");
 		searchField.setFont(new Font("Corbel", Font.PLAIN, 20));
 		searchField.setColumns(10);

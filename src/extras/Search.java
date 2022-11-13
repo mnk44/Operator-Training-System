@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import classes.Area;
 import classes.User;
+import classes.Process;
 
 public class Search {
 
@@ -36,20 +37,20 @@ public class Search {
 //		return result;
 //	}
 //	
-//	public static ArrayList<FactoryProcess> findProcess (ArrayList<FactoryProcess> process, String name) throws SQLException{
-//		ArrayList<FactoryProcess> result = new ArrayList<>();
-//		
-//		for(int i=0; i<process.size(); i++){
-//			String procesName = process.get(i).getProcess_name().toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
-//			String findingName = name.toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
-//			if(procesName.contains(findingName)){
-//				result.add(process.get(i));
-//			}
-//		}
-//		
-//		return result;
-//	}
-//	
+	public static ArrayList<Process> searchProcess (ArrayList<Process> process, String name) throws SQLException{
+		ArrayList<Process> result = new ArrayList<>();
+		
+		for(int i=0; i<process.size(); i++){
+			String procesName = process.get(i).getProcess_name().toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			String findingName = name.toLowerCase().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u");
+			if(procesName.contains(findingName)){
+				result.add(process.get(i));
+			}
+		}
+		
+		return result;
+	}
+	
 	public static ArrayList<User> searchUsers (ArrayList<User> user, String name) throws SQLException{
 		ArrayList<User> result = new ArrayList<>();
 		
