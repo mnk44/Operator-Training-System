@@ -160,12 +160,12 @@ public class ProcessView extends JDialog {
 					if (result == JFileChooser.APPROVE_OPTION){
 						img_name.setText(chooser.getSelectedFile().getName());
 						imageRoute = chooser.getSelectedFile().getAbsolutePath();
-						imgen_button.setIcon(new ImageIcon(NewProcessView.class.getResource("/images/trash.png")));
+						imgen_button.setIcon(new ImageIcon(ProcessView.class.getResource("/images/trash.png")));
 					}
 				}else{
 					img_name.setText("");
 					imageRoute = null;
-					imgen_button.setIcon(new ImageIcon(NewProcessView.class.getResource("/images/folder.png")));
+					imgen_button.setIcon(new ImageIcon(ProcessView.class.getResource("/images/folder.png")));
 				}
 			}
 		});
@@ -211,12 +211,12 @@ public class ProcessView extends JDialog {
 					if (result == JFileChooser.APPROVE_OPTION){
 						var_name.setText(chooser.getSelectedFile().getName());
 						anmRoute = chooser.getSelectedFile().getAbsolutePath();
-						anm_button.setIcon(new ImageIcon(NewProcessView.class.getResource("/images/trash.png")));
+						anm_button.setIcon(new ImageIcon(ProcessView.class.getResource("/images/trash.png")));
 					}
 				}else{
 					var_name.setText("");
 					anmRoute = null;
-					anm_button.setIcon(new ImageIcon(NewProcessView.class.getResource("/images/folder.png")));
+					anm_button.setIcon(new ImageIcon(ProcessView.class.getResource("/images/folder.png")));
 				}
 			}
 		});
@@ -250,12 +250,12 @@ public class ProcessView extends JDialog {
 					if (result == JFileChooser.APPROVE_OPTION){
 						rules_name.setText(chooser.getSelectedFile().getName());
 						drlRoute = chooser.getSelectedFile().getAbsolutePath();
-						drl_button.setIcon(new ImageIcon(NewProcessView.class.getResource("/images/trash.png")));
+						drl_button.setIcon(new ImageIcon(ProcessView.class.getResource("/images/trash.png")));
 					}
 				}else{
 					rules_name.setText("");
 					drlRoute = null;
-					drl_button.setIcon(new ImageIcon(NewProcessView.class.getResource("/images/folder.png")));
+					drl_button.setIcon(new ImageIcon(ProcessView.class.getResource("/images/folder.png")));
 				}
 			}
 		});
