@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 
 import classes.Area;
 import classes.User;
+import classes.Process;
 
 public class DataTable {
 	
@@ -33,30 +34,35 @@ public class DataTable {
 		table.setModel(date);
 	}
 	
-//	public static void getProcess(DefaultTableModel date, JTable table, ArrayList<FactoryProcess> process) throws SQLException{
-//		ArrayList<Integer> process_id = new ArrayList<Integer>();
-//		ArrayList<String> process_name = new ArrayList<String>();
-//		ArrayList<String> area_name = new ArrayList<String>();
-//		
-//		for(int i=0; i<process.size(); i++){
-//			process_id.add(process.get(i).getProcess_id());
-//			process_name.add(process.get(i).getProcess_name());
-//			Area area = (Area) AreaService.findId(process.get(i).getProcess_area());
-//			area_name.add(area.getArea_name());
-//		}
-//
-//		date = new DefaultTableModel(){
-//			private static final long serialVersionUID = 1L;
-//			public boolean isCellEditable(int r,int c){
-//				return false;
-//			}
-//		};
-//
-//		date.addColumn("ID",process_id.toArray());
-//		date.addColumn("Nombre",process_name.toArray());
-//		date.addColumn("Área",area_name.toArray());
-//		table.setModel(date);
-//	}
+	public static void fillProcess(DefaultTableModel date, JTable table, ArrayList<Process> process, ArrayList<Area> areas) throws SQLException{
+		ArrayList<Integer> process_id = new ArrayList<Integer>();
+		ArrayList<String> process_name = new ArrayList<String>();
+		ArrayList<String> area_name = new ArrayList<String>();
+		
+		for(int i=0; i<process.size(); i++){
+			process_id.add(process.get(i).getProcess_id());
+			process_name.add(process.get(i).getProcess_name());
+			boolean a = true;
+			for(int j=0; j<areas.size() && a;j++){
+				if(areas.get(j).getId_area() == process.get(i).getProcess_area()){
+					area_name.add(areas.get(j).getName_area());
+					a = false;
+				}
+			}
+		}
+
+		date = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+			public boolean isCellEditable(int r,int c){
+				return false;
+			}
+		};
+
+		date.addColumn("ID",process_id.toArray());
+		date.addColumn("Nombre",process_name.toArray());
+		date.addColumn("Área",area_name.toArray());
+		table.setModel(date);
+	}
 //	
 //	@SuppressWarnings("deprecation")
 //	public static void getTraces(DefaultTableModel date, JTable table, ArrayList<Trace> traces, String fecha) throws SQLException{

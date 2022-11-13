@@ -21,8 +21,10 @@ import javax.swing.ImageIcon;
 
 import classes.Area;
 import classes.User;
+import classes.Process;
 import extras.Encrypting;
 import services.AreaService;
+import services.ProcessService;
 import services.UserService;
 
 import java.awt.event.ActionListener;
@@ -49,6 +51,7 @@ public class PrincipalView {
 	User user_active = null;
 	ArrayList<Area> areasList = AreaService.getAreas();
 	ArrayList<User> usersList = UserService.getUsers();
+	ArrayList<Process> processList = ProcessService.getProcess();
 
 	JPanel panel = new JPanel();
 	private JLabel title;
@@ -306,7 +309,12 @@ public class PrincipalView {
 				frame.remove(title3);
 				panel = new JPanel();
 				ArrayList<User> op = getOperators();
-				panel = new ProcessManagementPanel(op, user_active);
+				try {
+					panel = new ProcessManagementPanel(op, user_active, areasList, processList);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				frame.getContentPane().add(panel);
 				int x = (frame.getWidth()-panel.getWidth())/2;
 				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){

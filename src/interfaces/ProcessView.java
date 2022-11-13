@@ -80,7 +80,6 @@ public class ProcessView extends JDialog {
 	String anmRoute = null;
 	String drlRoute = null;
 
-	ArrayList<User> operators = null;
 	ArrayList<String> autorized = new ArrayList<>();
 	ArrayList<String> inautorized = new ArrayList<>();
 	private JList<String> list1;
@@ -102,8 +101,7 @@ public class ProcessView extends JDialog {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ProcessView(ArrayList<User> op, final User user_active) {
-		operators = op;
+	public ProcessView(final ArrayList<User> op, final User user_active) {
 		for(int i=0; i<op.size(); i++){
 			inautorized.add(op.get(i).getUser_nick());
 		}
@@ -579,24 +577,24 @@ public class ProcessView extends JDialog {
 				}
 				ProcessConfiguration conf = new ProcessConfiguration((int)time.getValue(), (int)questions.getValue(), (int)aproved.getValue(), (String)variables.getSelectedItem(), (String)causes.getSelectedItem(), (String)recomendations.getSelectedItem());
 			    try {
-					Object result = ProcessService.newProcess(proc, conf, user_active.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+					Object result = ProcessService.newProcess(proc, user_active.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
 					if(!result.toString().contains("e")){
 						int id_process = (int)result;
 						String result2 = null;
 						if(allOpers.isSelected()){
-							 result2 = ProcessService.insertUsers(operators, id_process);
+							 result2 = ProcessService.insertUsers(op, id_process, conf);
 						}else{
 							ArrayList<User> aux = new ArrayList<>();
 							for(int k=0; k<autorized.size(); k++){
 								boolean found = true;
-								for(int i=0; i<operators.size() && found; i++){
-									if(autorized.get(k).equals(operators.get(i).getUser_nick())){
-										aux.add(operators.get(i));
+								for(int i=0; i<op.size() && found; i++){
+									if(autorized.get(k).equals(op.get(i).getUser_nick())){
+										aux.add(op.get(i));
 										found = false;
 									}
 								}
 							}
-							result2 = ProcessService.insertUsers(aux, id_process);
+							result2 = ProcessService.insertUsers(aux, id_process, conf);
 						}
 						if(result2 != null){
 							JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);

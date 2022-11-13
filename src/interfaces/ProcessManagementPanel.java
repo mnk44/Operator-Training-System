@@ -7,23 +7,32 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+import services.ProcessService;
+import classes.Area;
 import classes.User;
+import classes.Process;
+import extras.DataTable;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class ProcessManagementPanel extends JPanel {
 	
@@ -31,16 +40,18 @@ public class ProcessManagementPanel extends JPanel {
 	private static DefaultTableModel date;
 	
 	int selected = -1;
+	ArrayList<Area> areas = null;
 
 	private static final long serialVersionUID = -7006963620558751080L;
-	private JTextField textField;
+	private JTextField searchField;
 	private JButton btnNuevoProceso;
 	private JButton btnModificarProceso;
 	private JButton btnEliminarProceso;
 //	private JButton btnArchivoanm;
 //	private JButton btnArchivodrl;
  
-	public ProcessManagementPanel(final ArrayList<User> op, final User user_active) {
+	public ProcessManagementPanel(final ArrayList<User> op, final User user_active, ArrayList<Area> ars, final ArrayList<Process> process) throws SQLException {
+		areas = ars;
 		setBorder(null);
 		setBackground(Color.WHITE);
 		setBounds(100, 100, 838, 433);
@@ -65,28 +76,17 @@ public class ProcessManagementPanel extends JPanel {
 					selected = table.getSelectedRow();
 				}
 
-//				if (selected != -1) {
-//					btnReiniciarClave.setEnabled(true);
-//					btnModificarUsuario.setEnabled(true);
-//					btnReiniciarClave.setBackground(new Color(255, 113, 19));
-//					btnModificarUsuario.setBackground(new Color(255, 113, 19));
-//					btnInactivarUsuario.setEnabled(true);
-//					btnInactivarUsuario.setBackground(new Color(255, 113, 19));
-//					if(usersList.get(selected).isUser_active()){
-//						btnInactivarUsuario.setText("Inactivar usuario");
-//						btnInactivarUsuario.setIcon(new ImageIcon(UserManagementPanel.class.getResource("/images/icons8_Delete_User_Male_16.png")));
-//					}else{
-//						btnInactivarUsuario.setText("Activar usuario");
-//						btnInactivarUsuario.setIcon(new ImageIcon(UserManagementPanel.class.getResource("/images/icons8_Checked_User_Male_16.png")));
-//					}
-//				}else{
-//					btnModificarUsuario.setEnabled(false);
-//					btnReiniciarClave.setEnabled(false);
-//					btnModificarUsuario.setBackground(new Color(248, 159, 101));
-//					btnReiniciarClave.setBackground(new Color(248, 159, 101));
-//					btnInactivarUsuario.setEnabled(false);
-//					btnInactivarUsuario.setBackground(new Color(248, 159, 101));
-//				}
+				if (selected != -1) {
+					btnModificarProceso.setEnabled(true);
+					btnModificarProceso.setBackground(new Color(255, 113, 19));
+					btnEliminarProceso.setEnabled(true);
+					btnEliminarProceso.setBackground(new Color(255, 113, 19));
+				}else{
+					btnModificarProceso.setEnabled(false);
+					btnModificarProceso.setBackground(new Color(248, 159, 101));
+					btnEliminarProceso.setEnabled(false);
+					btnEliminarProceso.setBackground(new Color(248, 159, 101));
+				}
 			}
 		});
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -115,12 +115,12 @@ public class ProcessManagementPanel extends JPanel {
 		label.setBounds(58, 0, 48, 76);
 		add(label);
 		
-		textField = new JTextField();
-		textField.setToolTipText("Buscar usuario");
-		textField.setFont(new Font("Corbel", Font.PLAIN, 20));
-		textField.setColumns(10);
-		textField.setBounds(115, 26, 426, 29);
-		add(textField);
+		searchField = new JTextField();
+		searchField.setToolTipText("Buscar usuario");
+		searchField.setFont(new Font("Corbel", Font.PLAIN, 20));
+		searchField.setColumns(10);
+		searchField.setBounds(115, 26, 426, 29);
+		add(searchField);
 		
 		btnNuevoProceso = new JButton("Nuevo proceso");
 		btnNuevoProceso.addActionListener(new ActionListener() {
@@ -174,6 +174,24 @@ public class ProcessManagementPanel extends JPanel {
 		
 		btnEliminarProceso = new JButton("Eliminar proceso");
 		btnEliminarProceso.setEnabled(false);
+		btnEliminarProceso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selected = table.getSelectedRow();
+					try {
+						String result = ProcessService.deleteProcess(process.get(selected).getProcess_id(), user_active.getUser_nick(), process.get(selected).getProcess_name(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+						if(result == null){
+							JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);						
+							process.remove(selected);
+							reload(process);
+							searchField.setText("");
+						}else{
+							JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+					}
+			}
+		});
 		btnEliminarProceso.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -247,5 +265,21 @@ public class ProcessManagementPanel extends JPanel {
 //		JSeparator separator = new JSeparator();
 //		separator.setBounds(611, 284, 212, 2);
 //		add(separator);
+		
+		reload(process);
+	}
+	
+	public void reload(ArrayList<Process> process) throws SQLException{
+		DataTable.fillProcess(date, table, process, areas);
+		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);
+		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(1).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(2).setCellRenderer(tcr);
+		table.getColumnModel().getColumn(0).setMaxWidth(50);
+		btnModificarProceso.setEnabled(false);
+		btnEliminarProceso.setEnabled(false);
+		btnModificarProceso.setBackground(new Color(248, 159, 101));
+		btnEliminarProceso.setBackground(new Color(248, 159, 101));
 	}
 }

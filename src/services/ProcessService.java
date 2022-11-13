@@ -12,10 +12,10 @@ import classes.User;
 
 public class ProcessService {
 
-	public static Object newProcess(Process process, ProcessConfiguration config, String user_nick, Timestamp date) throws SQLException{
+	public static Object newProcess(Process process, String user_nick, Timestamp date) throws SQLException{
 		int id = -1;
 		try{
-			String sqlSentenc = "{call public.new_process(?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+			String sqlSentenc = "{call public.new_process_only(?,?,?,?,?,?,?,?)}";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			//process
 			cs.setString(1, process.getProcess_name());
@@ -23,17 +23,10 @@ public class ProcessService {
 			cs.setBytes(3, process.getProcess_anm());
 			cs.setBytes(4, process.getProcess_drl());
 			cs.setInt(5, process.getProcess_area());
-			//configuration
-			cs.setInt(6, config.getTime_limit());
-			cs.setInt(7, config.getCant_questions());
-			cs.setInt(8, config.getCant_aprov());
-			cs.setString(9, process.getProcess_name());
-			cs.setString(10, process.getProcess_name());
-			cs.setString(11, process.getProcess_name());
 			//trace
-			cs.setString(12, user_nick);
-			cs.setString(13, "creó el proceso");
-			cs.setTimestamp(14, date);
+			cs.setString(6, user_nick);
+			cs.setString(7, "creó el proceso");
+			cs.setTimestamp(8, date);
 			ResultSet rs = cs.executeQuery();
 			if(rs.next()){
 				id = rs.getInt(1);
@@ -81,7 +74,7 @@ public class ProcessService {
 
 	public static String deleteProcess(int process_id, String user_nick, String process_name, Timestamp trace_date) throws SQLException{
 		try{
-			String sqlSentenc = "DELETE FROM process WHERE process_id = ?"
+			String sqlSentenc = "DELETE FROM process WHERE process_id = ?;"
 					+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, process_id);
@@ -114,7 +107,7 @@ public class ProcessService {
 		return process;
 	}
 
-	public static ArrayList<Process> getProcess() throws SQLException{
+	public static ArrayList<Process> getProcess(){
 		ArrayList<Process> processList = new ArrayList<Process>();
 		try{
 			ResultSet rs = ConnectionService.getConnection().createStatement().executeQuery("SELECT * FROM process");
@@ -147,22 +140,41 @@ public class ProcessService {
 		return processList;
 	}
 
-	public static String insertUsers(ArrayList<User> users, int process){
+	public static String insertUsers(ArrayList<User> users, int process, ProcessConfiguration config){
 		try{
-			String sqlSentenc = "INSERT INTO user_process";
-			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
-			int cont = 1;
+			String sqlSentenc = "INSERT INTO process_configuration VALUES (DEFAULT,?,?,?,?,?,?,?);"
+					+ "INSERT INTO user_process";
 			for(int i=0; i<users.size(); i++){
 				sqlSentenc = sqlSentenc + " VALUES(DEFAULT,?,?),";
-				cs.setInt(cont, users.get(i).getUser_id());
-				cs.setInt(cont++, process);
-				cont++;
 			}
 			sqlSentenc = sqlSentenc.substring(0, sqlSentenc.length()-1) + ";";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			//configuration
+			int cont = 1;
+			cs.setInt(cont, process);
+			cont=cont +1;
+			cs.setInt(cont, config.getTime_limit());
+			cont=cont +1;
+			cs.setInt(cont, config.getCant_questions());
+			cont=cont +1;
+			cs.setInt(cont, config.getCant_aprov());
+			cont=cont +1;
+			cs.setString(cont, config.getType_var());
+			cont=cont +1;
+			cs.setString(cont, config.getType_cause());
+			cont=cont +1;
+			cs.setString(cont, config.getType_rec());
+			cont=cont +1;
+			for(int i=0; i<users.size(); i++){
+				cs.setInt(cont, users.get(i).getUser_id());
+				cont=cont +1;
+				cs.setInt(cont, process);
+				cont=cont +1;
+			}
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
-			return e.getMessage();
+			return "insertUsers: " + e.getMessage();
 		}
 		return null;
 	}
