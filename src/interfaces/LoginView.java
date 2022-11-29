@@ -22,12 +22,15 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.border.MatteBorder;
 import javax.swing.SwingConstants;
 
 import classes.User;
 import extras.Encrypting;
 import services.UserService;
+
+import javax.swing.JProgressBar;
 
 public class LoginView extends JDialog {
 
@@ -43,6 +46,13 @@ public class LoginView extends JDialog {
 			e.printStackTrace();
 		}
 	}
+	
+	//Timer
+	Timer time;
+	
+	User user = null;
+	Thread n = null;
+	boolean first = true;
 
 	private JButton accept_button;
 	private JTextField user_name;
@@ -50,6 +60,7 @@ public class LoginView extends JDialog {
 	private JLabel view_pass;
 	
 	private int error = 0;
+	private JProgressBar progressBar;
 
 	public LoginView() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/images/logo.png")));
@@ -149,31 +160,15 @@ public class LoginView extends JDialog {
 					error++;
 				}else{
 					try {
-						User user = (User) UserService.searchNick(user_name.getText());
-						if(user != null){
-							if(user.getUser_pass().equals(Encrypting.getEncript(user_pass.getText()))){
-								if(!user.isUser_active()){
-									JOptionPane.showMessageDialog(null, "Usuario desactivado", "Error", JOptionPane.ERROR_MESSAGE);
-									error++;
-								}else{
-									PrincipalView center = new PrincipalView(user);
-									LoginView.this.setVisible(false);
-									center.frame.setLocationRelativeTo(null);
-									center.frame.setVisible(true);
-								}
-							}else{
-								JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
-								error++;
-							}
-						}else{
-							JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
-							error++;
-						}
+						FirstRead f = new FirstRead();
+						n = new Thread(f);
+						n.start();
+						progressBar.setVisible(true);
+						progressBar.setValue(0);
+						time = new Timer(1, new TimerListener());
+						time.start();
+						first = false;
 					} catch (HeadlessException e) {
-						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-					} catch (UnsupportedEncodingException e) {
-						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-					} catch (SQLException e) {
 						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
@@ -216,5 +211,71 @@ public class LoginView extends JDialog {
 		lblProcesosQumicos.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		lblProcesosQumicos.setBounds(450, 92, 445, 49);
 		getContentPane().add(lblProcesosQumicos);
+		
+		progressBar = new JProgressBar();
+		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		progressBar.setStringPainted(true);
+		progressBar.setVisible(false);
+		progressBar.setForeground(Color.GREEN);
+		progressBar.setBackground(Color.WHITE);
+		progressBar.setBounds(491, 333, 339, 14);
+		getContentPane().add(progressBar);
+	}
+	
+	public class TimerListener implements ActionListener{
+		int cont = 1;
+		
+		@SuppressWarnings("deprecation")
+		public void actionPerformed(ActionEvent arg0) {
+			cont = cont + 1;
+			if(first){
+				progressBar.setValue(cont);
+			}else{
+				progressBar.setValue(cont*2);
+			}
+			if(progressBar.getValue() == 100){
+				time.stop();
+				if(user != null){
+					try {
+						if(user.getUser_pass().equals(Encrypting.getEncript(user_pass.getText()))){
+							if(!user.isUser_active()){
+								progressBar.setVisible(false);
+								JOptionPane.showMessageDialog(null, "Usuario desactivado", "Error", JOptionPane.ERROR_MESSAGE);
+								error++;
+							}else{
+								PrincipalView center = new PrincipalView(user);
+								LoginView.this.setVisible(false);
+								center.frame.setLocationRelativeTo(null);
+								center.frame.setVisible(true);
+							}
+						}else{
+							progressBar.setVisible(false);
+							JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+							error++;
+						}
+					} catch (HeadlessException | UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					progressBar.setVisible(false);
+					JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+					error++;
+				}
+			}
+		}
+	}
+	
+	public class FirstRead implements Runnable{
+
+		public void run() {
+			try {
+				user = (User) UserService.searchNick(user_name.getText());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
 }

@@ -20,6 +20,7 @@ import java.awt.event.InputEvent;
 import javax.swing.ImageIcon;
 
 import classes.Area;
+import classes.ProcessConfiguration;
 import classes.User;
 import classes.Process;
 import extras.Encrypting;
@@ -48,10 +49,12 @@ public class PrincipalView {
 	JFrame frame;
 	private JMenuItem changePass;
 
+	//cargas
 	User user_active = null;
 	ArrayList<Area> areasList = AreaService.getAreas();
 	ArrayList<User> usersList = UserService.getUsers();
 	ArrayList<Process> processList = ProcessService.getProcess();
+	ArrayList<ProcessConfiguration> configurationList = ProcessService.getProcessConf();
 
 	JPanel panel = new JPanel();
 	private JLabel title;
@@ -310,7 +313,7 @@ public class PrincipalView {
 				panel = new JPanel();
 				ArrayList<User> op = getOperators();
 				try {
-					panel = new ProcessManagementPanel(op, user_active, areasList, processList);
+					panel = new ProcessManagementPanel(op, user_active, areasList, processList, configurationList);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

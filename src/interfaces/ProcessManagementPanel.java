@@ -25,6 +25,7 @@ import javax.swing.JButton;
 
 import services.ProcessService;
 import classes.Area;
+import classes.ProcessConfiguration;
 import classes.User;
 import classes.Process;
 import extras.DataTable;
@@ -53,7 +54,7 @@ public class ProcessManagementPanel extends JPanel {
 //	private JButton btnArchivoanm;
 //	private JButton btnArchivodrl;
  
-	public ProcessManagementPanel(final ArrayList<User> op, final User user_active, ArrayList<Area> ars, final ArrayList<Process> process) throws SQLException {
+	public ProcessManagementPanel(final ArrayList<User> op, final User user_active, ArrayList<Area> ars, final ArrayList<Process> process, final ArrayList<ProcessConfiguration> configurationList) throws SQLException {
 		areas = ars;
 		setBorder(null);
 		setBackground(Color.WHITE);
@@ -323,7 +324,7 @@ public class ProcessManagementPanel extends JPanel {
 		table.getColumnModel().getColumn(0).setMaxWidth(50);
 		btnModificarProceso.setEnabled(false);
 		btnEliminarProceso.setEnabled(false);
-		btnModificarProceso.setBackground(new Color(248, 159, 101));
+//		btnModificarProceso.setBackground(new Color(248, 159, 101));
 		btnEliminarProceso.setBackground(new Color(248, 159, 101));
 	}
 }

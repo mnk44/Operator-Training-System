@@ -179,7 +179,7 @@ public class ProcessService {
 		return null;
 	}
 	
-	public static ArrayList<ProcessConfiguration> getProcessConf() throws SQLException{
+	public static ArrayList<ProcessConfiguration> getProcessConf(){
 		ArrayList<ProcessConfiguration> processList = new ArrayList<ProcessConfiguration>();
 		try{
 			ResultSet rs = ConnectionService.getConnection().createStatement().executeQuery("SELECT * FROM process_configuration");
