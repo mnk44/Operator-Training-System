@@ -52,7 +52,6 @@ public class LoginView extends JDialog {
 	
 	User user = null;
 	Thread n = null;
-	boolean first = true;
 
 	private JButton accept_button;
 	private JTextField user_name;
@@ -167,7 +166,6 @@ public class LoginView extends JDialog {
 						progressBar.setValue(0);
 						time = new Timer(1, new TimerListener());
 						time.start();
-						first = false;
 					} catch (HeadlessException e) {
 						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 					}
@@ -216,24 +214,20 @@ public class LoginView extends JDialog {
 		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		progressBar.setStringPainted(true);
 		progressBar.setVisible(false);
-		progressBar.setForeground(Color.GREEN);
+		progressBar.setForeground(new Color(255, 113, 19));
 		progressBar.setBackground(Color.WHITE);
 		progressBar.setBounds(491, 333, 339, 14);
 		getContentPane().add(progressBar);
 	}
 	
 	public class TimerListener implements ActionListener{
-		int cont = 1;
+		int cont = 0;
 		
 		@SuppressWarnings("deprecation")
 		public void actionPerformed(ActionEvent arg0) {
 			cont = cont + 1;
-			if(first){
-				progressBar.setValue(cont);
-			}else{
-				progressBar.setValue(cont*2);
-			}
-			if(progressBar.getValue() == 100){
+			progressBar.setValue(cont);
+			if(cont == 101){
 				time.stop();
 				if(user != null){
 					try {

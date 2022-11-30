@@ -42,9 +42,9 @@ public class UserService {
 	public static String updateUser(User user, String user_nick, Timestamp trace_date) throws SQLException{
 		try{
 			String sqlSentenc = "UPDATE users SET user_name = ?, user_sex = ?, user_card = ?, user_experience = ?,"
-					+ "user_level = ?, user_boss = ?, user_nick = ?, user_pass = ?, user_active = ?, user_area = ?,"
-					+ "user_rol = ? WHERE user_id = ?;"
-					+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?)";
+						+ "user_level = ?, user_boss = ?, user_nick = ?, user_pass = ?, user_active = ?, user_area = ?,"
+						+ "user_rol = ? WHERE user_id = ?;"
+						+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?)";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, user.getUser_name());
 			cs.setInt(2, user.getUser_sex());

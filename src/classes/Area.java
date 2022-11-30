@@ -3,7 +3,7 @@ package classes;
 public class Area {
 	int id_area;
 	String name_area;
-	
+
 	public Area(int id_area, String name_area) {
 		super();
 		this.id_area = id_area;

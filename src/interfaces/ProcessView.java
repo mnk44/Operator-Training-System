@@ -27,7 +27,6 @@ import java.awt.Toolkit;
 import javax.swing.JComboBox;
 
 import java.awt.ComponentOrientation;
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -90,18 +89,17 @@ public class ProcessView extends JDialog {
 	@SuppressWarnings("rawtypes")
 	private JComboBox variables;
 
-	public static void main(String[] args) {
-		try {
-			ProcessView dialog = new ProcessView(null, null);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	Process procesP = null;
+	ProcessConfiguration configurationP = null;
+	
+	private JLabel lblReglas;
+	private JLabel lblArchivoDeVariables;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ProcessView(final ArrayList<User> op, final User user_active) {
+	public ProcessView(final ArrayList<User> op, final User user_active, Process p, ProcessConfiguration c) throws ClassNotFoundException, IOException {
+		procesP = p;
+		configurationP = c;
+
 		for(int i=0; i<op.size(); i++){
 			inautorized.add(op.get(i).getUser_nick());
 		}
@@ -111,8 +109,156 @@ public class ProcessView extends JDialog {
 		getContentPane().setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
 
+		button = new JButton("Aceptar");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//validations
+				if(anmRoute == null || drlRoute == null){
+					JOptionPane.showMessageDialog(null, "Debe rellenar los ficheros del proceso", "Error", JOptionPane.ERROR_MESSAGE);
+				}else if(process_name.getText().replace(" ", "").isEmpty()){
+					JOptionPane.showMessageDialog(null, "El nombre del proceso debe ser un nombre válido", "Error", JOptionPane.ERROR_MESSAGE);
+				}else if(!allOpers.isSelected() && autorized.isEmpty()){
+					JOptionPane.showMessageDialog(null, "Deben existir usuarios capaces de realizar el entrenamiento", "Error", JOptionPane.ERROR_MESSAGE);
+				}else if((int)questions.getValue()<=(int)aproved.getValue()){
+					if((int)questions.getValue()!=(int)aproved.getValue()){
+						JOptionPane.showMessageDialog(null, "La cantidad de preguntas aprobadas no puede ser mayor que la cantidad de preguntas en total", "Error", JOptionPane.ERROR_MESSAGE);
+					}else{
+						JOptionPane.showMessageDialog(null, "Debe existir un margen de error en las preguntas, aumente la cantidad de preguntas/n o disminuya la cantidad de aprobados", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+
+				//insert
+				if(procesP == null){
+					Process proc = null;
+					try {
+						proc = new Process(process_name.getText(), user_active.getUser_area(), Convert.toBytes(imageRoute), Convert.toBytes(anmRoute), Convert.toBytes(drlRoute));
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					ProcessConfiguration conf = new ProcessConfiguration((int)time.getValue(), (int)questions.getValue(), (int)aproved.getValue(), (String)variables.getSelectedItem(), (String)causes.getSelectedItem(), (String)recomendations.getSelectedItem(), allOpers.isSelected());
+					Object result = null;
+					try {
+						result = ProcessService.newProcess(proc, user_active.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(!result.toString().contains("e")){
+						proc.setProcess_id((int)result);
+						PrincipalView.changeProcess(proc, 1);
+						String cfg = ProcessService.insertConfig((int)result, conf);
+						if(cfg!=null){
+							JOptionPane.showMessageDialog(null, cfg, "Error", JOptionPane.ERROR_MESSAGE);
+						}else{
+							conf.setProcess_id((int)result);
+							PrincipalView.changeConfig(conf, 1);
+						}
+						if(!allOpers.isSelected()){
+							ArrayList<User> aux = new ArrayList<>();
+							for(int k=0; k<autorized.size(); k++){
+								boolean found = true;
+								for(int i=0; i<op.size() && found; i++){
+									if(autorized.get(k).equals(op.get(i).getUser_nick())){
+										aux.add(op.get(i));
+										found = false;
+									}
+								}
+							}
+							String userers = ProcessService.insertUsers(aux, (int)result);
+							if(userers!=null){
+								JOptionPane.showMessageDialog(null, userers, "Error", JOptionPane.ERROR_MESSAGE);
+							}else{
+								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+								try {
+									ProcessManagementPanel.reload(PrincipalView.getProcess());
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								dispose();
+							}
+						}else{
+							JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+							try {
+								ProcessManagementPanel.reload(PrincipalView.getProcess());
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							dispose();
+						}
+					}
+				}else{
+					try {
+						procesP.setProcess_img(Convert.toBytes(imageRoute));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					procesP.setProcess_name(process_name.getText());
+					configurationP = new ProcessConfiguration((int)time.getValue(), (int)questions.getValue(), (int)aproved.getValue(), (String)variables.getSelectedItem(), (String)causes.getSelectedItem(), (String)recomendations.getSelectedItem(), allOpers.isSelected());
+					configurationP.setProcess_id(procesP.getProcess_id());
+					Object result = null;
+					try {
+						result = ProcessService.updateProcess(procesP, configurationP, user_active.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(result == null){
+						if(!allOpers.isSelected()){
+							ArrayList<User> aux = new ArrayList<>();
+							for(int k=0; k<autorized.size(); k++){
+								boolean found = true;
+								for(int i=0; i<op.size() && found; i++){
+									if(autorized.get(k).equals(op.get(i).getUser_nick())){
+										aux.add(op.get(i));
+										found = false;
+									}
+								}
+							}
+							String userers = ProcessService.insertUsers(aux, procesP.getProcess_id());
+							if(userers!=null){
+								JOptionPane.showMessageDialog(null, userers, "Error", JOptionPane.ERROR_MESSAGE);
+							}else{
+								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+								try {
+									ProcessManagementPanel.reload(PrincipalView.getProcess());
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								dispose();
+							}
+						}else{
+							JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+							try {
+								ProcessManagementPanel.reload(PrincipalView.getProcess());
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							dispose();
+						}
+					}else{
+						JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+		button.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				button.setBackground(new Color(248, 159, 101));
+			}
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				button.setBackground(new Color(255, 113, 19));
+			}
+		});
+
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(0, 0, 612, 312);
+		tabbedPane.setBounds(0, 0, 642, 312);
 		tabbedPane.setForeground(new Color(99, 68, 55));
 		tabbedPane.setFont(new Font("Dubai", Font.PLAIN, 20));
 		getContentPane().add(tabbedPane);
@@ -184,7 +330,7 @@ public class ProcessView extends JDialog {
 		imgen_button.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		imgen_button.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(255, 113, 19)));
 		imgen_button.setBackground(Color.WHITE);
-		imgen_button.setBounds(523, 75, 59, 43);
+		imgen_button.setBounds(533, 75, 59, 43);
 		panel.add(imgen_button);
 
 		var_name = new JTextField();
@@ -223,7 +369,9 @@ public class ProcessView extends JDialog {
 		anm_button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				anm_button.setBackground(new Color(240, 209, 188));
+				if(anm_button.isEnabled()){
+					anm_button.setBackground(new Color(240, 209, 188));
+				}
 			}
 			@Override
 			public void mouseExited(MouseEvent arg0) {
@@ -235,7 +383,7 @@ public class ProcessView extends JDialog {
 		anm_button.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		anm_button.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(255, 113, 19)));
 		anm_button.setBackground(Color.WHITE);
-		anm_button.setBounds(523, 134, 59, 43);
+		anm_button.setBounds(533, 134, 59, 43);
 		panel.add(anm_button);
 
 		drl_button = new JButton();
@@ -262,7 +410,9 @@ public class ProcessView extends JDialog {
 		drl_button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				drl_button.setBackground(new Color(240, 209, 188));
+				if(drl_button.isEnabled()){
+					drl_button.setBackground(new Color(240, 209, 188));
+				}
 			}
 			@Override
 			public void mouseExited(MouseEvent arg0) {
@@ -274,17 +424,17 @@ public class ProcessView extends JDialog {
 		drl_button.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		drl_button.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(255, 113, 19)));
 		drl_button.setBackground(Color.WHITE);
-		drl_button.setBounds(523, 193, 59, 43);
+		drl_button.setBounds(533, 190, 59, 43);
 		panel.add(drl_button);
 
-		JLabel lblArchivoDeVariables = new JLabel("Archivo con variables:");
+		lblArchivoDeVariables = new JLabel("Archivo con variables:");
 		lblArchivoDeVariables.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblArchivoDeVariables.setForeground(new Color(255, 113, 19));
 		lblArchivoDeVariables.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
 		lblArchivoDeVariables.setBounds(15, 134, 264, 43);
 		panel.add(lblArchivoDeVariables);
 
-		JLabel lblReglas = new JLabel("Archivo con reglas:");
+		lblReglas = new JLabel("Archivo con reglas:");
 		lblReglas.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblReglas.setForeground(new Color(255, 113, 19));
 		lblReglas.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
@@ -296,11 +446,11 @@ public class ProcessView extends JDialog {
 		tabbedPane.addTab("Entrenamiento", new ImageIcon(ProcessView.class.getResource("/images/icons8_Quiz_16.png")), panel_1, null);
 		panel_1.setLayout(null);
 
-		lblTiempoLmite = new JLabel("Tiempo:");
+		lblTiempoLmite = new JLabel("Tiempo (min):");
 		lblTiempoLmite.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblTiempoLmite.setForeground(new Color(255, 113, 19));
 		lblTiempoLmite.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
-		lblTiempoLmite.setBounds(424, 21, 93, 32);
+		lblTiempoLmite.setBounds(407, 26, 141, 23);
 		panel_1.add(lblTiempoLmite);
 
 		lblCantidadDePreguntas = new JLabel("Cantidad de preguntas:");
@@ -321,30 +471,30 @@ public class ProcessView extends JDialog {
 		lblTipoDePreguntas.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblTipoDePreguntas.setForeground(new Color(255, 113, 19));
 		lblTipoDePreguntas.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
-		lblTipoDePreguntas.setBounds(25, 110, 212, 43);
+		lblTipoDePreguntas.setBounds(51, 110, 212, 43);
 		panel_1.add(lblTipoDePreguntas);
 
 		lblPreguntasDeCausas = new JLabel("Causas:");
 		lblPreguntasDeCausas.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblPreguntasDeCausas.setForeground(new Color(255, 113, 19));
 		lblPreguntasDeCausas.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
-		lblPreguntasDeCausas.setBounds(58, 154, 180, 43);
+		lblPreguntasDeCausas.setBounds(83, 154, 180, 43);
 		panel_1.add(lblPreguntasDeCausas);
 
 		lblPreguntasDeRecomendaciones = new JLabel("Recomendaciones:");
 		lblPreguntasDeRecomendaciones.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblPreguntasDeRecomendaciones.setForeground(new Color(255, 113, 19));
 		lblPreguntasDeRecomendaciones.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
-		lblPreguntasDeRecomendaciones.setBounds(15, 200, 223, 43);
+		lblPreguntasDeRecomendaciones.setBounds(40, 200, 223, 43);
 		panel_1.add(lblPreguntasDeRecomendaciones);
 
 		variables = new JComboBox();
-		variables.setModel(new DefaultComboBoxModel(new String[] {"Enlazar", "Espacios en blanco", "Selecci\u00F3n m\u00FAltiple", "Verdadero o falso"}));
-		variables.setSelectedIndex(3);
+		variables.setModel(new DefaultComboBoxModel(new String[] {"Espacios en blanco", "Selecci\u00F3n m\u00FAltiple", "Verdadero o falso"}));
+		variables.setSelectedIndex(2);
 		variables.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 20));
 		variables.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		variables.setBackground(Color.WHITE);
-		variables.setBounds(242, 118, 287, 26);
+		variables.setBounds(278, 118, 287, 26);
 		panel_1.add(variables);
 
 		questions = new JSpinner();
@@ -368,7 +518,7 @@ public class ProcessView extends JDialog {
 		time.setToolTipText("Minutos");
 		time.setModel(new SpinnerNumberModel(10, 3, 60, 1));
 		time.setFont(new Font("Corbel", Font.PLAIN, 21));
-		time.setBounds(519, 26, 64, 26);
+		time.setBounds(553, 26, 64, 26);
 		panel_1.add(time);
 
 		causes = new JComboBox();
@@ -377,7 +527,7 @@ public class ProcessView extends JDialog {
 		causes.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 20));
 		causes.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		causes.setBackground(Color.WHITE);
-		causes.setBounds(242, 162, 287, 26);
+		causes.setBounds(278, 162, 287, 26);
 		panel_1.add(causes);
 
 		recomendations = new JComboBox();
@@ -386,7 +536,7 @@ public class ProcessView extends JDialog {
 		recomendations.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 20));
 		recomendations.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		recomendations.setBackground(Color.WHITE);
-		recomendations.setBounds(244, 208, 287, 26);
+		recomendations.setBounds(278, 208, 287, 26);
 		panel_1.add(recomendations);
 
 		panel_2 = new JPanel();
@@ -412,7 +562,7 @@ public class ProcessView extends JDialog {
 		allOpers.setForeground(new Color(255, 113, 19));
 		allOpers.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
 		allOpers.setBackground(Color.WHITE);
-		allOpers.setBounds(11, 12, 585, 29);
+		allOpers.setBounds(11, 12, 615, 29);
 		panel_2.add(allOpers);
 
 		list1 = new JList<String>(new AbstractListModel<String>(){	
@@ -439,7 +589,7 @@ public class ProcessView extends JDialog {
 		list1.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		list1.setEnabled(false);
 		list1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		list1.setBounds(21, 74, 237, 173);
+		list1.setBounds(21, 74, 258, 173);
 		panel_2.add(list1);
 
 		JLabel lblNoAutorizados = new JLabel("No autorizados:");
@@ -447,13 +597,18 @@ public class ProcessView extends JDialog {
 		lblNoAutorizados.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNoAutorizados.setForeground(new Color(99, 68, 55));
 		lblNoAutorizados.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
-		lblNoAutorizados.setBounds(21, 33, 237, 38);
+		lblNoAutorizados.setBounds(21, 33, 258, 38);
 		panel_2.add(lblNoAutorizados);
 
 		right = new JButton();
 		right.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				actualizar(0);
+				try {
+					actualizar(0);
+				} catch (ClassNotFoundException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		right.addMouseListener(new MouseAdapter() {
@@ -476,13 +631,18 @@ public class ProcessView extends JDialog {
 		right.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		right.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 113, 19)));
 		right.setBackground(new Color(248, 159, 101));
-		right.setBounds(273, 119, 50, 49);
+		right.setBounds(294, 119, 50, 49);
 		panel_2.add(right);
 
 		left = new JButton();
 		left.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				actualizar(1);
+				try {
+					actualizar(1);
+				} catch (ClassNotFoundException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		left.addMouseListener(new MouseAdapter() {
@@ -505,7 +665,7 @@ public class ProcessView extends JDialog {
 		left.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		left.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 113, 19)));
 		left.setBackground(new Color(248, 159, 101));
-		left.setBounds(273, 184, 50, 49);
+		left.setBounds(294, 184, 50, 49);
 		panel_2.add(left);
 
 		list_2 = new JList<String>(new AbstractListModel<String>(){		
@@ -532,7 +692,7 @@ public class ProcessView extends JDialog {
 		list_2.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		list_2.setEnabled(false);
 		list_2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		list_2.setBounds(338, 74, 237, 173);
+		list_2.setBounds(359, 74, 252, 173);
 		panel_2.add(list_2);
 
 		lblAutorizados = new JLabel("Autorizados:");
@@ -540,97 +700,53 @@ public class ProcessView extends JDialog {
 		lblAutorizados.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAutorizados.setForeground(new Color(99, 68, 55));
 		lblAutorizados.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
-		lblAutorizados.setBounds(338, 33, 237, 38);
+		lblAutorizados.setBounds(359, 33, 252, 38);
 		panel_2.add(lblAutorizados);
-
-		button = new JButton("Aceptar");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//validations
-				if(anmRoute == null || drlRoute == null){
-					JOptionPane.showMessageDialog(null, "Debe rellenar los ficheros del proceso", "Error", JOptionPane.ERROR_MESSAGE);
-				}else if(process_name.getText().replace(" ", "").isEmpty()){
-					JOptionPane.showMessageDialog(null, "El nombre del proceso debe ser un nombre válido", "Error", JOptionPane.ERROR_MESSAGE);
-				}else if(!allOpers.isSelected() && autorized.isEmpty()){
-					JOptionPane.showMessageDialog(null, "Deben existir usuarios capaces de realizar el entrenamiento", "Error", JOptionPane.ERROR_MESSAGE);
-				}else if((int)questions.getValue()<=(int)aproved.getValue()){
-					if((int)questions.getValue()!=(int)aproved.getValue()){
-						JOptionPane.showMessageDialog(null, "La cantidad de preguntas aprobadas no puede ser mayor que la cantidad de preguntas en total", "Error", JOptionPane.ERROR_MESSAGE);
-					}else{
-						JOptionPane.showMessageDialog(null, "Debe existir un margen de error en las preguntas, aumente la cantidad de preguntas/n o disminuya la cantidad de aprobados", "Error", JOptionPane.ERROR_MESSAGE);
-					}
-				}
-				//save
-				Process proc = null;
-				if(imageRoute != null){
-					try {
-						proc = new Process(process_name.getText(), user_active.getUser_area(), Convert.toBytes(new File(imageRoute)), Convert.toBytes(new File(anmRoute)), Convert.toBytes(new File(drlRoute)));
-					} catch (IOException e) {
-						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-					}
-				}else{
-					try {
-						proc = new Process(process_name.getText(), user_active.getUser_area(), null, Convert.toBytes(new File(anmRoute)), Convert.toBytes(new File(drlRoute)));
-					} catch (IOException e) {
-						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-					}
-				}
-				ProcessConfiguration conf = new ProcessConfiguration((int)time.getValue(), (int)questions.getValue(), (int)aproved.getValue(), (String)variables.getSelectedItem(), (String)causes.getSelectedItem(), (String)recomendations.getSelectedItem());
-			    try {
-					Object result = ProcessService.newProcess(proc, user_active.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
-					if(!result.toString().contains("e")){
-						int id_process = (int)result;
-						String result2 = null;
-						if(allOpers.isSelected()){
-							 result2 = ProcessService.insertUsers(op, id_process, conf);
-						}else{
-							ArrayList<User> aux = new ArrayList<>();
-							for(int k=0; k<autorized.size(); k++){
-								boolean found = true;
-								for(int i=0; i<op.size() && found; i++){
-									if(autorized.get(k).equals(op.get(i).getUser_nick())){
-										aux.add(op.get(i));
-										found = false;
-									}
-								}
-							}
-							result2 = ProcessService.insertUsers(aux, id_process, conf);
-						}
-						if(result2 != null){
-							JOptionPane.showMessageDialog(null, result2, "Error", JOptionPane.ERROR_MESSAGE);
-						}
-					}else{
-						JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
-					}
-				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-				}
-			    //anm y drl
-			}
-		});
-		button.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				button.setBackground(new Color(248, 159, 101));
-			}
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				button.setBackground(new Color(255, 113, 19));
-			}
-		});
 		button.setForeground(Color.WHITE);
 		button.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		button.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 113, 19)));
 		button.setBackground(new Color(255, 113, 19));
-		button.setBounds(221, 328, 153, 37);
+		button.setBounds(242, 326, 153, 37);
 		getContentPane().add(button);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModal(true);
 		setResizable(false);
-		setBounds(100, 100, 618, 419);
+		setBounds(100, 100, 648, 419);
+		
+		if(procesP != null){
+			//process
+			process_name.setText(procesP.getProcess_name());
+			if(procesP.getProcess_img() != null){
+				int position = Convert.toObject(procesP.getProcess_img()).toString().lastIndexOf("\\");
+				img_name.setText(Convert.toObject(procesP.getProcess_img()).toString().substring(position + 1));
+				imageRoute = Convert.toObject(procesP.getProcess_img()).toString();
+			}
+			int position = Convert.toObject(procesP.getProcess_anm()).toString().lastIndexOf("\\");
+			var_name.setText(Convert.toObject(procesP.getProcess_anm()).toString().substring(position + 1));
+			anmRoute = drlRoute = "";
+			var_name.setEnabled(false);
+			anm_button.setEnabled(false);
+			position = Convert.toObject(procesP.getProcess_drl()).toString().lastIndexOf("\\");
+			rules_name.setText(Convert.toObject(procesP.getProcess_drl()).toString().substring(position + 1));
+			rules_name.setEnabled(false);
+			drl_button.setEnabled(false);
+			lblReglas.setEnabled(false);
+			lblArchivoDeVariables.setEnabled(false);
+			
+			//config
+			questions.setValue(configurationP.getCant_questions());
+			aproved.setValue(configurationP.getCant_aprov());
+			time.setValue(configurationP.getTime_limit());
+			variables.setSelectedItem(configurationP.getType_var());
+			causes.setSelectedItem(configurationP.getType_cause());
+			recomendations.setSelectedItem(configurationP.getType_rec());
+			
+			//users
+			allOpers.setSelected(configurationP.isFor_every());
+		}
 	}
 
-	public void actualizar(int action){
+	public void actualizar(int action) throws ClassNotFoundException, IOException{
 		if(action == 0){
 			int position = list1.getSelectedIndex();
 			autorized.add(inautorized.get(position));

@@ -33,6 +33,7 @@ import extras.Search;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -44,17 +45,17 @@ public class ProcessManagementPanel extends JPanel {
 	private static DefaultTableModel date;
 	
 	int selected = -1;
-	ArrayList<Area> areas = null;
+	static ArrayList<Area> areas = null;
 
 	private static final long serialVersionUID = -7006963620558751080L;
 	private JTextField searchField;
 	private JButton btnNuevoProceso;
-	private JButton btnModificarProceso;
-	private JButton btnEliminarProceso;
+	private static JButton btnModificarProceso;
+	private static JButton btnEliminarProceso;
 //	private JButton btnArchivoanm;
 //	private JButton btnArchivodrl;
  
-	public ProcessManagementPanel(final ArrayList<User> op, final User user_active, ArrayList<Area> ars, final ArrayList<Process> process, final ArrayList<ProcessConfiguration> configurationList) throws SQLException {
+	public ProcessManagementPanel(final ArrayList<User> op, final User user_active, ArrayList<Area> ars, final ArrayList<Process> process, final ArrayList<ProcessConfiguration> con) throws SQLException {
 		areas = ars;
 		setBorder(null);
 		setBackground(Color.WHITE);
@@ -170,7 +171,13 @@ public class ProcessManagementPanel extends JPanel {
 		btnNuevoProceso = new JButton("Nuevo proceso");
 		btnNuevoProceso.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ProcessView p = new ProcessView(op, user_active);
+				ProcessView p = null;
+				try {
+					p = new ProcessView(op, user_active, null, null);
+				} catch (ClassNotFoundException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				p.setLocationRelativeTo(ProcessManagementPanel.this);
 				p.setVisible(true);
 			}
@@ -195,6 +202,30 @@ public class ProcessManagementPanel extends JPanel {
 		
 		btnModificarProceso = new JButton("Modificar proceso");
 		btnModificarProceso.setEnabled(false);
+		btnModificarProceso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				selected = table.getSelectedRow();
+				boolean x = true;
+				ProcessConfiguration c = null;
+				Process y = null;
+				for (int i = 0; i < process.size() && x; i++) {
+					if((int) table.getValueAt(selected, 0) == process.get(i).getProcess_id()){
+						y = process.get(i);
+						c = con.get(i);
+						x = false;
+					}
+				}
+				ProcessView uv = null;
+				try {
+					uv = new ProcessView(op, user_active, y, c);
+				} catch (ClassNotFoundException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				uv.setLocationRelativeTo(ProcessManagementPanel.this);
+				uv.setVisible(true);
+			}
+		});
 		btnModificarProceso.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -314,7 +345,7 @@ public class ProcessManagementPanel extends JPanel {
 		reload(process);
 	}
 	
-	public void reload(ArrayList<Process> process) throws SQLException{
+	public static void reload(ArrayList<Process> process) throws SQLException{
 		DataTable.fillProcess(date, table, process, areas);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
@@ -324,7 +355,7 @@ public class ProcessManagementPanel extends JPanel {
 		table.getColumnModel().getColumn(0).setMaxWidth(50);
 		btnModificarProceso.setEnabled(false);
 		btnEliminarProceso.setEnabled(false);
-//		btnModificarProceso.setBackground(new Color(248, 159, 101));
+		btnModificarProceso.setBackground(new Color(248, 159, 101));
 		btnEliminarProceso.setBackground(new Color(248, 159, 101));
 	}
 }

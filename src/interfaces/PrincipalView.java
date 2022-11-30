@@ -53,8 +53,8 @@ public class PrincipalView {
 	User user_active = null;
 	ArrayList<Area> areasList = AreaService.getAreas();
 	ArrayList<User> usersList = UserService.getUsers();
-	ArrayList<Process> processList = ProcessService.getProcess();
-	ArrayList<ProcessConfiguration> configurationList = ProcessService.getProcessConf();
+	static ArrayList<Process> processList = ProcessService.getProcess();
+	static ArrayList<ProcessConfiguration> configurationList = ProcessService.getProcessConf();
 
 	JPanel panel = new JPanel();
 	private JLabel title;
@@ -344,16 +344,37 @@ public class PrincipalView {
 			options.setVisible(false);
 		}
 	}
-	
+
 	public ArrayList<User> getOperators(){
 		ArrayList<User> operators = new ArrayList<>();
-		
+
 		for(int i=0; i<usersList.size(); i++){
 			if(usersList.get(i).getUser_rol()==3 && usersList.get(i).getUser_area()==user_active.getUser_area()){
 				operators.add(usersList.get(i));
 			}
 		}
-		
+
 		return operators;
 	}
+
+	public static void changeProcess(Process p, int opc){
+		if(opc == 1){
+			processList.add(p);
+		}else{
+
+		}
+	}
+
+	public static ArrayList<Process> getProcess(){
+		return processList;
+	}
+
+	public static void changeConfig(ProcessConfiguration p, int opc){
+		if(opc == 1){
+			configurationList.add(p);
+		}else{
+
+		}
+	}
+
 }

@@ -9,10 +9,11 @@ public class ProcessConfiguration {
 	String type_var;
 	String type_cause;
 	String type_rec;
+	boolean for_every;
 	
 	public ProcessConfiguration(int time_limit,
 			int cant_questions, int cant_aprov, String type_var,
-			String type_cause, String type_rec) {
+			String type_cause, String type_rec, boolean for_every) {
 		super();
 		this.time_limit = time_limit;
 		this.cant_questions = cant_questions;
@@ -20,11 +21,20 @@ public class ProcessConfiguration {
 		this.type_var = type_var;
 		this.type_cause = type_cause;
 		this.type_rec = type_rec;
+		this.for_every = for_every;
 	}
 	
+	public boolean isFor_every() {
+		return for_every;
+	}
+
+	public void setFor_every(boolean for_every) {
+		this.for_every = for_every;
+	}
+
 	public ProcessConfiguration(int table_id, int process_id, int time_limit,
 			int cant_questions, int cant_aprov, String type_var,
-			String type_cause, String type_rec) {
+			String type_cause, String type_rec, boolean for_every) {
 		super();
 		this.table_id = table_id;
 		this.process_id = process_id;
@@ -34,6 +44,7 @@ public class ProcessConfiguration {
 		this.type_var = type_var;
 		this.type_cause = type_cause;
 		this.type_rec = type_rec;
+		this.for_every = for_every;
 	}
 	
 	public int getTable_id() {
