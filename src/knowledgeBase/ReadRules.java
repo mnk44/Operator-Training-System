@@ -1,27 +1,26 @@
 package knowledgeBase;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
+import classes.AnmFile;
 import classes.Cause;
 import classes.CauseRecomendation;
+import classes.DrlFile;
 import classes.Recomendation;
 import classes.Variable;
 import classes.VariableCause;
-import services.CauseService;
-import services.RecomendationService;
-import services.RulesService;
-import services.VariableService;
 
 public class ReadRules {
 
-	public static void readRules (ArrayList<String> rule, int process_id) throws SQLException{
+	public static DrlFile readRules (ArrayList<String> rule, int process_id, AnmFile anm, DrlFile drlFile){
 		Variable variable = null;
 		String state = null;
 		Cause cause = null;
+		ArrayList<Cause> causesList = new ArrayList<>();
 		Recomendation recomendation = null;
+		
+		ArrayList<VariableCause> drlVar = drlFile.getVarCause();
+		ArrayList<CauseRecomendation> drlCaus = drlFile.getCauseRec();
 
 		//get variable-cause
 		if(rule.get(0).contains("VariableContinua") || rule.get(0).contains("VariableDiscreta") ||
@@ -43,7 +42,11 @@ public class ReadRules {
 				variable_name = variable_name.substring(0, variable_name.length()-1);
 			}
 
-			variable = (Variable) VariableService.findName(variable_name, process_id);
+			variable = findVar(anm, variable_name);
+			if(variable == null){
+				System.out.println("variable-causa: no se encontró una variable -- " + variable_name);
+				return null;
+			}
 
 			position = line.indexOf("Estados."); //state
 			line = line.substring(position);
@@ -58,30 +61,8 @@ public class ReadRules {
 				line = line.substring(0,position);
 				line = line.replace(")", "");
 			}
-
-			switch (line) {
-			case "ALTO":
-				state = "Alto";
-				break;
-			case "BAJO":
-				state = "Bajo";
-				break;
-			case "NORMAL":
-				state = "Normal";
-				break;
-			case "ABIERTA":
-				state = "Abierto";
-				break;
-			case "CERRADA":
-				state = "Cerrado";
-				break;
-			case "NEGATIVO":
-				state = "Negativo";
-				break;
-			case "POSITIVO":
-				state = "Positivo";
-				break;
-			}
+			
+			state = line;
 
 			boolean causes = false; //cause
 			ArrayList<Integer> positionCause = new ArrayList<>();
@@ -103,13 +84,14 @@ public class ReadRules {
 				causeLine = causeLine.replace(")", "");
 				causeLine = causeLine.substring(1,causeLine.length()-1);
 				
-				cause = (Cause) CauseService.findName(causeLine, process_id);
-
-				VariableCause varCause = new VariableCause(variable.getVariable_id(), state, cause.getCause_id());
-				Object result = RulesService.newVariableCause(varCause);
-				if(result != null){
-					JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+				cause = findCause(anm, causeLine);
+				if(cause == null){
+					System.out.println("variable-causa: no se encontró una causa -- " + causeLine);
+					return null;
 				}
+
+				VariableCause varCause = new VariableCause(process_id, variable.getVar_id(), state, cause.getCause_id());
+				drlVar.add(varCause);
 			}
 		}
 
@@ -118,18 +100,39 @@ public class ReadRules {
 			//cause
 			int i = 0;
 			while(!rule.get(i).contains("ProcesarDatos.insertarRespueta(")){
-				i++;
+				i = i + 1;
 			}
 
-			String causeLine = rule.get(i--);
+			String causeLine = rule.get(i);
 			causeLine = causeLine.replace("ProcesarDatos.insertarRespueta(", "");
 			causeLine = causeLine.substring(1,causeLine.length()-3);
 
-			if((Cause) CauseService.findName(causeLine, process_id) == null){
-				cause = new Cause(causeLine, process_id);
-				CauseService.newCause(cause);
+			//causes
+			if(causeLine.contains(",")){
+				String arr[] = causeLine.split(",");
+				int m = 0;
+				String aux = "";
+				
+				while(m < arr.length){
+					String name = aux + arr[m];
+					cause = findCause(anm, name);
+					if(cause != null){
+						causesList.add(cause);
+						aux = "";
+					}else{
+						aux = arr[m] + ",";
+					}
+					m = m + 1;
+				}
+			}else{
+				cause = findCause(anm, causeLine);
+				if(cause == null){
+					System.out.println("conjunta: no se encontró una causa -- " + causeLine);
+					return null;
+				}else{
+					causesList.add(cause);
+				}
 			}
-			cause = (Cause) CauseService.findName(causeLine, process_id);
 
 			//variables
 			int poss = 3;
@@ -144,7 +147,7 @@ public class ReadRules {
 					position = line.indexOf(",");
 					String line_name = line.substring(0, position);
 					line = line.substring(position);
-					if(rule.get(0).contains("VariableContinua")){
+					if(line.contains("valorVC")){
 						variable_name = line_name.substring(9);
 						variable_name = variable_name.substring(0, variable_name.length()-1);
 					}else{
@@ -152,13 +155,17 @@ public class ReadRules {
 						variable_name = variable_name.substring(0, variable_name.length()-1);
 					}
 
-					variable = (Variable) VariableService.findName(variable_name, process_id);
+					variable = findVar(anm, variable_name);
+					if(variable == null){
+						System.out.println("conjunta: no se encontró una variable -- " + variable_name);
+						return null;
+					}
 
 					position = line.indexOf("Estados."); //state
 					line = line.substring(position);
 					line = line.replace("Estados.", "");
 
-					if(rule.get(0).contains("VariableContinua")){
+					if(line.contains("valorVC")){
 						position = line.indexOf(",");
 						line = line.substring(0,position);
 						line = line.replace(",", "");
@@ -167,35 +174,12 @@ public class ReadRules {
 						line = line.substring(0,position);
 						line = line.replace(")", "");
 					}
+					
+					state = line;
 
-					switch (line) {
-					case "ALTO":
-						state = "Alto";
-						break;
-					case "BAJO":
-						state = "Bajo";
-						break;
-					case "NORMAL":
-						state = "Normal";
-						break;
-					case "ABIERTA":
-						state = "Abierto";
-						break;
-					case "CERRADA":
-						state = "Cerrado";
-						break;
-					case "NEGATIVO":
-						state = "Negativo";
-						break;
-					case "POSITIVO":
-						state = "Positivo";
-						break;
-					}
-
-					VariableCause varCause = new VariableCause(variable.getVariable_id(), state, cause.getCause_id());
-					Object result = RulesService.newVariableCause(varCause);
-					if(result != null){
-						JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+					for(int n = 0; n < causesList.size(); n++){
+						VariableCause varCause = new VariableCause(process_id, variable.getVar_id(), state, causesList.get(n).getCause_id());
+						drlVar.add(varCause);
 					}
 				}
 				poss++;
@@ -211,7 +195,11 @@ public class ReadRules {
 			line = line.replace("matches ", "");
 			line = line.substring(1, line.length()-3);
 
-			cause = (Cause) CauseService.findName(line, process_id);
+			cause = findCause(anm, line);
+			if(cause == null){
+				System.out.println("causa-recomendacion: no se encontró una causa -- " + line);
+				return null;
+			}
 
 			boolean rec = false; //recomendation
 			ArrayList<Integer> positionRecomendation = new ArrayList<>();
@@ -233,14 +221,63 @@ public class ReadRules {
 				recLine = recLine.replace(")", "");
 				recLine = recLine.substring(1,recLine.length()-1);
 
-				recomendation = (Recomendation) RecomendationService.findName(recLine, process_id);
-				CauseRecomendation causeRecomendation = new CauseRecomendation(cause.getCause_id(), 
-						recomendation.getRecomendation_id());
-				Object result = RulesService.newCauseRecomendation(causeRecomendation);
-				if(result != null){
-					JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
+				recomendation = findRec(anm, recLine);
+				if(recomendation == null){
+					System.out.println("causa-recomendacion: no se encontró una recomendacion -- " + recLine);
+					return null;
 				}
+				CauseRecomendation causeRecomendation = new CauseRecomendation(cause.getCause_id(), recomendation.getRec_id(), process_id);
+				drlCaus.add(causeRecomendation);
 			}
 		}
+		
+		DrlFile d = new DrlFile(drlVar, drlCaus);
+		
+		return d;
+	}
+	
+	public static Variable findVar(AnmFile anm, String name){
+		int cont = 0;
+		Variable var = null;
+		
+		while(var == null && cont < anm.getVariables().size()){
+			String varname = anm.getVariables().get(cont).getVar_name();
+			if(varname.equals(name)){
+				var = anm.getVariables().get(cont);
+			}
+			cont = cont + 1;
+		}
+		
+		return var;
+	}
+	
+	public static Cause findCause(AnmFile anm, String name){
+		int cont = 0;
+		Cause var = null;
+		
+		while(var == null && cont < anm.getCauses().size()){
+			String varname = anm.getCauses().get(cont).getCause_name();
+			if(varname.equals(name)){
+				var = anm.getCauses().get(cont);
+			}
+			cont = cont + 1;
+		}
+		
+		return var;
+	}
+	
+	public static Recomendation findRec(AnmFile anm, String name){
+		int cont = 0;
+		Recomendation var = null;
+		
+		while(var == null && cont < anm.getRecomendations().size()){
+			String varname = anm.getRecomendations().get(cont).getRec_name();
+			if(varname.equals(name)){
+				var = anm.getRecomendations().get(cont);
+			}
+			cont = cont + 1;
+		}
+		
+		return var;
 	}
 }

@@ -27,6 +27,7 @@ import java.awt.Toolkit;
 import javax.swing.JComboBox;
 
 import java.awt.ComponentOrientation;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -41,7 +42,11 @@ import javax.swing.JList;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import knowledgeBase.LoadFiles;
+import services.FileService;
 import services.ProcessService;
+import classes.AnmFile;
+import classes.DrlFile;
 import classes.Process;
 import classes.ProcessConfiguration;
 import classes.User;
@@ -91,7 +96,7 @@ public class ProcessView extends JDialog {
 
 	Process procesP = null;
 	ProcessConfiguration configurationP = null;
-	
+
 	private JLabel lblReglas;
 	private JLabel lblArchivoDeVariables;
 
@@ -136,56 +141,92 @@ public class ProcessView extends JDialog {
 						e1.printStackTrace();
 					}
 					ProcessConfiguration conf = new ProcessConfiguration((int)time.getValue(), (int)questions.getValue(), (int)aproved.getValue(), (String)variables.getSelectedItem(), (String)causes.getSelectedItem(), (String)recomendations.getSelectedItem(), allOpers.isSelected());
-					Object result = null;
+
+					//anm y drl
+					ArrayList<Integer> ids = PrincipalView.ids;
+					AnmFile anm = null;
 					try {
-						result = ProcessService.newProcess(proc, user_active.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
-					} catch (SQLException e) {
+						anm = LoadFiles.getAnmInfo(new File(anmRoute), proc.getProcess_id(), ids);
+					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					if(!result.toString().contains("e")){
-						proc.setProcess_id((int)result);
-						PrincipalView.changeProcess(proc, 1);
-						String cfg = ProcessService.insertConfig((int)result, conf);
-						if(cfg!=null){
-							JOptionPane.showMessageDialog(null, cfg, "Error", JOptionPane.ERROR_MESSAGE);
-						}else{
-							conf.setProcess_id((int)result);
-							PrincipalView.changeConfig(conf, 1);
+
+					DrlFile drl = null;
+					try {
+						drl = LoadFiles.getDrlInfo(new File(drlRoute), proc.getProcess_id(), anm);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					if(drl != null){
+						//insert process
+						Object result = null;
+						try {
+							result = ProcessService.newProcess(proc, user_active.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-						if(!allOpers.isSelected()){
-							ArrayList<User> aux = new ArrayList<>();
-							for(int k=0; k<autorized.size(); k++){
-								boolean found = true;
-								for(int i=0; i<op.size() && found; i++){
-									if(autorized.get(k).equals(op.get(i).getUser_nick())){
-										aux.add(op.get(i));
-										found = false;
-									}
-								}
-							}
-							String userers = ProcessService.insertUsers(aux, (int)result);
-							if(userers!=null){
-								JOptionPane.showMessageDialog(null, userers, "Error", JOptionPane.ERROR_MESSAGE);
-							}else{
-								JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
-								try {
-									ProcessManagementPanel.reload(PrincipalView.getProcess());
-								} catch (SQLException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								dispose();
-							}
-						}else{
-							JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+						if(!result.toString().contains("e")){
+							//insert anm y drl
+							String rules = null;
 							try {
-								ProcessManagementPanel.reload(PrincipalView.getProcess());
-							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+								rules = FileService.insertProcessRule(anm, drl, (int)result);
+							} catch (SQLException e1) {
+								JOptionPane.showMessageDialog(null, e1, "Error", JOptionPane.ERROR_MESSAGE);
 							}
-							dispose();
+							if(rules == null){
+								PrincipalView.ids.set(0, anm.getVariables().get(anm.getVariables().size()-1).getVar_id());
+								PrincipalView.ids.set(1, anm.getCauses().get(anm.getCauses().size()-1).getCause_id());
+								PrincipalView.ids.set(2, anm.getRecomendations().get(anm.getRecomendations().size()-1).getRec_id());
+								
+								//insert configuration
+								proc.setProcess_id((int)result);
+								PrincipalView.changeProcess(proc, 1);
+								String cfg = ProcessService.insertConfig((int)result, conf);
+								if(cfg!=null){
+									JOptionPane.showMessageDialog(null, cfg, "Error", JOptionPane.ERROR_MESSAGE);
+								}else{
+									conf.setProcess_id((int)result);
+									PrincipalView.changeConfig(conf, 1);
+								}
+								if(!allOpers.isSelected()){
+									ArrayList<User> aux = new ArrayList<>();
+									for(int k=0; k<autorized.size(); k++){
+										boolean found = true;
+										for(int i=0; i<op.size() && found; i++){
+											if(autorized.get(k).equals(op.get(i).getUser_nick())){
+												aux.add(op.get(i));
+												found = false;
+											}
+										}
+									}
+									String userers = ProcessService.insertUsers(aux, (int)result);
+									if(userers!=null){
+										JOptionPane.showMessageDialog(null, userers, "Error", JOptionPane.ERROR_MESSAGE);
+									}else{
+										JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+										try {
+											ProcessManagementPanel.reload(PrincipalView.getProcess());
+										} catch (SQLException e) {
+											JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+										}
+										dispose();
+									}
+								}else{
+									JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "Acción completada", JOptionPane.INFORMATION_MESSAGE);
+									try {
+										ProcessManagementPanel.reload(PrincipalView.getProcess());
+									} catch (SQLException e) {
+										JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+									}	
+									dispose();
+								}
+							}else{
+								JOptionPane.showMessageDialog(null, rules, "Error", JOptionPane.ERROR_MESSAGE);
+							}
 						}
 					}
 				}else{
@@ -289,6 +330,8 @@ public class ProcessView extends JDialog {
 		panel.add(lblImagenDelProceso);
 
 		img_name = new JTextField();
+		img_name.setBackground(Color.WHITE);
+		img_name.setEditable(false);
 		img_name.setFont(new Font("Corbel", Font.PLAIN, 20));
 		img_name.setColumns(10);
 		img_name.setBounds(285, 84, 233, 29);
@@ -334,12 +377,16 @@ public class ProcessView extends JDialog {
 		panel.add(imgen_button);
 
 		var_name = new JTextField();
+		var_name.setEditable(false);
+		var_name.setBackground(Color.WHITE);
 		var_name.setFont(new Font("Corbel", Font.PLAIN, 20));
 		var_name.setColumns(10);
 		var_name.setBounds(285, 142, 233, 29);
 		panel.add(var_name);
 
 		rules_name = new JTextField();
+		rules_name.setBackground(Color.WHITE);
+		rules_name.setEditable(false);
 		rules_name.setFont(new Font("Corbel", Font.PLAIN, 20));
 		rules_name.setColumns(10);
 		rules_name.setBounds(285, 204, 233, 29);
@@ -712,7 +759,7 @@ public class ProcessView extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setBounds(100, 100, 648, 419);
-		
+
 		if(procesP != null){
 			//process
 			process_name.setText(procesP.getProcess_name());
@@ -732,7 +779,7 @@ public class ProcessView extends JDialog {
 			drl_button.setEnabled(false);
 			lblReglas.setEnabled(false);
 			lblArchivoDeVariables.setEnabled(false);
-			
+
 			//config
 			questions.setValue(configurationP.getCant_questions());
 			aproved.setValue(configurationP.getCant_aprov());
@@ -740,7 +787,7 @@ public class ProcessView extends JDialog {
 			variables.setSelectedItem(configurationP.getType_var());
 			causes.setSelectedItem(configurationP.getType_cause());
 			recomendations.setSelectedItem(configurationP.getType_rec());
-			
+
 			//users
 			allOpers.setSelected(configurationP.isFor_every());
 		}

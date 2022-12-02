@@ -7,10 +7,9 @@ public class VariableCause {
 	String state_var;
 	int cause_id;
 	
-	public VariableCause(int table_id, int proces_id, int var_id,
+	public VariableCause(int proces_id, int var_id,
 			String state_var, int cause_id) {
 		super();
-		this.table_id = table_id;
 		this.proces_id = proces_id;
 		this.var_id = var_id;
 		this.state_var = state_var;
