@@ -761,6 +761,8 @@ public class ProcessView extends JDialog {
 		setBounds(100, 100, 648, 419);
 
 		if(procesP != null){
+			setTitle("Modificar proceso");
+			
 			//process
 			process_name.setText(procesP.getProcess_name());
 			if(procesP.getProcess_img() != null){

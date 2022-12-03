@@ -237,7 +237,13 @@ public class LoginView extends JDialog {
 								JOptionPane.showMessageDialog(null, "Usuario desactivado", "Error", JOptionPane.ERROR_MESSAGE);
 								error++;
 							}else{
-								PrincipalView center = new PrincipalView(user);
+								PrincipalView center = null;
+								try {
+									center = new PrincipalView(user);
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								LoginView.this.setVisible(false);
 								center.frame.setLocationRelativeTo(null);
 								center.frame.setVisible(true);

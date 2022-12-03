@@ -24,7 +24,9 @@ import classes.ProcessConfiguration;
 import classes.User;
 import classes.Process;
 import extras.Encrypting;
+import extras.PrepareProcess;
 import services.AreaService;
+import services.FileService;
 import services.ProcessService;
 import services.UserService;
 
@@ -49,12 +51,13 @@ public class PrincipalView {
 	JFrame frame;
 	private JMenuItem changePass;
 
-	//cargas
+	//datas
 	User user_active = null;
 	ArrayList<Area> areasList = AreaService.getAreas();
 	ArrayList<User> usersList = UserService.getUsers();
-	static ArrayList<Process> processList = ProcessService.getProcess();
-	static ArrayList<ProcessConfiguration> configurationList = ProcessService.getProcessConf();
+	static ArrayList<Process> processList = new ArrayList<>();
+	static ArrayList<ProcessConfiguration> configurationList = new ArrayList<>();
+	static ArrayList<Integer> ids = new ArrayList<>();
 
 	JPanel panel = new JPanel();
 	private JLabel title;
@@ -65,6 +68,7 @@ public class PrincipalView {
 	private JMenuItem userMana;
 	private JMenuItem areaMana;
 	private JMenu options;
+	private JMenuItem train;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -80,12 +84,12 @@ public class PrincipalView {
 		});
 	}
 
-	public PrincipalView(User uss) {
+	public PrincipalView(User uss) throws SQLException {
 		user_active = uss;
 		initialize();
 	}
 
-	private void initialize() {
+	private void initialize() throws SQLException {		
 		frame = new JFrame();
 		frame.setMaximumSize(new Dimension(901, 514));
 		frame.setMinimumSize(new Dimension(901, 514));
@@ -334,14 +338,61 @@ public class PrincipalView {
 		processMana.setFont(new Font("Dubai", Font.BOLD, 19));
 		processMana.setBackground(new Color(255, 113, 19));
 		options.add(processMana);
+		
+		train = new JMenuItem("Gesti\u00F3n de entrenamientos");
+		train.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.remove(title);
+				title.setVisible(false);
+				title1.setVisible(false);
+				title2.setVisible(false);
+				title3.setVisible(false);
+				frame.remove(title1);
+				frame.remove(title2);
+				frame.remove(title3);
+				frame.remove(panel);
+				panel = new GeneralTrainingPanel();
+				frame.getContentPane().add(panel);
+				int x = (frame.getWidth()-panel.getWidth())/2;
+				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
+					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
+					panel.setLocation(x, y);
+				}else if(frame.getExtendedState() == JFrame.NORMAL){
+					panel.setLocation(x, 0);
+				}
+			}
+		});
+		train.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/icons8_Test_Passed_16.png")));
+		train.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.ALT_MASK));
+		train.setForeground(Color.WHITE);
+		train.setFont(new Font("Dubai", Font.BOLD, 19));
+		train.setBackground(new Color(255, 113, 19));
+		options.add(train);
 
 		if(user_active.getUser_rol() == 1){
 			processMana.setVisible(false);
+			train.setVisible(false);
 		}else if(user_active.getUser_rol() == 2){
+			//charge info
+			ids = FileService.getIds();
+			processList = ProcessService.searchArea(user_active.getUser_area());
+			configurationList = ProcessService.getProcessConf();
+			
+			//show functions
 			userMana.setVisible(false);
 			areaMana.setVisible(false);
+			train.setVisible(false);
 		}else{
-			options.setVisible(false);
+			//charge info
+			processList = ProcessService.searchArea(user_active.getUser_area());
+			configurationList = ProcessService.getProcessConf();
+			
+			PrepareProcess.prepareTraining(user_active, processList, configurationList);			
+			
+			//hide and shows functions
+			userMana.setVisible(false);
+			areaMana.setVisible(false);
+			processMana.setVisible(false);
 		}
 	}
 
@@ -349,7 +400,8 @@ public class PrincipalView {
 		ArrayList<User> operators = new ArrayList<>();
 
 		for(int i=0; i<usersList.size(); i++){
-			if(usersList.get(i).getUser_rol()==3 && usersList.get(i).getUser_area()==user_active.getUser_area()){
+			if(usersList.get(i).getUser_rol()==3 && usersList.get(i).getUser_area()==user_active.getUser_area()
+					&& usersList.get(i).isUser_active()){
 				operators.add(usersList.get(i));
 			}
 		}
@@ -376,5 +428,4 @@ public class PrincipalView {
 
 		}
 	}
-
 }

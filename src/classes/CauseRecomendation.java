@@ -14,6 +14,15 @@ public class CauseRecomendation {
 		this.process_id = process_id;
 	}
 	
+	public CauseRecomendation(int table_id, int cause_id, int rec_id,
+			int process_id) {
+		super();
+		this.table_id = table_id;
+		this.cause_id = cause_id;
+		this.rec_id = rec_id;
+		this.process_id = process_id;
+	}
+
 	public int getTable_id() {
 		return table_id;
 	}

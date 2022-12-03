@@ -7,6 +7,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import classes.Area;
+import classes.TrainingPrepare;
 import classes.User;
 import classes.Process;
 
@@ -93,37 +94,57 @@ public class DataTable {
 //		table.setModel(date);
 //	}
 //	
-//	@SuppressWarnings("unchecked")
-//	public static void getProcessAction(DefaultTableModel date, JTable table) throws SQLException{
-//		ArrayList<FactoryProcess> process = (ArrayList<FactoryProcess>) FactoryProcessService.getProcess();
-//		ArrayList<Integer> process_id = new ArrayList<Integer>();
-//		ArrayList<String> process_name = new ArrayList<String>();
-//		ArrayList<String> area_name = new ArrayList<String>();
-//		ArrayList<ImageIcon> edit = new ArrayList<ImageIcon>();
-//		
-//		for(int i=0; i<process.size(); i++){
-//			process_id.add(process.get(i).getProcess_id());
-//			process_name.add(process.get(i).getProcess_name());
-//			Area area = (Area) AreaService.findId(process.get(i).getProcess_area());
-//			area_name.add(area.getArea_name());
-//			edit.add(new ImageIcon(DataTable.class.getResource("/imgs/tableEdit.png")));
-//		}
-//
-//		date = new DefaultTableModel(){
-//			private static final long serialVersionUID = 1L;
-//			public boolean isCellEditable(int r,int c){
-//				return false;
-//			}
-//		};
-//
-//		date.addColumn("ID",process_id.toArray());
-//		date.addColumn("Nombre",process_name.toArray());
-//		date.addColumn("Área",area_name.toArray());
-//		date.addColumn(" ",area_name.toArray());
-//		table.setModel(date);
-//	}
-//	
+
 	public static void fillUsers(DefaultTableModel date, JTable table, ArrayList<User> users, ArrayList<Area> areas, int user_id) throws SQLException{
+		ArrayList<Integer> id_user = new ArrayList<Integer>();
+		ArrayList<String> nick = new ArrayList<String>();
+		ArrayList<String> rol = new ArrayList<String>();
+		ArrayList<String> area = new ArrayList<String>();
+		ArrayList<String> active = new ArrayList<String>();
+
+		for(int i=0; i<users.size(); i++){
+			if(user_id != users.get(i).getUser_id()){
+				id_user.add(users.get(i).getUser_id());
+				nick.add(users.get(i).getUser_nick());
+				boolean a = true;
+				for(int j=0; j<areas.size() && a;j++){
+					if(areas.get(j).getId_area() == users.get(i).getUser_area()){
+						area.add(areas.get(j).getName_area());
+						a = false;
+					}
+				}
+				if(users.get(i).getUser_rol() == 0){
+					rol.add("Administrador");
+				}else if(users.get(i).getUser_rol() == 3){
+					rol.add("Operario");
+				}else{
+					rol.add("Jefe de área");
+				}
+				if(users.get(i).isUser_active()){
+					active.add("sí");
+				}else{
+					active.add("no");
+				}
+			}
+		}
+
+		date = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int r,int c){
+				return false;
+			}
+		};
+
+		date.addColumn("ID",id_user.toArray());
+		date.addColumn("Usuario",nick.toArray());
+		date.addColumn("Rol",rol.toArray());
+		date.addColumn("Área",area.toArray());
+		date.addColumn("Activo",active.toArray());
+		table.setModel(date);
+	}
+	
+	public static void fillPTrain(DefaultTableModel date, JTable table, TrainingPrepare train) throws SQLException{
 		ArrayList<Integer> id_user = new ArrayList<Integer>();
 		ArrayList<String> nick = new ArrayList<String>();
 		ArrayList<String> rol = new ArrayList<String>();

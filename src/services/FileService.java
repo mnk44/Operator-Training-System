@@ -140,9 +140,9 @@ public class FileService {
 			id = id + 1;
 			cs.setString(id, variables.get(i).getVar_type());
 			id = id + 1;
-			cs.setFloat(id, variables.get(i).getMin_value());
+			cs.setDouble(id, variables.get(i).getMin_value());
 			id = id + 1;
-			cs.setFloat(id, variables.get(i).getMax_value());
+			cs.setDouble(id, variables.get(i).getMax_value());
 			id = id + 1;
 		}
 		//causas
@@ -191,5 +191,96 @@ public class FileService {
 			cs.setInt(id, id_process);
 			id = id + 1;
 		}
+	}
+	
+	public static AnmFile getAnm(int process){
+		AnmFile anm = null;
+		
+		ArrayList<Variable> variables = new ArrayList<>();
+		ArrayList<Cause> causes = new ArrayList<>();
+		ArrayList<Recomendation> recomendations = new ArrayList<>();
+		
+		try{
+			String sqlSentenc = "SELECT * FROM variable WHERE process_id = ?";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, process);
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				Variable v = new Variable(rs.getInt("var_id"), rs.getInt("process_id"), rs.getString("var_name"), 
+						rs.getString("var_type"), rs.getDouble("min_value"), rs.getDouble("max_value"));
+				variables.add(v);
+			}
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		try{
+			String sqlSentenc = "SELECT * FROM cause WHERE process_id = ?";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, process);
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				Cause v = new Cause(rs.getInt("cause_id"), rs.getInt("process_id"), rs.getString("cause_name"));
+				causes.add(v);
+			}
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		try{
+			String sqlSentenc = "SELECT * FROM recomendation WHERE process_id = ?";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, process);
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				Recomendation v = new Recomendation(rs.getInt("rec_id"), rs.getInt("process_id"), rs.getString("rec_name"));
+				recomendations.add(v);
+			}
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		anm = new AnmFile(variables, causes, recomendations);
+		
+		return anm;
+	}
+	
+	public static DrlFile getDrl(int process){
+		DrlFile drl = null;
+		
+		ArrayList<VariableCause> variables = new ArrayList<>();
+		ArrayList<CauseRecomendation> causes = new ArrayList<>();
+		
+		try{
+			String sqlSentenc = "SELECT * FROM var_cause WHERE proces_id = ?";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, process);
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				VariableCause v = new VariableCause(rs.getInt("table_id"), rs.getInt("proces_id"), rs.getInt("var_id"), 
+						rs.getString("state_var"), rs.getInt("cause_id"));
+				variables.add(v);
+			}
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		try{
+			String sqlSentenc = "SELECT * FROM cause_recomendation WHERE process_id = ?";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, process);
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				CauseRecomendation v = new CauseRecomendation(rs.getInt("table_id"), rs.getInt("cause_id"), 
+						rs.getInt("rec_id"), rs.getInt("process_id"));
+				causes.add(v);
+			}
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		drl = new DrlFile(variables, causes);
+		
+		return drl;
 	}
 }

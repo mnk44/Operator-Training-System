@@ -202,4 +202,22 @@ public class ProcessService {
 		}
 		return processList;
 	}
+	
+	public static ArrayList<Integer> getProcessOperator(User operator) throws SQLException{
+		ArrayList<Integer> process = new ArrayList<>();
+		
+		try{
+			String sqlSentenc = "SELECT * FROM user_process WHERE user_id = ?";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, operator.getUser_id());
+			ResultSet rs = cs.executeQuery();
+			if(rs.next()){
+				process.add(rs.getInt("process_id"));
+			}
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		return process;
+	}
 }

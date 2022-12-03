@@ -211,8 +211,13 @@ public class ProcessManagementPanel extends JPanel {
 				for (int i = 0; i < process.size() && x; i++) {
 					if((int) table.getValueAt(selected, 0) == process.get(i).getProcess_id()){
 						y = process.get(i);
-						c = con.get(i);
 						x = false;
+					}
+				}
+				for (int j = 0; j < con.size() && !x; j++){
+					if(con.get(j).getProcess_id() == y.getProcess_id()){
+						c = con.get(j);
+						x = true;
 					}
 				}
 				ProcessView uv = null;
