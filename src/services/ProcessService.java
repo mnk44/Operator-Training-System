@@ -131,7 +131,7 @@ public class ProcessService {
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, process_area);
 			ResultSet rs = cs.executeQuery();
-			if(rs.next()){
+			while(rs.next()){
 				Process process = new Process(rs.getInt("process_id"),rs.getString("process_name"), rs.getInt("process_area"),
 						rs.getBytes("process_img"), rs.getBytes("process_anm"), rs.getBytes("process_drl"));
 				processList.add(process);

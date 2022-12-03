@@ -21,6 +21,7 @@ import javax.swing.ImageIcon;
 
 import classes.Area;
 import classes.ProcessConfiguration;
+import classes.TrainingPrepare;
 import classes.User;
 import classes.Process;
 import extras.Encrypting;
@@ -58,6 +59,7 @@ public class PrincipalView {
 	static ArrayList<Process> processList = new ArrayList<>();
 	static ArrayList<ProcessConfiguration> configurationList = new ArrayList<>();
 	static ArrayList<Integer> ids = new ArrayList<>();
+	TrainingPrepare trainer = null;
 
 	JPanel panel = new JPanel();
 	private JLabel title;
@@ -339,7 +341,7 @@ public class PrincipalView {
 		processMana.setBackground(new Color(255, 113, 19));
 		options.add(processMana);
 		
-		train = new JMenuItem("Gesti\u00F3n de entrenamientos");
+		train = new JMenuItem("Iniciar entrenamiento");
 		train.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.remove(title);
@@ -351,7 +353,12 @@ public class PrincipalView {
 				frame.remove(title2);
 				frame.remove(title3);
 				frame.remove(panel);
-				panel = new GeneralTrainingPanel();
+				try {
+					panel = new GeneralTrainingPanel(trainer);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				frame.getContentPane().add(panel);
 				int x = (frame.getWidth()-panel.getWidth())/2;
 				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
@@ -387,7 +394,7 @@ public class PrincipalView {
 			processList = ProcessService.searchArea(user_active.getUser_area());
 			configurationList = ProcessService.getProcessConf();
 			
-			PrepareProcess.prepareTraining(user_active, processList, configurationList);			
+			trainer = PrepareProcess.prepareTraining(user_active, processList, configurationList);			
 			
 			//hide and shows functions
 			userMana.setVisible(false);

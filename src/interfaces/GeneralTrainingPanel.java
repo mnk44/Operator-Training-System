@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -16,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -33,13 +30,14 @@ public class GeneralTrainingPanel extends JPanel {
 	
 	private static JTable table;
 	private static DefaultTableModel date;
-	private JTextField searchField;
 	private JButton trainning;
 	int selected = -1;
 	
 	static TrainingPrepare train = null;
 
-	public GeneralTrainingPanel() {
+	public GeneralTrainingPanel(TrainingPrepare t) throws SQLException {
+		train = t;
+		
 		setBorder(null);
 		setBackground(Color.WHITE);
 		setBounds(100, 100, 657, 433);
@@ -50,7 +48,7 @@ public class GeneralTrainingPanel extends JPanel {
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(Color.WHITE);
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBounds(35, 104, 577, 261);
+		scrollPane.setBounds(15, 64, 620, 301);
 		add(scrollPane);
 
 		table = new JTable();
@@ -65,8 +63,16 @@ public class GeneralTrainingPanel extends JPanel {
 				}
 
 				if (selected != -1) {
-					trainning.setEnabled(true);
-					trainning.setBackground(new Color(255, 113, 19));
+					String title = (String) table.getValueAt(selected, 1);
+					if(title.equals("Iniciado")){
+						trainning.setText("Continuar entrenamiento");
+						trainning.setEnabled(true);
+						trainning.setBackground(new Color(255, 113, 19));
+					}else if(title.equals("No iniciado")){
+						trainning.setText("Iniciar entrenamiento");
+						trainning.setEnabled(true);
+						trainning.setBackground(new Color(255, 113, 19));
+					}
 				}else{
 					trainning.setEnabled(false);
 					trainning.setBackground(new Color(248, 159, 101));
@@ -91,61 +97,8 @@ public class GeneralTrainingPanel extends JPanel {
 		lblGestinDeProcesos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblGestinDeProcesos.setForeground(new Color(255, 113, 19));
 		lblGestinDeProcesos.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
-		lblGestinDeProcesos.setBounds(35, 79, 600, 23);
+		lblGestinDeProcesos.setBounds(15, 28, 620, 23);
 		add(lblGestinDeProcesos);
-		
-		JLabel label = new JLabel();
-		label.setIcon(new ImageIcon(GeneralTrainingPanel.class.getResource("/images/search.png")));
-		label.setBounds(58, 0, 48, 76);
-		add(label);
-		
-		searchField = new JTextField();
-		searchField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-//				if(searchField.getText().length()==1 && arg0.getKeyChar()==KeyEvent.VK_BACK_SPACE){
-//					try {
-//						reload(process);
-//					} catch (SQLException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}else if(arg0.getKeyChar()==KeyEvent.VK_BACK_SPACE){
-//					ArrayList<Process> s = null;
-//					try {
-//						s = Search.searchProcess(process, searchField.getText().substring(0,searchField.getText().length()-1));
-//					} catch (SQLException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
-//					try {
-//						reload(s);
-//					} catch (SQLException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}else{
-//					ArrayList<Process> s = null;
-//					try {
-//						s = Search.searchProcess(process, (searchField.getText()+ arg0.getKeyChar()));
-//					} catch (SQLException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
-//					try {
-//						reload(s);
-//					} catch (SQLException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-			}
-		});
-		searchField.setToolTipText("Buscar usuario");
-		searchField.setFont(new Font("Corbel", Font.PLAIN, 20));
-		searchField.setColumns(10);
-		searchField.setBounds(115, 26, 445, 29);
-		add(searchField);
 		
 		trainning = new JButton("Iniciar entrenamiento");
 		trainning.setEnabled(false);
@@ -174,9 +127,10 @@ public class GeneralTrainingPanel extends JPanel {
 		trainning.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		trainning.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 113, 19)));
 		trainning.setBackground(new Color(248, 159, 101));
-		trainning.setBounds(189, 380, 272, 37);
+		trainning.setBounds(186, 380, 272, 37);
 		add(trainning);
 
+		reload();
 	}
 	
 	public static void reload() throws SQLException{
@@ -185,8 +139,6 @@ public class GeneralTrainingPanel extends JPanel {
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(1).setCellRenderer(tcr);
-		table.getColumnModel().getColumn(2).setCellRenderer(tcr);
-		table.getColumnModel().getColumn(0).setMaxWidth(50);
 	}
 
 }

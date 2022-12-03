@@ -10,11 +10,11 @@ public class Training {
     double rec_note;
     double general_note;
     
-    public Training(int process_id, int operator) {
+    public Training(int process_id, int operator, int can_try) {
 		super();
 		this.process_id = process_id;
 		this.operator = operator;
-		this.cant_try = 0;
+		this.cant_try = can_try;
 	}
     
 	public Training(int train_id, int process_id, int operator, int cant_try,
