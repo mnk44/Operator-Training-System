@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,6 +23,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import classes.Training;
 import classes.TrainingPrepare;
 import extras.DataTable;
 
@@ -119,7 +122,8 @@ public class GeneralTrainingPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				panel.removeAll();
 				panel.repaint();
-				TrainingView t = new TrainingView((String) table.getValueAt(selected, 0));
+				Training trainn = getTrain(train.getTraining(), train.getConfigurationList().get(selected).getProcess_id());
+				TrainingView t = new TrainingView((String) table.getValueAt(selected, 0), train.getConfigurationList().get(selected), trainn);
 				panel.add(t.getPanel());
 			}
 		});
@@ -152,5 +156,17 @@ public class GeneralTrainingPanel extends JPanel {
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(1).setCellRenderer(tcr);
+	}
+	
+	private Training getTrain(ArrayList<Training> trainning, int id_process){
+		Training trainn = null;
+		
+		for(int i=0; i<trainning.size(); i++){
+			if(trainning.get(i).getProcess_id() == id_process){
+				trainn = trainning.get(i);
+			}
+		}
+		
+		return trainn;
 	}
 }

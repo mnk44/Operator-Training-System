@@ -1,6 +1,7 @@
 package interfaces;
 
 import java.awt.Color;
+
 import javax.swing.JLabel;
 
 import java.awt.Font;
@@ -14,6 +15,9 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
+import classes.ProcessConfiguration;
+import classes.Training;
+
 public class TrainingView extends JPanel{
 
 	private static final long serialVersionUID = 2160031059373289103L;
@@ -24,14 +28,25 @@ public class TrainingView extends JPanel{
 	private JLabel lblIntentos;
 	private JLabel lblPuntosObtenidos;
 	private JLabel lblTotal;
-	private JLabel label;
-	private JLabel label_1;
-	private JLabel label_2;
 	private JLabel lblNewLabel;
 	private JButton btnComenzarPrueba;
 	private JPanel panel;
+	private JLabel var_int;
+	private JLabel total1;
+	private JLabel total2;
+	private JLabel total3;
+	private JLabel cause_int;
+	private JLabel rec_int;
+	private JLabel var;
+	private JLabel cause;
+	private JLabel rec;
+	private JLabel prom_var;
+	private JLabel prom_cause;
+	private JLabel prom_rec;
+	private JLabel lblCantidadDeIntentos;
+	private JLabel label;
 
-	public TrainingView(String process) {
+	public TrainingView(String process, ProcessConfiguration conf, Training trainn) {
 		setBorder(null);
 		setBackground(Color.WHITE);
 		setLayout(null);
@@ -102,24 +117,7 @@ public class TrainingView extends JPanel{
 		lblTotal.setBounds(536, 81, 105, 34);
 		panel.add(lblTotal);
 		
-		label = new JLabel("");
-		label.setIcon(new ImageIcon(TrainingView.class.getResource("/images/right-orange.png")));
-		label.setBounds(255, 136, 32, 20);
-		panel.add(label);
-		
-		label_1 = new JLabel("");
-		label_1.setVisible(false);
-		label_1.setIcon(new ImageIcon(TrainingView.class.getResource("/images/right-orange.png")));
-		label_1.setBounds(255, 179, 32, 20);
-		panel.add(label_1);
-		
-		label_2 = new JLabel("");
-		label_2.setVisible(false);
-		label_2.setIcon(new ImageIcon(TrainingView.class.getResource("/images/right-orange.png")));
-		label_2.setBounds(255, 228, 32, 20);
-		panel.add(label_2);
-		
-		lblNewLabel = new JLabel("");
+		lblNewLabel = new JLabel();
 		lblNewLabel.setIcon(new ImageIcon(TrainingView.class.getResource("/images/entrenamiento.png")));
 		lblNewLabel.setBounds(25, 69, 215, 220);
 		panel.add(lblNewLabel);
@@ -143,6 +141,145 @@ public class TrainingView extends JPanel{
 		btnComenzarPrueba.setBackground(new Color(255, 113, 19));
 		btnComenzarPrueba.setBounds(484, 272, 236, 37);
 		panel.add(btnComenzarPrueba);
+		
+		var_int = new JLabel();
+		var_int.setHorizontalAlignment(SwingConstants.CENTER);
+		var_int.setForeground(Color.BLACK);
+		var_int.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 18));
+		var_int.setBounds(428, 122, 105, 49);
+		panel.add(var_int);
+		
+		total1 = new JLabel();
+		total1.setHorizontalAlignment(SwingConstants.CENTER);
+		total1.setForeground(Color.BLACK);
+		total1.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 18));
+		total1.setBounds(536, 122, 105, 49);
+		panel.add(total1);
+		
+		total2 = new JLabel();
+		total2.setHorizontalAlignment(SwingConstants.CENTER);
+		total2.setForeground(Color.BLACK);
+		total2.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 18));
+		total2.setBounds(536, 167, 105, 49);
+		panel.add(total2);
+		
+		total3 = new JLabel();
+		total3.setHorizontalAlignment(SwingConstants.CENTER);
+		total3.setForeground(Color.BLACK);
+		total3.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 18));
+		total3.setBounds(536, 214, 105, 49);
+		panel.add(total3);
+		
+		cause_int = new JLabel();
+		cause_int.setHorizontalAlignment(SwingConstants.CENTER);
+		cause_int.setForeground(Color.BLACK);
+		cause_int.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 18));
+		cause_int.setBounds(431, 166, 102, 49);
+		panel.add(cause_int);
+		
+		rec_int = new JLabel();
+		rec_int.setHorizontalAlignment(SwingConstants.CENTER);
+		rec_int.setForeground(Color.BLACK);
+		rec_int.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 18));
+		rec_int.setBounds(431, 213, 102, 49);
+		panel.add(rec_int);
+		
+		var = new JLabel();
+		var.setHorizontalAlignment(SwingConstants.RIGHT);
+		var.setIcon(new ImageIcon(TrainingView.class.getResource("/images/right-orange.png")));
+		var.setBounds(267, 130, 32, 32);
+		panel.add(var);
+		
+		cause = new JLabel();
+		cause.setVisible(false);
+		cause.setIcon(new ImageIcon(TrainingView.class.getResource("/images/right-orange.png")));
+		cause.setHorizontalAlignment(SwingConstants.RIGHT);
+		cause.setBounds(267, 174, 32, 32);
+		panel.add(cause);
+		
+		rec = new JLabel();
+		rec.setVisible(false);
+		rec.setIcon(new ImageIcon(TrainingView.class.getResource("/images/right-orange.png")));
+		rec.setHorizontalAlignment(SwingConstants.RIGHT);
+		rec.setBounds(267, 174, 32, 32);
+		panel.add(rec);
+		
+		prom_var = new JLabel();
+		prom_var.setHorizontalAlignment(SwingConstants.CENTER);
+		prom_var.setForeground(Color.BLACK);
+		prom_var.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 18));
+		prom_var.setBounds(644, 122, 105, 49);
+		panel.add(prom_var);
+		
+		prom_cause = new JLabel();
+		prom_cause.setHorizontalAlignment(SwingConstants.CENTER);
+		prom_cause.setForeground(Color.BLACK);
+		prom_cause.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 18));
+		prom_cause.setBounds(644, 166, 105, 49);
+		panel.add(prom_cause);
+		
+		prom_rec = new JLabel();
+		prom_rec.setHorizontalAlignment(SwingConstants.CENTER);
+		prom_rec.setForeground(Color.BLACK);
+		prom_rec.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 18));
+		prom_rec.setBounds(644, 207, 105, 49);
+		panel.add(prom_rec);
+		
+		lblCantidadDeIntentos = new JLabel("Cantidad de intentos a aprobar:");
+		lblCantidadDeIntentos.setHorizontalAlignment(SwingConstants.LEFT);
+		lblCantidadDeIntentos.setForeground(new Color(255, 113, 19));
+		lblCantidadDeIntentos.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 16));
+		lblCantidadDeIntentos.setBounds(0, 293, 300, 34);
+		panel.add(lblCantidadDeIntentos);
+		
+		label = new JLabel();
+		label.setHorizontalAlignment(SwingConstants.LEFT);
+		label.setForeground(new Color(99, 68, 55));
+		label.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 16));
+		label.setBounds(289, 293, 71, 34);
+		panel.add(label);
+		
+		//fill data
+		total1.setText(Integer.toString(conf.getCant_questions()));
+		total2.setText(Integer.toString(conf.getCant_questions()));
+		total3.setText(Integer.toString(conf.getCant_questions()));
+		label.setText(Integer.toString(conf.getCant_aprov()));
+		if(trainn != null){
+			if(trainn.getVar_note() == -1){
+				var_int.setText(Integer.toString(trainn.getCant_try()));
+				cause_int.setText("-");
+				rec_int.setText("-");
+				prom_var.setText("-");
+				prom_cause.setText("-");
+				prom_rec.setText("-");
+			}else if(trainn.getCause_note() == -1){
+				var.setVisible(false);
+				cause.setVisible(true);
+				var_int.setText(Integer.toString(conf.getCant_questions()));
+				cause_int.setText(Integer.toString(trainn.getCant_try()));
+				rec_int.setText("-");
+				prom_var.setText(Double.toString(trainn.getVar_note()));
+				prom_cause.setText("-");
+				prom_rec.setText("-");
+			}else{
+				var.setVisible(false);
+				cause.setVisible(false);
+				rec.setVisible(true);
+				var_int.setText(Integer.toString(conf.getCant_questions()));
+				cause_int.setText(Integer.toString(conf.getCant_questions()));
+				rec_int.setText(Integer.toString(trainn.getCant_try()));
+				prom_var.setText(Double.toString(trainn.getVar_note()));
+				prom_cause.setText(Double.toString(trainn.getCause_note()));
+				prom_rec.setText("-");
+			}
+		}else{
+			var_int.setText("-");
+			cause_int.setText("-");
+			rec_int.setText("-");
+			prom_var.setText("-");
+			prom_cause.setText("-");
+			prom_rec.setText("-");
+		}
 	}
 
 	public JPanel getPanel() {
