@@ -201,7 +201,7 @@ public class TrainingView extends JPanel{
 		rec.setVisible(false);
 		rec.setIcon(new ImageIcon(TrainingView.class.getResource("/images/right-orange.png")));
 		rec.setHorizontalAlignment(SwingConstants.RIGHT);
-		rec.setBounds(267, 174, 32, 32);
+		rec.setBounds(267, 221, 32, 32);
 		panel.add(rec);
 		
 		prom_var = new JLabel();
@@ -263,7 +263,6 @@ public class TrainingView extends JPanel{
 				prom_rec.setText("-");
 			}else{
 				var.setVisible(false);
-				cause.setVisible(false);
 				rec.setVisible(true);
 				var_int.setText(Integer.toString(conf.getCant_questions()));
 				cause_int.setText(Integer.toString(conf.getCant_questions()));
