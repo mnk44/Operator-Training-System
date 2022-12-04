@@ -31,25 +31,35 @@ public class GeneralTrainingPanel extends JPanel {
 	private static JTable table;
 	private static DefaultTableModel date;
 	private JButton trainning;
+	JLabel lblGestinDeProcesos;
+	JScrollPane scrollPane;
 	int selected = -1;
 	
 	static TrainingPrepare train = null;
+	private JPanel panel;
 
 	public GeneralTrainingPanel(TrainingPrepare t) throws SQLException {
 		train = t;
 		
 		setBorder(null);
 		setBackground(Color.WHITE);
-		setBounds(100, 100, 657, 433);
-		setLayout(null);
+		setBounds(100, 100, 779, 359);
+	    setLayout(null);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		panel = new JPanel();
+		panel.setBorder(null);
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(0, 0, 779, 359);
+		add(panel);
+		panel.setLayout(null);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(75, 38, 620, 264);
+		panel.add(scrollPane);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(Color.WHITE);
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBounds(15, 64, 620, 301);
-		add(scrollPane);
 
 		table = new JTable();
 		table.addMouseListener(new MouseAdapter() {
@@ -93,19 +103,24 @@ public class GeneralTrainingPanel extends JPanel {
 		scrollPane.setColumnHeaderView(table);		
 		scrollPane.setViewportView(table);
 		
-		JLabel lblGestinDeProcesos = new JLabel("Lista de entrenamientos:");
+		lblGestinDeProcesos = new JLabel("Lista de entrenamientos:");
+		lblGestinDeProcesos.setBounds(75, 13, 620, 23);
+		panel.add(lblGestinDeProcesos);
 		lblGestinDeProcesos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblGestinDeProcesos.setForeground(new Color(255, 113, 19));
 		lblGestinDeProcesos.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
-		lblGestinDeProcesos.setBounds(15, 28, 620, 23);
-		add(lblGestinDeProcesos);
 		
 		trainning = new JButton("Iniciar entrenamiento");
+		trainning.setBounds(255, 311, 272, 37);
+		panel.add(trainning);
 		trainning.setEnabled(false);
 		trainning.setHorizontalTextPosition(SwingConstants.LEFT);
 		trainning.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				panel.removeAll();
+				panel.repaint();
+				TrainingView t = new TrainingView((String) table.getValueAt(selected, 0));
+				panel.add(t.getPanel());
 			}
 		});
 		trainning.addMouseListener(new MouseAdapter() {
@@ -127,8 +142,6 @@ public class GeneralTrainingPanel extends JPanel {
 		trainning.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		trainning.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 113, 19)));
 		trainning.setBackground(new Color(248, 159, 101));
-		trainning.setBounds(186, 380, 272, 37);
-		add(trainning);
 
 		reload();
 	}
@@ -140,5 +153,4 @@ public class GeneralTrainingPanel extends JPanel {
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(1).setCellRenderer(tcr);
 	}
-
 }

@@ -1,7 +1,6 @@
 package interfaces;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
@@ -49,7 +48,7 @@ import javax.swing.SwingConstants;
 
 public class PrincipalView {
 
-	JFrame frame;
+	public JFrame frame;
 	private JMenuItem changePass;
 
 	//datas
@@ -72,20 +71,6 @@ public class PrincipalView {
 	private JMenu options;
 	private JMenuItem train;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PrincipalView window = new PrincipalView(null);
-					window.frame.setLocationRelativeTo(null);
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	public PrincipalView(User uss) throws SQLException {
 		user_active = uss;
 		initialize();
@@ -97,13 +82,7 @@ public class PrincipalView {
 		frame.setMinimumSize(new Dimension(901, 514));
 		frame.addWindowStateListener(new WindowStateListener() {
 			public void windowStateChanged(WindowEvent arg0) {
-				int x = (frame.getWidth()-panel.getWidth())/2;
-				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
-					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
-					panel.setLocation(x, y);
-				}else if(frame.getExtendedState() == JFrame.NORMAL){
-					panel.setLocation(x, 0);
-				}
+				adjustPanel(panel);
 			}
 		});
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);		
@@ -139,6 +118,8 @@ public class PrincipalView {
 		title2.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 26));
 		title2.setBounds(335, 196, 513, 49);
 		frame.getContentPane().add(title2);
+		
+		
 		frame.setTitle("Sistema de entrenamiento SECPROIT");
 		frame.setBounds(100, 100, 901, 514);
 		frame.addWindowListener(new WindowAdapter() {
@@ -208,13 +189,7 @@ public class PrincipalView {
 					JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				frame.getContentPane().add(panel);
-				int x = (frame.getWidth()-panel.getWidth())/2;
-				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
-					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
-					panel.setLocation(x, y);
-				}else if(frame.getExtendedState() == JFrame.NORMAL){
-					panel.setLocation(x, 0);
-				}
+				adjustPanel(panel);
 			}
 		});
 		mntmInformacinPersonal.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/personal-info.png")));
@@ -260,13 +235,7 @@ public class PrincipalView {
 					JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				frame.getContentPane().add(panel);
-				int x = (frame.getWidth()-panel.getWidth())/2;
-				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
-					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
-					panel.setLocation(x, y);
-				}else if(frame.getExtendedState() == JFrame.NORMAL){
-					panel.setLocation(x, 0);
-				}
+				adjustPanel(panel);
 			}
 		});
 		areaMana.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.ALT_MASK));
@@ -292,13 +261,7 @@ public class PrincipalView {
 					e.printStackTrace();
 				}
 				frame.getContentPane().add(panel);
-				int x = (frame.getWidth()-panel.getWidth())/2;
-				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
-					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
-					panel.setLocation(x, y);
-				}else if(frame.getExtendedState() == JFrame.NORMAL){
-					panel.setLocation(x, 0);
-				}
+				adjustPanel(panel);
 			}
 		});
 		userMana.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/user_management.png")));
@@ -325,13 +288,7 @@ public class PrincipalView {
 					e.printStackTrace();
 				}
 				frame.getContentPane().add(panel);
-				int x = (frame.getWidth()-panel.getWidth())/2;
-				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
-					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
-					panel.setLocation(x, y);
-				}else if(frame.getExtendedState() == JFrame.NORMAL){
-					panel.setLocation(x, 0);
-				}
+				adjustPanel(panel);
 			}
 		});
 		processMana.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/procesos.png")));
@@ -361,12 +318,8 @@ public class PrincipalView {
 				}
 				frame.getContentPane().add(panel);
 				int x = (frame.getWidth()-panel.getWidth())/2;
-				if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
-					int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
-					panel.setLocation(x, y);
-				}else if(frame.getExtendedState() == JFrame.NORMAL){
-					panel.setLocation(x, 0);
-				}
+				int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
+				panel.setLocation(x, y);
 			}
 		});
 		train.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/icons8_Test_Passed_16.png")));
@@ -433,6 +386,16 @@ public class PrincipalView {
 			configurationList.add(p);
 		}else{
 
+		}
+	}
+	
+	public void adjustPanel(JPanel panel){
+		int x = (frame.getWidth()-panel.getWidth())/2;
+		if(frame.getExtendedState() == JFrame.MAXIMIZED_BOTH){
+			int y = (frame.getHeight()- panel.getHeight() - frame.getInsets().top - frame.getInsets().bottom)/4;
+			panel.setLocation(x, y);
+		}else if(frame.getExtendedState() == JFrame.NORMAL){
+			panel.setLocation(x, 0);
 		}
 	}
 }
