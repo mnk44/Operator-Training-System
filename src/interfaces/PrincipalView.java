@@ -311,7 +311,7 @@ public class PrincipalView {
 				frame.remove(title3);
 				frame.remove(panel);
 				try {
-					panel = new GeneralTrainingPanel(trainer);
+					panel = new GeneralTrainingPanel(trainer, user_active);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

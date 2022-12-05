@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 
 import classes.Training;
 import classes.TrainingPrepare;
+import classes.User;
 import extras.DataTable;
 
 public class GeneralTrainingPanel extends JPanel {
@@ -41,7 +42,7 @@ public class GeneralTrainingPanel extends JPanel {
 	static TrainingPrepare train = null;
 	private JPanel panel;
 
-	public GeneralTrainingPanel(TrainingPrepare t) throws SQLException {
+	public GeneralTrainingPanel(TrainingPrepare t, final User operator) throws SQLException {
 		train = t;
 		
 		setBorder(null);
@@ -123,7 +124,7 @@ public class GeneralTrainingPanel extends JPanel {
 				panel.removeAll();
 				panel.repaint();
 				Training trainn = getTrain(train.getTraining(), train.getConfigurationList().get(selected).getProcess_id());
-				TrainingView t = new TrainingView((String) table.getValueAt(selected, 0), train.getConfigurationList().get(selected), trainn);
+				TrainingView t = new TrainingView((String) table.getValueAt(selected, 0), train.getConfigurationList().get(selected), trainn, operator);
 				panel.add(t.getPanel());
 			}
 		});

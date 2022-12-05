@@ -14,10 +14,10 @@ public class FillVariableTrain {
 	public static QuestionsVar fillQuestionVar(Process process){
 		ArrayList<Variable> variables = FileService.getVariables(process.getProcess_id());
 		ArrayList<VariableCause> varCauses = FileService.getVariableCause(process.getProcess_id());
-		int cant = (int) getRandomIntegerBetweenRange(1, 11);
+		int cant = (int) getRandomIntegerBetweenRange(0, 7);
 
 		ArrayList<Variable> questions = new ArrayList<>();
-		ArrayList<Variable> answers = new ArrayList<>();
+		ArrayList<Integer> answers = new ArrayList<>();
 		ArrayList<String> states = new ArrayList<>();
 
 		ArrayList<Integer> numbers = new ArrayList<>();
@@ -38,7 +38,7 @@ public class FillVariableTrain {
 		for(int i=0; i<questions.size(); i++){
 			String state = getState(varCauses, questions.get(i));
 			if(state.equals("todos")){
-				answers.add(questions.get(i));
+				answers.add(i);
 				if(questions.get(i).getVar_type().equals("Discreta")){
 					int r = (int) getRandomIntegerBetweenRange(0, 2);
 					if(r == 0){
@@ -72,7 +72,7 @@ public class FillVariableTrain {
 			}else if(state.contains(",")){
 				String[] options = state.split(",");
 				if(answers.size() < cant){
-					answers.add(questions.get(i));
+					answers.add(i);
 					if(!questions.get(i).getVar_type().equals("Continua")){
 						states.add(options[0]);
 					}else{
@@ -108,7 +108,7 @@ public class FillVariableTrain {
 				}
 			}else{
 				if(answers.size() < cant){
-					answers.add(questions.get(i));
+					answers.add(i);
 					if(!questions.get(i).getVar_type().equals("Continua")){
 						states.add(state);
 					}else{

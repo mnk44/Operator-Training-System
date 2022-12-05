@@ -6,11 +6,11 @@ import classes.Variable;
 
 public class QuestionsVar {
 	ArrayList<Variable> variables;
-	ArrayList<Variable> answer;
+	ArrayList<Integer> answer;
 	ArrayList<String> states;
 	
 	public QuestionsVar(ArrayList<Variable> variables,
-			ArrayList<Variable> answer, ArrayList<String> states) {
+			ArrayList<Integer> answer, ArrayList<String> states) {
 		super();
 		this.variables = variables;
 		this.answer = answer;
@@ -29,10 +29,10 @@ public class QuestionsVar {
 	public void setVariables(ArrayList<Variable> variables) {
 		this.variables = variables;
 	}
-	public ArrayList<Variable> getAnswer() {
+	public ArrayList<Integer> getAnswer() {
 		return answer;
 	}
-	public void setAnswer(ArrayList<Variable> answer) {
+	public void setAnswer(ArrayList<Integer> answer) {
 		this.answer = answer;
 	}
 }

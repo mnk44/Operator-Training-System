@@ -19,6 +19,7 @@ import trainerInterfaces.VariableTrueFalse;
 import classes.ProcessConfiguration;
 import classes.Training;
 import classes.Process;
+import classes.User;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -52,7 +53,7 @@ public class TrainingView extends JPanel{
 	private JLabel lblCantidadDeIntentos;
 	private JLabel label;
 
-	public TrainingView(String process, final ProcessConfiguration conf, Training trainn) {
+	public TrainingView(String process, final ProcessConfiguration conf, Training trainn, final User operator) {
 		setBorder(null);
 		setBackground(Color.WHITE);
 		setLayout(null);
@@ -132,7 +133,7 @@ public class TrainingView extends JPanel{
 		btnComenzarPrueba.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Process p = findProcess(conf.getProcess_id());
-				VariableTrueFalse var = new VariableTrueFalse(p);
+				VariableTrueFalse var = new VariableTrueFalse(p, conf.getTime_limit(), operator);
 				var.frmEtapa.setLocationRelativeTo(null);
 				var.frmEtapa.setVisible(true);
 				PrincipalView.close();

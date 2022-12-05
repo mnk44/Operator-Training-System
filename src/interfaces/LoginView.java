@@ -149,7 +149,7 @@ public class LoginView extends JDialog {
 		view_pass.setIcon(new ImageIcon(LoginView.class.getResource("/images/icons8_Eye_32.png")));
 		
 		accept_button = new JButton("Aceptar");
-		accept_button.setBounds(600, 374, 153, 37);
+		accept_button.setBounds(585, 374, 153, 37);
 		getContentPane().add(accept_button);
 		accept_button.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
@@ -237,16 +237,15 @@ public class LoginView extends JDialog {
 								JOptionPane.showMessageDialog(null, "Usuario desactivado", "Error", JOptionPane.ERROR_MESSAGE);
 								error++;
 							}else{
-								PrincipalView center = null;
 								try {
-									center = new PrincipalView(user);
+									new PrincipalView(user);
 								} catch (SQLException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 								LoginView.this.setVisible(false);
-								center.frame.setLocationRelativeTo(null);
-								center.frame.setVisible(true);
+								PrincipalView.frame.setLocationRelativeTo(null);
+								PrincipalView.frame.setVisible(true);
 							}
 						}else{
 							progressBar.setVisible(false);
