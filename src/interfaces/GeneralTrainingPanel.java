@@ -39,7 +39,7 @@ public class GeneralTrainingPanel extends JPanel {
 	JScrollPane scrollPane;
 	int selected = -1;
 	
-	static TrainingPrepare train = null;
+	public static TrainingPrepare train = null;
 	private JPanel panel;
 
 	public GeneralTrainingPanel(TrainingPrepare t, final User operator) throws SQLException {

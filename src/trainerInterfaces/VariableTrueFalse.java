@@ -33,6 +33,8 @@ import javax.swing.DefaultComboBoxModel;
 import trainerLogic.FillVariableTrain;
 import trainerLogic.QuestionsVar;
 import classes.Process;
+import classes.ProcessConfiguration;
+import classes.Training;
 import classes.User;
 
 import java.awt.event.ActionListener;
@@ -88,13 +90,13 @@ public class VariableTrueFalse {
 	@SuppressWarnings("rawtypes")
 	ArrayList<JComboBox> viewAnswers = new ArrayList<>();
 
-	public VariableTrueFalse(Process p, int timeFinal, User operator) {
+	public VariableTrueFalse(Process p, int timeFinal, User operator, Training train, ProcessConfiguration cantInte) {
 		questions = FillVariableTrain.fillQuestionVar(p);
-		initialize(timeFinal, operator);
+		initialize(timeFinal, operator, train, cantInte);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void initialize(final int timeFinal, final User operator) {
+	private void initialize(final int timeFinal, final User operator, final Training train, final ProcessConfiguration cantInt) {
 		frmEtapa = new JFrame();
 		frmEtapa.setTitle("Etapa #1: Variables");
 		frmEtapa.setResizable(false);
@@ -329,7 +331,7 @@ public class VariableTrueFalse {
 					String tiempo = min + "." + sec;
 					double t = Double.parseDouble(tiempo);
 					
-					ResultView rs = new ResultView(cant, 10, t, timeFinal, frmEtapa, operator);
+					ResultView rs = new ResultView(cant, 10, t, timeFinal, frmEtapa, operator, train, "variable", cantInt);
 					rs.setLocationRelativeTo(frmEtapa);
 					rs.setVisible(true);
 				}
@@ -373,7 +375,7 @@ public class VariableTrueFalse {
 					}else{
 						label.setText("0" + minutes + ":" + seconds);
 					}
-					if(minutes < 2){
+					if(minutes < 1){
 						label.setForeground(Color.RED);
 					}
 				}else{

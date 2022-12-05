@@ -301,15 +301,16 @@ public class PrincipalView {
 		train = new JMenuItem("Iniciar entrenamiento");
 		train.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				frame.remove(panel);
 				frame.remove(title);
+				frame.remove(title1);
+				frame.remove(title2);
+				frame.remove(title3);
 				title.setVisible(false);
 				title1.setVisible(false);
 				title2.setVisible(false);
 				title3.setVisible(false);
-				frame.remove(title1);
-				frame.remove(title2);
-				frame.remove(title3);
-				frame.remove(panel);
+				panel = new JPanel();
 				try {
 					panel = new GeneralTrainingPanel(trainer, user_active);
 				} catch (SQLException e) {
@@ -347,7 +348,7 @@ public class PrincipalView {
 			processList = ProcessService.searchArea(user_active.getUser_area());
 			configurationList = ProcessService.getProcessConf();
 			
-			trainer = PrepareProcess.prepareTraining(user_active, processList, configurationList);			
+			trainer = PrepareProcess.prepareTraining(user_active, processList, configurationList);	
 			
 			//hide and shows functions
 			userMana.setVisible(false);

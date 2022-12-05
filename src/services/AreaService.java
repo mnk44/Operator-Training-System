@@ -32,7 +32,7 @@ public class AreaService {
 	public static String updateArea(int area_id, String area_name, String user_nick, Timestamp trace_date) throws SQLException{
 		try{
 			String sqlSentenc = "UPDATE area SET name_area = ? WHERE id_area = ?;"
-					+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?)";
+					+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?);";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setString(1, area_name);
 			cs.setInt(2, area_id);
@@ -51,7 +51,7 @@ public class AreaService {
 	public static String deleteArea(int area_id, String user_nick, String area_name, Timestamp trace_date) throws SQLException{
 		try{
 			String sqlSentenc = "DELETE FROM area WHERE id_area = ?;"
-					+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?)";
+					+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?);";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, area_id);
 			cs.setString(2, user_nick);

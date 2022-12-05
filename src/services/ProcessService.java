@@ -37,35 +37,32 @@ public class ProcessService {
 		return id;
 	}
 
-	public static String updateProcess(Process process, ProcessConfiguration config, String user_nick, Timestamp date) throws SQLException{
+	public static String updateProcess(Process process, ProcessConfiguration config, String user_nick, Timestamp date, int conf) throws SQLException{
 		try{
-			String sqlSentenc = "DELETE FROM process WHERE process_id = ?;" +
-					"INSERT INTO process VALUES(?,?,?,?,?,?);" +
+			String sqlSentenc = "UPDATE process SET process_name = ?, process_img = ? WHERE process_id = ?;" +
+					"DELETE FROM process_configuration WHERE table_id = ?;" +
 					"INSERT INTO process_configuration VALUES (DEFAULT,?,?,?,?,?,?,?,?);" + 
 					"INSERT INTO trace VALUES (DEFAULT,?,?,?,?);";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
-			cs.setInt(1, process.getProcess_id());
 			//process
-			cs.setInt(2, process.getProcess_id());
-			cs.setString(3, process.getProcess_name());
-			cs.setBytes(4, process.getProcess_img());
-			cs.setBytes(5, process.getProcess_anm());
-			cs.setBytes(6, process.getProcess_drl());
-			cs.setInt(7, process.getProcess_area());
+			cs.setString(1, process.getProcess_name());
+			cs.setBytes(2, process.getProcess_img());
+			cs.setInt(3, process.getProcess_id());
+			cs.setInt(4, conf);
 			//configuration
-			cs.setInt(8, process.getProcess_id());
-			cs.setInt(9, config.getTime_limit());
-			cs.setInt(10, config.getCant_questions());
-			cs.setInt(11, config.getCant_aprov());
-			cs.setString(12, config.getType_var());
-			cs.setString(13, config.getType_cause());
-			cs.setString(14, config.getType_rec());
-			cs.setBoolean(15, config.isFor_every());
+			cs.setInt(5, process.getProcess_id());
+			cs.setInt(6, config.getTime_limit());
+			cs.setInt(7, config.getCant_questions());
+			cs.setInt(8, config.getCant_aprov());
+			cs.setString(9, config.getType_var());
+			cs.setString(10, config.getType_cause());
+			cs.setString(11, config.getType_rec());
+			cs.setBoolean(12, config.isFor_every());
 			//trace
-			cs.setString(16, user_nick);
-			cs.setString(17, "modificó el proceso");
-			cs.setString(18, process.getProcess_name());
-			cs.setTimestamp(19, date);
+			cs.setString(13, user_nick);
+			cs.setString(14, "modificó el proceso");
+			cs.setString(15, process.getProcess_name());
+			cs.setTimestamp(16, date);
 			cs.execute();
 			cs.close();
 		}catch(Exception e){
@@ -211,7 +208,7 @@ public class ProcessService {
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, operator.getUser_id());
 			ResultSet rs = cs.executeQuery();
-			if(rs.next()){
+			while(rs.next()){
 				process.add(rs.getInt("process_id"));
 			}
 		}catch (Exception e){

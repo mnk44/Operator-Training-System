@@ -101,7 +101,7 @@ public class ProcessView extends JDialog {
 	private JLabel lblArchivoDeVariables;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ProcessView(final ArrayList<User> op, final User user_active, Process p, ProcessConfiguration c) throws ClassNotFoundException, IOException {
+	public ProcessView(final ArrayList<User> op, final User user_active, Process p, final ProcessConfiguration c) throws ClassNotFoundException, IOException {
 		procesP = p;
 		configurationP = c;
 
@@ -116,6 +116,7 @@ public class ProcessView extends JDialog {
 
 		button = new JButton("Aceptar");
 		button.addActionListener(new ActionListener() {
+			@SuppressWarnings("null")
 			public void actionPerformed(ActionEvent arg0) {
 				//validations
 				if(anmRoute == null || drlRoute == null){
@@ -181,7 +182,7 @@ public class ProcessView extends JDialog {
 								PrincipalView.ids.set(0, anm.getVariables().get(anm.getVariables().size()-1).getVar_id());
 								PrincipalView.ids.set(1, anm.getCauses().get(anm.getCauses().size()-1).getCause_id());
 								PrincipalView.ids.set(2, anm.getRecomendations().get(anm.getRecomendations().size()-1).getRec_id());
-								
+
 								//insert configuration
 								proc.setProcess_id((int)result);
 								PrincipalView.changeProcess(proc, 1);
@@ -241,7 +242,7 @@ public class ProcessView extends JDialog {
 					configurationP.setProcess_id(procesP.getProcess_id());
 					Object result = null;
 					try {
-						result = ProcessService.updateProcess(procesP, configurationP, user_active.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+						result = ProcessService.updateProcess(procesP, configurationP, user_active.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()), c.getTable_id());
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -258,7 +259,7 @@ public class ProcessView extends JDialog {
 									}
 								}
 							}
-							String userers = ProcessService.insertUsers(aux, procesP.getProcess_id());
+							String userers = ProcessService.insertUsers(aux, (int)result);
 							if(userers!=null){
 								JOptionPane.showMessageDialog(null, userers, "Error", JOptionPane.ERROR_MESSAGE);
 							}else{
@@ -266,8 +267,7 @@ public class ProcessView extends JDialog {
 								try {
 									ProcessManagementPanel.reload(PrincipalView.getProcess());
 								} catch (SQLException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
+									JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 								}
 								dispose();
 							}
@@ -276,13 +276,10 @@ public class ProcessView extends JDialog {
 							try {
 								ProcessManagementPanel.reload(PrincipalView.getProcess());
 							} catch (SQLException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+								JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+							}	
 							dispose();
 						}
-					}else{
-						JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
@@ -563,7 +560,7 @@ public class ProcessView extends JDialog {
 
 		time = new JSpinner();
 		time.setToolTipText("Minutos");
-		time.setModel(new SpinnerNumberModel(10, 3, 60, 1));
+		time.setModel(new SpinnerNumberModel(10, 1, 60, 1));
 		time.setFont(new Font("Corbel", Font.PLAIN, 21));
 		time.setBounds(553, 26, 64, 26);
 		panel_1.add(time);
@@ -762,7 +759,7 @@ public class ProcessView extends JDialog {
 
 		if(procesP != null){
 			setTitle("Modificar proceso");
-			
+
 			//process
 			process_name.setText(procesP.getProcess_name());
 			if(procesP.getProcess_img() != null){

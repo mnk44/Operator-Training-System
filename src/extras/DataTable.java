@@ -177,6 +177,7 @@ public class DataTable {
 					state = "Iniciado";
 				}
 			}
+			cont++;
 		}
 		
 		return state;

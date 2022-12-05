@@ -14,6 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.SwingConstants;
 import javax.swing.JProgressBar;
 
+import trainerLogic.InsertTrainPart;
+import classes.ProcessConfiguration;
+import classes.TrainPart;
+import classes.Training;
 import classes.User;
 
 import java.awt.Toolkit;
@@ -36,8 +40,11 @@ public class ResultView extends JDialog {
 	Timer timer;
 	DecimalFormat format = new DecimalFormat("#.00");
 	int porcent;
+	double noteF;
 
-	public ResultView(final int cantAprove, final int cantQ, final double time, final int totalTime, final JFrame frame, final User uss) {
+	public ResultView(final int cantAprove, final int cantQ, final double time, final int totalTime, final JFrame frame, 
+			final User uss, final Training train, final String type, final ProcessConfiguration config) {
+		setModal(true);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ResultView.class.getResource("/images/icons8_Grades_32.png")));
 		setTitle("Resultado");
 		setResizable(false);
@@ -47,7 +54,14 @@ public class ResultView extends JDialog {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				frame.setVisible(false);
+				TrainPart part = new TrainPart(train.getTrain_id(), time, cantAprove, type, noteF);
+				try {
+					InsertTrainPart.insertPart(part, train, config, uss.getUser_nick());
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				try {
 					new PrincipalView(uss);
 				} catch (SQLException e) {
@@ -55,6 +69,7 @@ public class ResultView extends JDialog {
 					e.printStackTrace();
 				}
 				dispose();
+				frame.setVisible(false);
 				PrincipalView.frame.setLocationRelativeTo(null);
 				PrincipalView.frame.setVisible(true);
 			}
@@ -123,8 +138,12 @@ public class ResultView extends JDialog {
 		
 		double apr = ((double)cantAprove)/cantQ;
 		double t = (time/totalTime)* 0.1;
-		double noteF = (apr + t) * 9.09;
-		note.setText(format.format(noteF) + " de 10");
+		noteF = (apr + t) * 9.09;
+		if(!format.format(noteF).startsWith(".")){
+			note.setText(format.format(noteF) + " de 10");
+		}else{
+			note.setText("0" + format.format(noteF) + " de 10");
+		}
 		
 		porcent = (int) (noteF * 10);
 		if(porcent > 50){

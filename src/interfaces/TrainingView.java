@@ -12,9 +12,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
+import services.TrainingService;
 import trainerInterfaces.VariableTrueFalse;
 import classes.ProcessConfiguration;
 import classes.Training;
@@ -23,7 +25,10 @@ import classes.User;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class TrainingView extends JPanel{
 
@@ -53,7 +58,7 @@ public class TrainingView extends JPanel{
 	private JLabel lblCantidadDeIntentos;
 	private JLabel label;
 
-	public TrainingView(String process, final ProcessConfiguration conf, Training trainn, final User operator) {
+	public TrainingView(String process, final ProcessConfiguration conf, final Training trainn, final User operator) {
 		setBorder(null);
 		setBackground(Color.WHITE);
 		setLayout(null);
@@ -108,7 +113,7 @@ public class TrainingView extends JPanel{
 		lblIntentos.setBounds(428, 81, 105, 34);
 		panel.add(lblIntentos);
 
-		lblPuntosObtenidos = new JLabel("Promedio");
+		lblPuntosObtenidos = new JLabel("Nota");
 		lblPuntosObtenidos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPuntosObtenidos.setBorder(new LineBorder(new Color(255, 113, 19)));
 		lblPuntosObtenidos.setForeground(new Color(99, 68, 55));
@@ -132,11 +137,24 @@ public class TrainingView extends JPanel{
 		btnComenzarPrueba = new JButton("Iniciar evaluaci\u00F3n");
 		btnComenzarPrueba.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Process p = findProcess(conf.getProcess_id());
-				VariableTrueFalse var = new VariableTrueFalse(p, conf.getTime_limit(), operator);
-				var.frmEtapa.setLocationRelativeTo(null);
-				var.frmEtapa.setVisible(true);
-				PrincipalView.close();
+				if(trainn == null){
+					Object train = null;
+					try {
+						train = TrainingService.newTraining(conf.getProcess_id(), operator.getUser_id(), operator.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(null, e, "¡Tiempo!", JOptionPane.INFORMATION_MESSAGE);
+					}
+					if(!train.toString().contains("e")){
+						Process p = findProcess(conf.getProcess_id());
+						Training t = new Training((int)train, conf.getProcess_id(), operator.getUser_id(), 0, -1, -1, -1, -1, 0);
+						if(var.isVisible() && conf.getType_var().equals("Verdadero o falso")){
+							VariableTrueFalse var = new VariableTrueFalse(p, conf.getTime_limit(), operator, t, conf);
+							var.frmEtapa.setLocationRelativeTo(null);
+							var.frmEtapa.setVisible(true);
+							PrincipalView.close();
+						}
+					}
+				}
 			}
 		});
 		btnComenzarPrueba.addMouseListener(new MouseAdapter() {
@@ -259,7 +277,6 @@ public class TrainingView extends JPanel{
 		total1.setText(Integer.toString(conf.getCant_questions()));
 		total2.setText(Integer.toString(conf.getCant_questions()));
 		total3.setText(Integer.toString(conf.getCant_questions()));
-		label.setText(Integer.toString(conf.getCant_aprov()));
 		if(trainn != null){
 			if(trainn.getVar_note() == -1){
 				var_int.setText(Integer.toString(trainn.getCant_try()));
@@ -287,6 +304,7 @@ public class TrainingView extends JPanel{
 				prom_cause.setText(Double.toString(trainn.getCause_note()));
 				prom_rec.setText("-");
 			}
+			label.setText(Integer.toString(conf.getCant_aprov()-trainn.getCant_aprov()));
 		}else{
 			var_int.setText("-");
 			cause_int.setText("-");
@@ -294,6 +312,7 @@ public class TrainingView extends JPanel{
 			prom_var.setText("-");
 			prom_cause.setText("-");
 			prom_rec.setText("-");
+			label.setText(Integer.toString(conf.getCant_aprov()));
 		}
 	}
 
