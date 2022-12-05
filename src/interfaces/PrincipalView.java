@@ -48,7 +48,7 @@ import javax.swing.SwingConstants;
 
 public class PrincipalView {
 
-	public JFrame frame;
+	public static JFrame frame;
 	private JMenuItem changePass;
 
 	//datas
@@ -397,5 +397,9 @@ public class PrincipalView {
 		}else if(frame.getExtendedState() == JFrame.NORMAL){
 			panel.setLocation(x, 0);
 		}
+	}
+	
+	public static void close(){
+		frame.setVisible(false);
 	}
 }
