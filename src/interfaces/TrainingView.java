@@ -147,8 +147,20 @@ public class TrainingView extends JPanel{
 					if(!train.toString().contains("e")){
 						Process p = findProcess(conf.getProcess_id());
 						Training t = new Training((int)train, conf.getProcess_id(), operator.getUser_id(), 0, -1, -1, -1, -1, 0);
-						if(var.isVisible() && conf.getType_var().equals("Verdadero o falso")){
-							VariableTrueFalse var = new VariableTrueFalse(p, conf.getTime_limit(), operator, t, conf);
+						if(var.isVisible()){
+							if(conf.getType_var().equals("Verdadero o falso")){
+								VariableTrueFalse var = new VariableTrueFalse(p, conf.getTime_limit(), operator, t, conf);
+								var.frmEtapa.setLocationRelativeTo(null);
+								var.frmEtapa.setVisible(true);
+								PrincipalView.close();
+							}
+						}
+					}
+				}else{
+					Process p = findProcess(conf.getProcess_id());
+					if(var.isVisible()){
+						if(conf.getType_var().equals("Verdadero o falso")){
+							VariableTrueFalse var = new VariableTrueFalse(p, conf.getTime_limit(), operator, trainn, conf);
 							var.frmEtapa.setLocationRelativeTo(null);
 							var.frmEtapa.setVisible(true);
 							PrincipalView.close();
