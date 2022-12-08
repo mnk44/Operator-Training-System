@@ -282,7 +282,7 @@ public class PrincipalView {
 				panel = new JPanel();
 				ArrayList<User> op = getOperators();
 				try {
-					panel = new ProcessManagementPanel(op, user_active, areasList, processList, configurationList);
+					panel = new ProcessManagementPanel(op, user_active, processList, configurationList);
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

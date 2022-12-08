@@ -24,7 +24,6 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import services.ProcessService;
-import classes.Area;
 import classes.ProcessConfiguration;
 import classes.User;
 import classes.Process;
@@ -45,7 +44,6 @@ public class ProcessManagementPanel extends JPanel {
 	private static DefaultTableModel date;
 	
 	int selected = -1;
-	static ArrayList<Area> areas = null;
 
 	private static final long serialVersionUID = -7006963620558751080L;
 	private JTextField searchField;
@@ -55,11 +53,10 @@ public class ProcessManagementPanel extends JPanel {
 //	private JButton btnArchivoanm;
 //	private JButton btnArchivodrl;
  
-	public ProcessManagementPanel(final ArrayList<User> op, final User user_active, ArrayList<Area> ars, final ArrayList<Process> process, final ArrayList<ProcessConfiguration> con) throws SQLException {
-		areas = ars;
+	public ProcessManagementPanel(final ArrayList<User> op, final User user_active, final ArrayList<Process> process, final ArrayList<ProcessConfiguration> con) throws SQLException {
 		setBorder(null);
 		setBackground(Color.WHITE);
-		setBounds(100, 100, 838, 433);
+		setBounds(100, 100, 765, 433);
 		setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -67,7 +64,7 @@ public class ProcessManagementPanel extends JPanel {
 		scrollPane.setBorder(null);
 		scrollPane.setBackground(Color.WHITE);
 		scrollPane.setAutoscrolls(true);
-		scrollPane.setBounds(35, 104, 561, 313);
+		scrollPane.setBounds(28, 104, 490, 313);
 		add(scrollPane);
 
 		table = new JTable();
@@ -112,12 +109,12 @@ public class ProcessManagementPanel extends JPanel {
 		lblGestinDeProcesos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblGestinDeProcesos.setForeground(new Color(255, 113, 19));
 		lblGestinDeProcesos.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
-		lblGestinDeProcesos.setBounds(25, 79, 571, 23);
+		lblGestinDeProcesos.setBounds(28, 79, 490, 23);
 		add(lblGestinDeProcesos);
 		
 		JLabel label = new JLabel();
 		label.setIcon(new ImageIcon(ProcessManagementPanel.class.getResource("/images/search.png")));
-		label.setBounds(58, 0, 48, 76);
+		label.setBounds(45, 0, 48, 88);
 		add(label);
 		
 		searchField = new JTextField();
@@ -165,7 +162,7 @@ public class ProcessManagementPanel extends JPanel {
 		searchField.setToolTipText("Buscar usuario");
 		searchField.setFont(new Font("Corbel", Font.PLAIN, 20));
 		searchField.setColumns(10);
-		searchField.setBounds(115, 26, 426, 29);
+		searchField.setBounds(100, 27, 363, 29);
 		add(searchField);
 		
 		btnNuevoProceso = new JButton("Nuevo proceso");
@@ -197,7 +194,7 @@ public class ProcessManagementPanel extends JPanel {
 		btnNuevoProceso.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		btnNuevoProceso.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 113, 19)));
 		btnNuevoProceso.setBackground(new Color(255, 113, 19));
-		btnNuevoProceso.setBounds(611, 116, 212, 37);
+		btnNuevoProceso.setBounds(533, 116, 212, 37);
 		add(btnNuevoProceso);
 		
 		btnModificarProceso = new JButton("Modificar proceso");
@@ -250,7 +247,7 @@ public class ProcessManagementPanel extends JPanel {
 		btnModificarProceso.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		btnModificarProceso.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 113, 19)));
 		btnModificarProceso.setBackground(new Color(248, 159, 101));
-		btnModificarProceso.setBounds(611, 169, 212, 37);
+		btnModificarProceso.setBounds(533, 169, 212, 37);
 		add(btnModificarProceso);
 		
 		btnEliminarProceso = new JButton("Eliminar proceso");
@@ -292,7 +289,7 @@ public class ProcessManagementPanel extends JPanel {
 		btnEliminarProceso.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		btnEliminarProceso.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 113, 19)));
 		btnEliminarProceso.setBackground(new Color(248, 159, 101));
-		btnEliminarProceso.setBounds(611, 222, 212, 37);
+		btnEliminarProceso.setBounds(533, 222, 212, 37);
 		add(btnEliminarProceso);
 		
 //		btnArchivoanm = new JButton("Archivo .anm");
@@ -351,12 +348,11 @@ public class ProcessManagementPanel extends JPanel {
 	}
 	
 	public static void reload(ArrayList<Process> process) throws SQLException{
-		DataTable.fillProcess(date, table, process, areas);
+		DataTable.fillProcess(date, table, process);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
 		tcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(1).setCellRenderer(tcr);
-		table.getColumnModel().getColumn(2).setCellRenderer(tcr);
 		table.getColumnModel().getColumn(0).setMaxWidth(50);
 		btnModificarProceso.setEnabled(false);
 		btnEliminarProceso.setEnabled(false);

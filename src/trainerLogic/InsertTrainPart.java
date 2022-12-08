@@ -27,15 +27,15 @@ public class InsertTrainPart {
 		String sqlSentenc = "INSERT INTO train_part VALUES(DEFAULT,?,?,?,?,?);"
 				+ "INSERT INTO trace VALUES (DEFAULT,?,?,?,?);"
 				+ "UPDATE training SET cant_try = ?, cant_aprov = ? WHERE train_id = ?;";
-		
-		if((int)train.getFinal_note() > 5){
+		int x = (int) train.getFinal_note();
+		if(x >= 5){
 			aprov = aprov + 1;
 			if(aprov == conf.getCant_aprov()){
 				aprov = 0;
 				cantTry = 0;
 				ArrayList<Double> notes = TrainingService.getNotes(t.getTrain_id(), train.getTest_type());
 				for(int i=0; i<notes.size(); i++){
-					if(notes.get(i) > 4.49){
+					if(notes.get(i) >= 5){
 						prom = prom + notes.get(i);
 						j = j + 1;
 					}

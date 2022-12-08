@@ -182,16 +182,16 @@ public class ProcessView extends JDialog {
 								PrincipalView.ids.set(0, anm.getVariables().get(anm.getVariables().size()-1).getVar_id());
 								PrincipalView.ids.set(1, anm.getCauses().get(anm.getCauses().size()-1).getCause_id());
 								PrincipalView.ids.set(2, anm.getRecomendations().get(anm.getRecomendations().size()-1).getRec_id());
-
+								System.out.println("se inserto");
 								//insert configuration
 								proc.setProcess_id((int)result);
-								PrincipalView.changeProcess(proc, 1);
+								PrincipalView.processList.add(proc);
 								String cfg = ProcessService.insertConfig((int)result, conf);
 								if(cfg!=null){
 									JOptionPane.showMessageDialog(null, cfg, "Error", JOptionPane.ERROR_MESSAGE);
 								}else{
 									conf.setProcess_id((int)result);
-									PrincipalView.changeConfig(conf, 1);
+									PrincipalView.configurationList.add(conf);
 								}
 								if(!allOpers.isSelected()){
 									ArrayList<User> aux = new ArrayList<>();
@@ -228,6 +228,8 @@ public class ProcessView extends JDialog {
 							}else{
 								JOptionPane.showMessageDialog(null, rules, "Error", JOptionPane.ERROR_MESSAGE);
 							}
+						}else{
+							JOptionPane.showMessageDialog(null, result, "Error", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}else{

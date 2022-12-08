@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -57,6 +58,8 @@ public class TrainingView extends JPanel{
 	private JLabel prom_rec;
 	private JLabel lblCantidadDeIntentos;
 	private JLabel label;
+	
+	DecimalFormat format = new DecimalFormat("#.00");
 
 	public TrainingView(String process, final ProcessConfiguration conf, final Training trainn, final User operator) {
 		setBorder(null);
@@ -286,34 +289,46 @@ public class TrainingView extends JPanel{
 		panel.add(label);
 
 		//fill data
-		total1.setText(Integer.toString(conf.getCant_questions()));
-		total2.setText(Integer.toString(conf.getCant_questions()));
-		total3.setText(Integer.toString(conf.getCant_questions()));
 		if(trainn != null){
 			if(trainn.getVar_note() == -1){
+				total1.setText(Integer.toString(conf.getCant_questions()));
 				var_int.setText(Integer.toString(trainn.getCant_try()));
 				cause_int.setText("-");
 				rec_int.setText("-");
 				prom_var.setText("-");
 				prom_cause.setText("-");
 				prom_rec.setText("-");
+				total2.setText("-");
+				total3.setText("-");
 			}else if(trainn.getCause_note() == -1){
+				total1.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
+				total1.setText("");
 				var.setVisible(false);
 				cause.setVisible(true);
-				var_int.setText(Integer.toString(conf.getCant_questions()));
+				var_int.setText("");
+				var_int.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
 				cause_int.setText(Integer.toString(trainn.getCant_try()));
 				rec_int.setText("-");
-				prom_var.setText(Double.toString(trainn.getVar_note()));
+				prom_var.setText(format.format(trainn.getVar_note()));
 				prom_cause.setText("-");
 				prom_rec.setText("-");
+				total2.setText(Integer.toString(conf.getCant_questions()));
+				total3.setText("-");
 			}else{
 				var.setVisible(false);
 				rec.setVisible(true);
-				var_int.setText(Integer.toString(conf.getCant_questions()));
-				cause_int.setText(Integer.toString(conf.getCant_questions()));
+				var_int.setText("");
+				var_int.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
+				cause_int.setText("");
+				cause_int.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
+				total1.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
+				total1.setText("");
+				total2.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
+				total2.setText("");
+				total3.setText(Integer.toString(conf.getCant_questions()));
 				rec_int.setText(Integer.toString(trainn.getCant_try()));
-				prom_var.setText(Double.toString(trainn.getVar_note()));
-				prom_cause.setText(Double.toString(trainn.getCause_note()));
+				prom_var.setText(format.format(trainn.getVar_note()));
+				prom_cause.setText(format.format(trainn.getCause_note()));
 				prom_rec.setText("-");
 			}
 			label.setText(Integer.toString(conf.getCant_aprov()-trainn.getCant_aprov()));

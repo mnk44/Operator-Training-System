@@ -36,21 +36,13 @@ public class DataTable {
 		table.setModel(date);
 	}
 	
-	public static void fillProcess(DefaultTableModel date, JTable table, ArrayList<Process> process, ArrayList<Area> areas) throws SQLException{
+	public static void fillProcess(DefaultTableModel date, JTable table, ArrayList<Process> process) throws SQLException{
 		ArrayList<Integer> process_id = new ArrayList<Integer>();
 		ArrayList<String> process_name = new ArrayList<String>();
-		ArrayList<String> area_name = new ArrayList<String>();
 		
 		for(int i=0; i<process.size(); i++){
 			process_id.add(process.get(i).getProcess_id());
 			process_name.add(process.get(i).getProcess_name());
-			boolean a = true;
-			for(int j=0; j<areas.size() && a;j++){
-				if(areas.get(j).getId_area() == process.get(i).getProcess_area()){
-					area_name.add(areas.get(j).getName_area());
-					a = false;
-				}
-			}
 		}
 
 		date = new DefaultTableModel(){
@@ -62,7 +54,6 @@ public class DataTable {
 
 		date.addColumn("ID",process_id.toArray());
 		date.addColumn("Nombre",process_name.toArray());
-		date.addColumn("Área",area_name.toArray());
 		table.setModel(date);
 	}
 //	
