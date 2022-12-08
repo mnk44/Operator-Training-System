@@ -288,7 +288,7 @@ public class FileService {
 		ArrayList<VariableCause> variables = new ArrayList<>();
 		
 		try{
-			String sqlSentenc = "SELECT * FROM var_cause WHERE proces_id = ?";
+			String sqlSentenc = "SELECT * FROM var_cause WHERE proces_id = ?;";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, process);
 			ResultSet rs = cs.executeQuery();
@@ -307,7 +307,7 @@ public class FileService {
 		ArrayList<Variable> variables = new ArrayList<>();
 		
 		try{
-			String sqlSentenc = "SELECT * FROM variable WHERE process_id = ?";
+			String sqlSentenc = "SELECT * FROM variable WHERE process_id = ?;";
 			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
 			cs.setInt(1, process);
 			ResultSet rs = cs.executeQuery();
@@ -320,5 +320,23 @@ public class FileService {
 			System.out.println(e.getMessage());
 		}
 		return variables;
+	}
+	
+	public static ArrayList<Cause> getCauses(int process){
+		ArrayList<Cause> cause = new ArrayList<>();
+		
+		try{
+			String sqlSentenc = "SELECT * FROM cause WHERE process_id = ?;";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, process);
+			ResultSet rs = cs.executeQuery();
+			while(rs.next()){
+				Cause v = new Cause(rs.getInt("cause_id"), rs.getInt("process_id"), rs.getString("cause_name"));
+				cause.add(v);
+			}
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		return cause;
 	}
 }

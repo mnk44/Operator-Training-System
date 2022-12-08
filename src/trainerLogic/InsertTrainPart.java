@@ -60,6 +60,7 @@ public class InsertTrainPart {
 				sqlSentenc = sqlSentenc + "UPDATE training SET var_note = ?, general_note = ? WHERE train_id = ?;";
 			}else if(train.getTest_type().equals("causa")){
 				sqlSentenc = sqlSentenc + "UPDATE training SET cause_note = ?, general_note = ? WHERE train_id = ?;";
+				generalNote = (t.getVar_note())/3;
 			}else{
 				sqlSentenc = sqlSentenc + "UPDATE training SET rec_note = ?, general_note = ? WHERE train_id = ?;";
 				generalNote = (t.getVar_note() + t.getCause_note())/3;

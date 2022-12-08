@@ -70,6 +70,7 @@ public class PrincipalView {
 	private JMenuItem areaMana;
 	private JMenu options;
 	private JMenuItem train;
+	private JMenu mnReportes;
 
 	public PrincipalView(User uss) throws SQLException {
 		user_active = uss;
@@ -329,6 +330,11 @@ public class PrincipalView {
 		train.setFont(new Font("Dubai", Font.BOLD, 19));
 		train.setBackground(new Color(255, 113, 19));
 		options.add(train);
+		
+		mnReportes = new JMenu("Reportes");
+		mnReportes.setForeground(Color.WHITE);
+		mnReportes.setFont(new Font("Dubai", Font.BOLD, 20));
+		menuBar.add(mnReportes);
 
 		if(user_active.getUser_rol() == 1){
 			processMana.setVisible(false);

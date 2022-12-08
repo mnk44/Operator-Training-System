@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
 import services.TrainingService;
+import trainerInterfaces.CauseWhiteSpace;
 import trainerInterfaces.VariableTrueFalse;
 import classes.ProcessConfiguration;
 import classes.Training;
@@ -145,19 +146,19 @@ public class TrainingView extends JPanel{
 					try {
 						train = TrainingService.newTraining(conf.getProcess_id(), operator.getUser_id(), operator.getUser_nick(), new Timestamp(Calendar.getInstance().getTime().getTime()));
 					} catch (SQLException e) {
-						JOptionPane.showMessageDialog(null, e, "¡Tiempo!", JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.INFORMATION_MESSAGE);
 					}
 					if(!train.toString().contains("e")){
 						Process p = findProcess(conf.getProcess_id());
 						Training t = new Training((int)train, conf.getProcess_id(), operator.getUser_id(), 0, -1, -1, -1, -1, 0);
-						if(var.isVisible()){
-							if(conf.getType_var().equals("Verdadero o falso")){
-								VariableTrueFalse var = new VariableTrueFalse(p, conf.getTime_limit(), operator, t, conf);
-								var.frmEtapa.setLocationRelativeTo(null);
-								var.frmEtapa.setVisible(true);
-								PrincipalView.close();
-							}
+						if(conf.getType_var().equals("Verdadero o falso")){
+							VariableTrueFalse var = new VariableTrueFalse(p, conf.getTime_limit(), operator, t, conf);
+							var.frmEtapa.setLocationRelativeTo(null);
+							var.frmEtapa.setVisible(true);
+							PrincipalView.close();
 						}
+					}else{
+						JOptionPane.showMessageDialog(null, train, "Error", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}else{
 					Process p = findProcess(conf.getProcess_id());
@@ -168,6 +169,11 @@ public class TrainingView extends JPanel{
 							var.frmEtapa.setVisible(true);
 							PrincipalView.close();
 						}
+					}else if(cause.isVisible()){
+						CauseWhiteSpace cw = new CauseWhiteSpace(p, conf.getTime_limit(), operator, trainn, conf);
+						cw.frmEtapa.setLocationRelativeTo(null);
+						cw.frmEtapa.setVisible(true);
+						PrincipalView.close();
 					}
 				}
 			}
@@ -333,6 +339,9 @@ public class TrainingView extends JPanel{
 			}
 			label.setText(Integer.toString(conf.getCant_aprov()-trainn.getCant_aprov()));
 		}else{
+			total1.setText(Integer.toString(conf.getCant_questions()));
+			total2.setText("-");
+			total3.setText("-");
 			var_int.setText("-");
 			cause_int.setText("-");
 			rec_int.setText("-");

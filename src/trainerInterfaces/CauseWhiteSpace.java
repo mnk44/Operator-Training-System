@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,10 +27,8 @@ import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-
 import trainerLogic.FillTrain;
-import trainerLogic.QuestionsVar;
+import trainerLogic.QuestionCause;
 import classes.Process;
 import classes.ProcessConfiguration;
 import classes.Training;
@@ -40,7 +37,7 @@ import classes.User;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class VariableTrueFalse {
+public class CauseWhiteSpace {
 
 	public JFrame frmEtapa;
 	private JLabel label;
@@ -63,48 +60,32 @@ public class VariableTrueFalse {
 	private JComboBox v4;
 	@SuppressWarnings("rawtypes")
 	private JComboBox v5;
-	@SuppressWarnings("rawtypes")
-	private JComboBox v6;
-	@SuppressWarnings("rawtypes")
-	private JComboBox v7;
-	@SuppressWarnings("rawtypes")
-	private JComboBox v8;
-	@SuppressWarnings("rawtypes")
-	private JComboBox v9;
-	@SuppressWarnings("rawtypes")
-	private JComboBox v10;
 	private JTextPane var2;
 	private JTextPane var3;
 	private JTextPane var4;
 	private JTextPane var5;
-	private JTextPane var6;
-	private JTextPane var7;
-	private JTextPane var8;
-	private JTextPane var9;
-	private JTextPane var10;
 
-	QuestionsVar questions;
-	ArrayList<Integer> numbers = new ArrayList<>();
+	QuestionCause questions;
 	ArrayList<JTextPane> view = new ArrayList<>();
 	ArrayList<String> trueAnswers = new ArrayList<>();
 	@SuppressWarnings("rawtypes")
 	ArrayList<JComboBox> viewAnswers = new ArrayList<>();
 
-	public VariableTrueFalse(Process p, int timeFinal, User operator, Training train, ProcessConfiguration cantInte) {
-		questions = FillTrain.fillQuestionVar(p);
+	public CauseWhiteSpace(Process p, int timeFinal, User operator, Training train, ProcessConfiguration cantInte) {
+		questions = FillTrain.fillQuestionCause(p);
 		initialize(timeFinal, operator, train, cantInte);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	private void initialize(final int timeFinal, final User operator, final Training train, final ProcessConfiguration cantInt) {
 		frmEtapa = new JFrame();
-		frmEtapa.setTitle("Etapa #1: Variables");
+		frmEtapa.setTitle("Etapa #2: Causas");
 		frmEtapa.setResizable(false);
-		frmEtapa.setIconImage(Toolkit.getDefaultToolkit().getImage(VariableTrueFalse.class.getResource("/images/icons8_Quiz_32.png")));
+		frmEtapa.setIconImage(Toolkit.getDefaultToolkit().getImage(CauseWhiteSpace.class.getResource("/images/icons8_Quiz_32.png")));
 		frmEtapa.getContentPane().setBackground(Color.WHITE);
 		frmEtapa.getContentPane().setLayout(null);
 		frmEtapa.setBackground(Color.WHITE);
-		frmEtapa.setBounds(100, 100, 745, 594);
+		frmEtapa.setBounds(100, 100, 745, 621);
 		frmEtapa.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frmEtapa.addWindowListener(new WindowAdapter() {
 			@Override
@@ -124,7 +105,7 @@ public class VariableTrueFalse {
 
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(25, 59, 699, 431);
+		panel.setBounds(25, 59, 699, 446);
 		frmEtapa.getContentPane().add(panel);
 		panel.setLayout(null);
 
@@ -133,180 +114,95 @@ public class VariableTrueFalse {
 		txtpnSeleccioneLasVariables.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		txtpnSeleccioneLasVariables.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 18));
 		txtpnSeleccioneLasVariables.setForeground(new Color(255, 113, 19));
-		txtpnSeleccioneLasVariables.setText("Seleccione verdadero o falso si la varible se encuentra fuera de rango:");
+		txtpnSeleccioneLasVariables.setText("Complete los espacios en blanco de manera que se obtenga una expresi\u00F3n verdadera:");
 		txtpnSeleccioneLasVariables.setEditable(false);
-		txtpnSeleccioneLasVariables.setBounds(0, 0, 664, 58);
+		txtpnSeleccioneLasVariables.setBounds(15, 0, 684, 58);
 		panel.add(txtpnSeleccioneLasVariables);
 
 		var1 = new JTextPane();
+		var1.setBorder(null);
 		var1.setForeground(new Color(99, 68, 55));
 		var1.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		var1.setEditable(false);
 		var1.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var1.setBounds(80, 61, 619, 29);
+		var1.setBounds(15, 61, 669, 29);
 		panel.add(var1);
 		view.add(var1);
 
 		v1 = new JComboBox();
 		v1.setFont(new Font("Corbel", Font.PLAIN, 20));
 		v1.setBackground(Color.WHITE);
-		v1.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
-		v1.setBounds(25, 64, 48, 26);
+		v1.setBounds(15, 94, 669, 26);
 		panel.add(v1);
 		viewAnswers.add(v1);
 
 		v2 = new JComboBox();
-		v2.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
 		v2.setFont(new Font("Corbel", Font.PLAIN, 20));
 		v2.setBackground(Color.WHITE);
-		v2.setBounds(25, 101, 48, 26);
+		v2.setBounds(15, 176, 669, 26);
 		panel.add(v2);
 		viewAnswers.add(v2);
 
 		var2 = new JTextPane();
+		var2.setBorder(null);
 		var2.setForeground(new Color(99, 68, 55));
 		var2.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		var2.setEditable(false);
 		var2.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var2.setBounds(80, 98, 619, 29);
+		var2.setBounds(15, 143, 669, 29);
 		panel.add(var2);
 		view.add(var2);
 
 		v3 = new JComboBox();
-		v3.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
 		v3.setFont(new Font("Corbel", Font.PLAIN, 20));
 		v3.setBackground(Color.WHITE);
-		v3.setBounds(25, 138, 48, 26);
+		v3.setBounds(15, 256, 669, 26);
 		panel.add(v3);
 		viewAnswers.add(v3);
 
-		v4 = new JComboBox();
-		v4.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
-		v4.setFont(new Font("Corbel", Font.PLAIN, 20));
-		v4.setBackground(Color.WHITE);
-		v4.setBounds(25, 174, 48, 26);
-		panel.add(v4);
-		viewAnswers.add(v4);
-
-		v5 = new JComboBox();
-		v5.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
-		v5.setFont(new Font("Corbel", Font.PLAIN, 20));
-		v5.setBackground(Color.WHITE);
-		v5.setBounds(25, 211, 48, 26);
-		panel.add(v5);
-		viewAnswers.add(v5);
-
-		v6 = new JComboBox();
-		v6.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
-		v6.setFont(new Font("Corbel", Font.PLAIN, 20));
-		v6.setBackground(Color.WHITE);
-		v6.setBounds(25, 247, 48, 26);
-		panel.add(v6);
-		viewAnswers.add(v6);
-
-		v7 = new JComboBox();
-		v7.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
-		v7.setFont(new Font("Corbel", Font.PLAIN, 20));
-		v7.setBackground(Color.WHITE);
-		v7.setBounds(25, 286, 48, 26);
-		panel.add(v7);
-		viewAnswers.add(v7);
-
-		v8 = new JComboBox();
-		v8.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
-		v8.setFont(new Font("Corbel", Font.PLAIN, 20));
-		v8.setBackground(Color.WHITE);
-		v8.setBounds(25, 324, 48, 26);
-		panel.add(v8);
-		viewAnswers.add(v8);
-
-		v9 = new JComboBox();
-		v9.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
-		v9.setFont(new Font("Corbel", Font.PLAIN, 20));
-		v9.setBackground(Color.WHITE);
-		v9.setBounds(25, 361, 48, 26);
-		panel.add(v9);
-		viewAnswers.add(v9);
-
-		v10 = new JComboBox();
-		v10.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
-		v10.setFont(new Font("Corbel", Font.PLAIN, 20));
-		v10.setBackground(Color.WHITE);
-		v10.setBounds(25, 397, 48, 26);
-		panel.add(v10);
-		viewAnswers.add(v10);
-
 		var3 = new JTextPane();
+		var3.setBorder(null);
 		var3.setForeground(new Color(99, 68, 55));
 		var3.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		var3.setEditable(false);
 		var3.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var3.setBounds(80, 138, 619, 29);
+		var3.setBounds(15, 223, 669, 29);
 		panel.add(var3);
 		view.add(var3);
 
 		var4 = new JTextPane();
+		var4.setBorder(null);
 		var4.setForeground(new Color(99, 68, 55));
 		var4.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		var4.setEditable(false);
 		var4.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var4.setBounds(80, 174, 619, 29);
+		var4.setBounds(15, 298, 669, 29);
 		panel.add(var4);
 		view.add(var4);
 
 		var5 = new JTextPane();
+		var5.setBorder(null);
 		var5.setForeground(new Color(99, 68, 55));
 		var5.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		var5.setEditable(false);
 		var5.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var5.setBounds(80, 211, 619, 29);
+		var5.setBounds(15, 376, 669, 29);
 		panel.add(var5);
 		view.add(var5);
 
-		var6 = new JTextPane();
-		var6.setForeground(new Color(99, 68, 55));
-		var6.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
-		var6.setEditable(false);
-		var6.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var6.setBounds(80, 247, 619, 29);
-		panel.add(var6);
-		view.add(var6);
+		v4 = new JComboBox();
+		v4.setBounds(15, 334, 669, 26);
+		panel.add(v4);
+		v4.setFont(new Font("Corbel", Font.PLAIN, 20));
+		v4.setBackground(Color.WHITE);
+		viewAnswers.add(v4);
 
-		var7 = new JTextPane();
-		var7.setForeground(new Color(99, 68, 55));
-		var7.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
-		var7.setEditable(false);
-		var7.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var7.setBounds(80, 286, 619, 29);
-		panel.add(var7);
-		view.add(var7);
-
-		var8 = new JTextPane();
-		var8.setForeground(new Color(99, 68, 55));
-		var8.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
-		var8.setEditable(false);
-		var8.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var8.setBounds(80, 324, 619, 29);
-		panel.add(var8);
-		view.add(var8);
-
-		var9 = new JTextPane();
-		var9.setForeground(new Color(99, 68, 55));
-		var9.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
-		var9.setEditable(false);
-		var9.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var9.setBounds(80, 361, 619, 29);
-		panel.add(var9);
-		view.add(var9);
-
-		var10 = new JTextPane();
-		var10.setForeground(new Color(99, 68, 55));
-		var10.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
-		var10.setEditable(false);
-		var10.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var10.setBounds(80, 397, 619, 29);
-		panel.add(var10);
-		view.add(var10);
+		v5 = new JComboBox();
+		v5.setBounds(15, 408, 669, 26);
+		panel.add(v5);
+		v5.setFont(new Font("Corbel", Font.PLAIN, 20));
+		v5.setBackground(Color.WHITE);
+		viewAnswers.add(v5);
 
 		finish = new JButton("Terminar evaluaci\u00F3n");
 		finish.addActionListener(new ActionListener() {
@@ -319,8 +215,8 @@ public class VariableTrueFalse {
 					int cant = 0;
 					timer.cancel();
 
-					for(int i=0; i<10; i++){
-						if(viewAnswers.get(i).getSelectedItem().equals(trueAnswers.get(i))){
+					for(int i=0; i<5; i++){
+						if((viewAnswers.get(i).getSelectedIndex() - 1) == questions.getAnswer().get(i)){
 							cant = cant + 1;
 							viewAnswers.get(i).setForeground(Color.GREEN);
 						}else{
@@ -330,14 +226,14 @@ public class VariableTrueFalse {
 
 					String tiempo = min + "." + sec;
 					double t = Double.parseDouble(tiempo);
-					
-					ResultView rs = new ResultView(cant, 10, t, timeFinal, frmEtapa, operator, train, "variable", cantInt);
+
+					ResultView rs = new ResultView(cant, 5, t, timeFinal, frmEtapa, operator, train, "causa", cantInt);
 					rs.setLocationRelativeTo(frmEtapa);
 					rs.setVisible(true);
 				}
 			}
 		});
-		finish.setIcon(new ImageIcon(VariableTrueFalse.class.getResource("/images/icons8_Finish_Flag_16.png")));
+		finish.setIcon(new ImageIcon(CauseWhiteSpace.class.getResource("/images/icons8_Finish_Flag_16.png")));
 		finish.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -353,11 +249,11 @@ public class VariableTrueFalse {
 		finish.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		finish.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 113, 19)));
 		finish.setBackground(new Color(255, 113, 19));
-		finish.setBounds(248, 506, 236, 35);
+		finish.setBounds(247, 530, 236, 35);
 		frmEtapa.getContentPane().add(finish);
 
 		label_1 = new JLabel();
-		label_1.setIcon(new ImageIcon(VariableTrueFalse.class.getResource("/images/icons8_Time_32.png")));
+		label_1.setIcon(new ImageIcon(CauseWhiteSpace.class.getResource("/images/icons8_Time_32.png")));
 		label_1.setBounds(577, 16, 32, 36);
 		frmEtapa.getContentPane().add(label_1);
 
@@ -403,24 +299,23 @@ public class VariableTrueFalse {
 		chargeData();
 	}
 
+	@SuppressWarnings("unchecked")
 	private void chargeData(){
-		for(int i=0; i<10; i++){
-			numbers.add(i);
+		viewAnswers.get(0).addItem(" ");
+		viewAnswers.get(1).addItem(" ");
+		viewAnswers.get(2).addItem(" ");
+		viewAnswers.get(3).addItem(" ");
+		viewAnswers.get(4).addItem(" ");
+		for(int i=0; i<5; i++){
+			view.get(i).setText((i+1) + ". " + questions.getVariables().get(i));
+			System.out.println(questions.getAnswer().get(i));
 		}
-		Collections.shuffle(numbers);
-
-		for(int i=0; i<10; i++){
-			if(questions.getVariables().get(i).getVar_type().equals("Continua")){
-				view.get(i).setText(questions.getStates().get(numbers.get(i)) + ", " + questions.getVariables().get(numbers.get(i)).getVar_name());
-			}else{
-				view.get(i).setText(questions.getStates().get(numbers.get(i)) + ", " + questions.getVariables().get(numbers.get(i)).getVar_name());
-			}
-
-			if(questions.getAnswer().contains(numbers.get(i))){
-				trueAnswers.add("V");
-			}else{
-				trueAnswers.add("F");
-			}
+		for(int i=0; i<questions.getCauses().size(); i++){
+			viewAnswers.get(0).addItem(questions.getCauses().get(i));
+			viewAnswers.get(1).addItem(questions.getCauses().get(i));
+			viewAnswers.get(2).addItem(questions.getCauses().get(i));
+			viewAnswers.get(3).addItem(questions.getCauses().get(i));
+			viewAnswers.get(4).addItem(questions.getCauses().get(i));
 		}
 	}
 }
