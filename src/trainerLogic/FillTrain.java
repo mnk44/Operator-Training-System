@@ -229,27 +229,27 @@ public class FillTrain {
 
 		return state;
 	}
-	
+
 	public static QuestionCause fillQuestionCause(Process process){
 		ArrayList<Integer> answers = new ArrayList<>();
 		ArrayList<String> questions = new ArrayList<>();
 		ArrayList<String> causes = new ArrayList<>();
-		
+
 		ArrayList<Variable> variables = FileService.getVariables(process.getProcess_id());
 		ArrayList<Cause> causeList = FileService.getCauses(process.getProcess_id());
 		ArrayList<VariableCause> varCauses = FileService.getVariableCause(process.getProcess_id());
-		
+
 		ArrayList<Integer> azar = new ArrayList<>();
-		
+
 		DecimalFormat format = new DecimalFormat("#.00");
-		
+
 		for(int i=0; i<5; i++){
 			answers.add(-1);
 			questions.add("");
 			azar.add(i);
 		}
 		Collections.shuffle(azar);
-		
+
 		for(int i=0; i<5; i++){
 			int position = (int) getRandomIntegerBetweenRange(0, (varCauses.size() - 1));
 			Variable var = findVar(variables, varCauses.get(position).getVar_id());
@@ -269,7 +269,7 @@ public class FillTrain {
 				qt = qt + " en estado " + varCauses.get(position).getState_var();
 			}
 			questions.set(azar.get(i), qt);
-			
+
 			String c = findCause(causeList, varCauses.get(position).getCause_id());
 			if(causes.contains(c)){
 				answers.set(azar.get(i), causes.indexOf(c));
@@ -282,11 +282,11 @@ public class FillTrain {
 		QuestionCause q = new QuestionCause(causes, answers, questions);
 		return q;
 	}
-	
+
 	private static Variable findVar(ArrayList<Variable> variables, int id){
 		Variable variable = null;
 		int cont = 0;
-		
+
 		while((variable == null) && (cont < variables.size())){
 			int idVar = variables.get(cont).getVar_id();
 			if(idVar == id){
@@ -294,14 +294,14 @@ public class FillTrain {
 			}
 			cont = cont + 1;
 		}
-		
+
 		return variable;
 	}
-	
+
 	private static String findCause(ArrayList<Cause> variables, int id){
 		String variable = null;
 		int cont = 0;
-		
+
 		while(variable == null && cont < variables.size()){
 			int idVar = variables.get(cont).getCause_id();
 			if(idVar == id){
@@ -309,7 +309,47 @@ public class FillTrain {
 			}
 			cont = cont + 1;
 		}
-		
+
 		return variable;
 	}
+
+	public static QuestionVar2 fillQuestionVar2(Process process){
+		ArrayList<Variable> variables = FileService.getVariables(process.getProcess_id());
+		ArrayList<VariableCause> varCauses = FileService.getVariableCause(process.getProcess_id());
+
+		ArrayList<String> questions = new ArrayList<>();
+		ArrayList<String> answers = new ArrayList<>();
+
+		ArrayList<Integer> azar = new ArrayList<>();
+
+		for(int i=0; i<10; i++){
+			answers.add("");
+			questions.add("");
+			azar.add(i);
+		}
+		Collections.shuffle(azar);
+
+		//fill questions
+		for(int i=0; i<10; i++){
+			int position = (int) getRandomIntegerBetweenRange(0, (varCauses.size() - 1));
+			Variable var = findVar(variables, varCauses.get(position).getVar_id());
+			String state = getState(varCauses,  var);
+			questions.set(azar.get(i), var.getVar_name());
+			if(state.equals("todos")){
+				if(var.getVar_type().equals("Discreta")){
+					answers.set(azar.get(i), "POSITIVO,NEGATIVO");
+				}else if(var.getVar_type().equals("Continua")){
+					answers.set(azar.get(i), "ALTO,BAJO,NORMAL");
+				}else{
+					answers.set(azar.get(i), "ABIERTA,CERRADA,NORMAL");
+				}
+			}else{
+				answers.set(azar.get(i), state);
+			}
+		}
+
+		QuestionVar2 q = new QuestionVar2(questions, answers);	
+		return q;
+	}
+
 }

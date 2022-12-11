@@ -19,6 +19,7 @@ import javax.swing.border.MatteBorder;
 import services.TrainingService;
 import trainerInterfaces.CauseWhiteSpace;
 import trainerInterfaces.VariableTrueFalse;
+import trainerInterfaces.VariableWhiteSpace;
 import classes.ProcessConfiguration;
 import classes.Training;
 import classes.Process;
@@ -59,7 +60,7 @@ public class TrainingView extends JPanel{
 	private JLabel prom_rec;
 	private JLabel lblCantidadDeIntentos;
 	private JLabel label;
-	
+
 	DecimalFormat format = new DecimalFormat("#.00");
 
 	public TrainingView(String process, final ProcessConfiguration conf, final Training trainn, final User operator) {
@@ -156,6 +157,11 @@ public class TrainingView extends JPanel{
 							var.frmEtapa.setLocationRelativeTo(null);
 							var.frmEtapa.setVisible(true);
 							PrincipalView.close();
+						}else if(conf.getType_var().equals("Espacios en blanco")){
+							VariableWhiteSpace var = new VariableWhiteSpace(p, conf.getTime_limit(), operator, t, conf);
+							var.frmEtapa.setLocationRelativeTo(null);
+							var.frmEtapa.setVisible(true);
+							PrincipalView.close();
 						}
 					}else{
 						JOptionPane.showMessageDialog(null, train, "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -168,12 +174,19 @@ public class TrainingView extends JPanel{
 							var.frmEtapa.setLocationRelativeTo(null);
 							var.frmEtapa.setVisible(true);
 							PrincipalView.close();
+						}else if(conf.getType_var().equals("Espacios en blanco")){
+							VariableWhiteSpace var = new VariableWhiteSpace(p, conf.getTime_limit(), operator, trainn, conf);
+							var.frmEtapa.setLocationRelativeTo(null);
+							var.frmEtapa.setVisible(true);
+							PrincipalView.close();
 						}
 					}else if(cause.isVisible()){
-						CauseWhiteSpace cw = new CauseWhiteSpace(p, conf.getTime_limit(), operator, trainn, conf);
-						cw.frmEtapa.setLocationRelativeTo(null);
-						cw.frmEtapa.setVisible(true);
-						PrincipalView.close();
+						if(conf.getType_cause().equals("Espacios en blanco")){
+							CauseWhiteSpace cw = new CauseWhiteSpace(p, conf.getTime_limit(), operator, trainn, conf);
+							cw.frmEtapa.setLocationRelativeTo(null);
+							cw.frmEtapa.setVisible(true);
+							PrincipalView.close();
+						}
 					}
 				}
 			}
