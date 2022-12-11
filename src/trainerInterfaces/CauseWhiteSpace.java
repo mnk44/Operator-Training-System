@@ -290,7 +290,7 @@ public class CauseWhiteSpace {
 						JOptionPane.showMessageDialog(null, "Se ha terminado el tiempo", "¡Tiempo!", JOptionPane.INFORMATION_MESSAGE);
 						finish.doClick();
 					}else{
-						seconds = 60;
+						seconds = 59;
 					}
 				}
 			}
