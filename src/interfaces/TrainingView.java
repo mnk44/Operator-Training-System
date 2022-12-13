@@ -19,6 +19,7 @@ import javax.swing.border.MatteBorder;
 import services.TrainingService;
 import trainerInterfaces.CauseWhiteSpace;
 import trainerInterfaces.VariableEnlace;
+import trainerInterfaces.VariableMultipleSelection;
 import trainerInterfaces.VariableTrueFalse;
 import trainerInterfaces.VariableWhiteSpace;
 import classes.ProcessConfiguration;
@@ -168,6 +169,11 @@ public class TrainingView extends JPanel{
 							var.frmEtapa.setLocationRelativeTo(null);
 							var.frmEtapa.setVisible(true);
 							PrincipalView.close();
+						}else{
+							VariableMultipleSelection var = new VariableMultipleSelection(p, conf.getTime_limit(), operator, t, conf);
+							var.frmEtapa.setLocationRelativeTo(null);
+							var.frmEtapa.setVisible(true);
+							PrincipalView.close();
 						}
 					}else{
 						JOptionPane.showMessageDialog(null, train, "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -187,6 +193,11 @@ public class TrainingView extends JPanel{
 							PrincipalView.close();
 						}else if(conf.getType_var().equals("Enlazar")){
 							VariableEnlace var = new VariableEnlace(p, conf.getTime_limit(), operator, trainn, conf);
+							var.frmEtapa.setLocationRelativeTo(null);
+							var.frmEtapa.setVisible(true);
+							PrincipalView.close();
+						}else{
+							VariableMultipleSelection var = new VariableMultipleSelection(p, conf.getTime_limit(), operator, trainn, conf);
 							var.frmEtapa.setLocationRelativeTo(null);
 							var.frmEtapa.setVisible(true);
 							PrincipalView.close();
