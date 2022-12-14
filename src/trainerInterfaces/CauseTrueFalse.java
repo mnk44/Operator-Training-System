@@ -39,7 +39,7 @@ import classes.User;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class CauseEnlace {
+public class CauseTrueFalse {
 
 	public JFrame frmEtapa;
 	private JLabel label;
@@ -72,11 +72,9 @@ public class CauseEnlace {
 	ArrayList<String> trueAnswers = new ArrayList<>();
 	@SuppressWarnings("rawtypes")
 	ArrayList<JComboBox> viewAnswers = new ArrayList<>();
-	private JTextPane varA;
-	private JTextPane varB;
 
-	public CauseEnlace(Process p, int timeFinal, User operator, Training train, ProcessConfiguration cantInte) {
-		questions = FillTrain.fillQuestionCause2(p);
+	public CauseTrueFalse(Process p, int timeFinal, User operator, Training train, ProcessConfiguration cantInte) {
+		questions = FillTrain.fillQuestionCause3(p);
 		initialize(timeFinal, operator, train, cantInte);
 	}
 
@@ -85,11 +83,11 @@ public class CauseEnlace {
 		frmEtapa = new JFrame();
 		frmEtapa.setTitle("Etapa #1: Variables");
 		frmEtapa.setResizable(false);
-		frmEtapa.setIconImage(Toolkit.getDefaultToolkit().getImage(CauseEnlace.class.getResource("/images/icons8_Quiz_32.png")));
+		frmEtapa.setIconImage(Toolkit.getDefaultToolkit().getImage(CauseTrueFalse.class.getResource("/images/icons8_Quiz_32.png")));
 		frmEtapa.getContentPane().setBackground(Color.WHITE);
 		frmEtapa.getContentPane().setLayout(null);
 		frmEtapa.setBackground(Color.WHITE);
-		frmEtapa.setBounds(100, 100, 745, 573);
+		frmEtapa.setBounds(100, 100, 745, 593);
 		frmEtapa.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frmEtapa.addWindowListener(new WindowAdapter() {
 			@Override
@@ -109,7 +107,7 @@ public class CauseEnlace {
 
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(25, 59, 699, 411);
+		panel.setBounds(25, 59, 699, 430);
 		frmEtapa.getContentPane().add(panel);
 		panel.setLayout(null);
 
@@ -118,9 +116,9 @@ public class CauseEnlace {
 		txtpnSeleccioneLasVariables.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		txtpnSeleccioneLasVariables.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 18));
 		txtpnSeleccioneLasVariables.setForeground(new Color(255, 113, 19));
-		txtpnSeleccioneLasVariables.setText("Enlace cada variable con su causa de manera que se obtenga una expresi\u00F3n verdadera:");
+		txtpnSeleccioneLasVariables.setText("Seleccione verdadero o falso si la causa corresponde a la variable:");
 		txtpnSeleccioneLasVariables.setEditable(false);
-		txtpnSeleccioneLasVariables.setBounds(0, 0, 699, 58);
+		txtpnSeleccioneLasVariables.setBounds(0, 0, 664, 58);
 		panel.add(txtpnSeleccioneLasVariables);
 
 		var1 = new JTextPane();
@@ -129,23 +127,23 @@ public class CauseEnlace {
 		var1.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		var1.setEditable(false);
 		var1.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var1.setBounds(346, 64, 338, 63);
+		var1.setBounds(80, 61, 604, 71);
 		panel.add(var1);
 		view.add(var1);
 
 		v1 = new JComboBox();
 		v1.setFont(new Font("Corbel", Font.PLAIN, 20));
 		v1.setBackground(Color.WHITE);
-		v1.setModel(new DefaultComboBoxModel(new String[] {"", "A", "B"}));
-		v1.setBounds(294, 85, 48, 26);
+		v1.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
+		v1.setBounds(25, 84, 48, 26);
 		panel.add(v1);
 		viewAnswers.add(v1);
 
 		v2 = new JComboBox();
-		v2.setModel(new DefaultComboBoxModel(new String[] {"", "A", "B"}));
+		v2.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
 		v2.setFont(new Font("Corbel", Font.PLAIN, 20));
 		v2.setBackground(Color.WHITE);
-		v2.setBounds(294, 147, 48, 26);
+		v2.setBounds(25, 159, 48, 26);
 		panel.add(v2);
 		viewAnswers.add(v2);
 
@@ -155,31 +153,31 @@ public class CauseEnlace {
 		var2.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		var2.setEditable(false);
 		var2.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var2.setBounds(346, 130, 338, 63);
+		var2.setBounds(80, 135, 604, 71);
 		panel.add(var2);
 		view.add(var2);
 
 		v3 = new JComboBox();
-		v3.setModel(new DefaultComboBoxModel(new String[] {"", "A", "B"}));
+		v3.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
 		v3.setFont(new Font("Corbel", Font.PLAIN, 20));
 		v3.setBackground(Color.WHITE);
-		v3.setBounds(294, 211, 48, 26);
+		v3.setBounds(25, 225, 48, 26);
 		panel.add(v3);
 		viewAnswers.add(v3);
 
 		v4 = new JComboBox();
-		v4.setModel(new DefaultComboBoxModel(new String[] {"", "A", "B"}));
+		v4.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
 		v4.setFont(new Font("Corbel", Font.PLAIN, 20));
 		v4.setBackground(Color.WHITE);
-		v4.setBounds(294, 283, 48, 26);
+		v4.setBounds(25, 300, 48, 26);
 		panel.add(v4);
 		viewAnswers.add(v4);
 
 		v5 = new JComboBox();
-		v5.setModel(new DefaultComboBoxModel(new String[] {"", "A", "B"}));
+		v5.setModel(new DefaultComboBoxModel(new String[] {"", "V", "F"}));
 		v5.setFont(new Font("Corbel", Font.PLAIN, 20));
 		v5.setBackground(Color.WHITE);
-		v5.setBounds(294, 348, 48, 26);
+		v5.setBounds(25, 372, 48, 26);
 		panel.add(v5);
 		viewAnswers.add(v5);
 
@@ -189,7 +187,7 @@ public class CauseEnlace {
 		var3.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		var3.setEditable(false);
 		var3.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var3.setBounds(346, 195, 338, 63);
+		var3.setBounds(80, 207, 604, 71);
 		panel.add(var3);
 		view.add(var3);
 
@@ -199,37 +197,19 @@ public class CauseEnlace {
 		var4.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		var4.setEditable(false);
 		var4.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var4.setBounds(346, 264, 338, 63);
+		var4.setBounds(80, 280, 604, 71);
 		panel.add(var4);
 		view.add(var4);
-
-		var5 = new JTextPane();
-		var5.setBorder(null);
-		var5.setForeground(new Color(99, 68, 55));
-		var5.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
-		var5.setEditable(false);
-		var5.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		var5.setBounds(346, 330, 338, 63);
-		panel.add(var5);
-		view.add(var5);
 		
-		varA = new JTextPane();
-		varA.setBorder(null);
-		varA.setForeground(new Color(99, 68, 55));
-		varA.setFont(new Font("Copperplate Gothic Light", Font.BOLD, 18));
-		varA.setEditable(false);
-		varA.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		varA.setBounds(15, 140, 233, 63);
-		panel.add(varA);
-		
-		varB = new JTextPane();
-		varB.setForeground(new Color(99, 68, 55));
-		varB.setFont(new Font("Copperplate Gothic Light", Font.BOLD, 18));
-		varB.setEditable(false);
-		varB.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-		varB.setBorder(null);
-		varB.setBounds(15, 219, 233, 63);
-		panel.add(varB);
+				var5 = new JTextPane();
+				var5.setBounds(80, 358, 604, 64);
+				panel.add(var5);
+				var5.setBorder(null);
+				var5.setForeground(new Color(99, 68, 55));
+				var5.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
+				var5.setEditable(false);
+				var5.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+				view.add(var5);
 
 		finish = new JButton("Terminar evaluaci\u00F3n");
 		finish.addActionListener(new ActionListener() {
@@ -243,7 +223,7 @@ public class CauseEnlace {
 					timer.cancel();
 
 					for(int i=0; i<5; i++){
-						if(viewAnswers.get(i).getSelectedIndex() == questions.getAnswer().get(i) || questions.getAnswer().get(i) == 3){
+						if(viewAnswers.get(i).getSelectedIndex() == questions.getAnswer().get(i)){
 							cant = cant + 1;
 							viewAnswers.get(i).setForeground(Color.GREEN);
 						}else{
@@ -253,14 +233,14 @@ public class CauseEnlace {
 
 					String tiempo = min + "." + sec;
 					double t = Double.parseDouble(tiempo);
-					
+
 					ResultView rs = new ResultView(cant, 5, t, timeFinal, frmEtapa, operator, train, "causa", cantInt);
 					rs.setLocationRelativeTo(frmEtapa);
 					rs.setVisible(true);
 				}
 			}
 		});
-		finish.setIcon(new ImageIcon(CauseEnlace.class.getResource("/images/icons8_Finish_Flag_16.png")));
+		finish.setIcon(new ImageIcon(CauseTrueFalse.class.getResource("/images/icons8_Finish_Flag_16.png")));
 		finish.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -276,11 +256,11 @@ public class CauseEnlace {
 		finish.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		finish.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(255, 113, 19)));
 		finish.setBackground(new Color(255, 113, 19));
-		finish.setBounds(247, 486, 236, 35);
+		finish.setBounds(240, 505, 236, 35);
 		frmEtapa.getContentPane().add(finish);
 
 		label_1 = new JLabel();
-		label_1.setIcon(new ImageIcon(CauseEnlace.class.getResource("/images/icons8_Time_32.png")));
+		label_1.setIcon(new ImageIcon(CauseTrueFalse.class.getResource("/images/icons8_Time_32.png")));
 		label_1.setBounds(577, 16, 32, 36);
 		frmEtapa.getContentPane().add(label_1);
 
@@ -327,11 +307,8 @@ public class CauseEnlace {
 	}
 
 	private void chargeData(){
-		varA.setText("A) " + questions.getVariables().get(0));
-		varB.setText("B) " + questions.getVariables().get(1));
-		
 		for(int i=0; i<5; i++){
-			view.get(i).setText((i+1) + ". " + questions.getCauses().get(i));
+			view.get(i).setText(questions.getVariables().get(i) + " tiene como causa " + questions.getCauses().get(i));
 		}
 	}
 }
