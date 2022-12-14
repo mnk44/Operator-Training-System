@@ -577,7 +577,7 @@ public class ProcessView extends JDialog {
 		panel_1.add(causes);
 
 		recomendations = new JComboBox();
-		recomendations.setModel(new DefaultComboBoxModel(new String[] {"Enlazar", "Espacios en blanco", "Selecci\u00F3n m\u00FAltiple", "Verdadero o falso"}));
+		recomendations.setModel(new DefaultComboBoxModel(new String[] {"Selecci\u00F3n m\u00FAltiple", "Verdadero o falso"}));
 		recomendations.setSelectedIndex(0);
 		recomendations.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 20));
 		recomendations.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
