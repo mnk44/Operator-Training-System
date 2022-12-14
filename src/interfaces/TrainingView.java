@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
 import services.TrainingService;
+import trainerInterfaces.CauseEnlace;
 import trainerInterfaces.CauseWhiteSpace;
 import trainerInterfaces.VariableEnlace;
 import trainerInterfaces.VariableMultipleSelection;
@@ -208,6 +209,18 @@ public class TrainingView extends JPanel{
 							cw.frmEtapa.setLocationRelativeTo(null);
 							cw.frmEtapa.setVisible(true);
 							PrincipalView.close();
+						}else if(conf.getType_cause().equals("Verdadero o falso")){
+							CauseWhiteSpace cw = new CauseWhiteSpace(p, conf.getTime_limit(), operator, trainn, conf);
+							cw.frmEtapa.setLocationRelativeTo(null);
+							cw.frmEtapa.setVisible(true);
+							PrincipalView.close();
+						}else if(conf.getType_cause().equals("Enlazar")){
+							CauseEnlace cw = new CauseEnlace(p, conf.getTime_limit(), operator, trainn, conf);
+							cw.frmEtapa.setLocationRelativeTo(null);
+							cw.frmEtapa.setVisible(true);
+							PrincipalView.close();
+						}else{
+							
 						}
 					}
 				}

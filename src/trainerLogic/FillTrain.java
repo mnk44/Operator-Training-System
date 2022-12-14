@@ -283,6 +283,97 @@ public class FillTrain {
 		return q;
 	}
 
+	public static QuestionCause fillQuestionCause2(Process process){
+		ArrayList<Integer> answers = new ArrayList<>();
+		ArrayList<String> questions = new ArrayList<>();
+		ArrayList<String> causes = new ArrayList<>();
+		ArrayList<String> ccc = new ArrayList<>();
+		
+		int index = -1;
+		int other = -1;
+		ArrayList<Integer> repit = new ArrayList<>();
+
+		ArrayList<Variable> variables = FileService.getVariables(process.getProcess_id());
+		ArrayList<Cause> causeList = FileService.getCauses(process.getProcess_id());
+		ArrayList<VariableCause> varCauses = FileService.getVariableCause(process.getProcess_id());
+
+		ArrayList<Integer> azar = new ArrayList<>();
+
+		DecimalFormat format = new DecimalFormat("#.00");
+
+		for(int k=0; k<2; k++){
+			index = causes.size();
+			int position = (int) getRandomIntegerBetweenRange(0, (varCauses.size() - 1));
+			Variable var = findVar(variables, varCauses.get(position).getVar_id());
+			String qt = var.getVar_name();
+			if(var.getVar_type().equals("Continua")){
+				if(varCauses.get(position).getState_var().equals("ALTO")){
+					double valor = getRandomIntegerBetweenRange((var.getMax_value() + 1), (var.getMax_value() * 100));
+					qt = qt + " con un valor " + format.format(valor);
+				}else if(varCauses.get(position).getState_var().equals("NORMAL")){
+					double valor = getRandomIntegerBetweenRange(var.getMin_value(), var.getMax_value());
+					qt = qt + " con un valor " + format.format(valor);
+				}else{
+					double valor = getRandomIntegerBetweenRange((var.getMin_value() - 1000), var.getMin_value());
+					qt = qt + " con un valor " + format.format(valor);
+				}
+			}else{
+				qt = qt + " en estado " + varCauses.get(position).getState_var();
+			}
+			questions.add(qt);
+			
+			for(int i=0; i<varCauses.size(); i++){
+				if(varCauses.get(i).getVar_id() == var.getVar_id()){
+					String caus = findCause(causeList, varCauses.get(i).getCause_id());
+					if(!causes.contains(caus)){
+						causes.add(caus);
+						System.out.println(caus);
+					}else{
+						repit.add(causes.indexOf(caus));
+					}
+				}
+			}
+			System.out.println(index);
+		}
+		
+		if(causes.size() <= 5){
+			other = causes.size();
+			for(int i=(causes.size()-1); i<5; i++){
+				int position = (int) getRandomIntegerBetweenRange(0, (varCauses.size() - 1));
+				String caus = findCause(causeList, varCauses.get(position).getCause_id());
+				if(!causes.contains(caus)){
+					causes.add(caus);
+				}else{
+					i = i - 1;
+				}
+			}
+			for(int i=0; i<5; i++){
+				azar.add(i);
+			}
+			Collections.shuffle(azar);
+		}else if(causes.size() > 5){
+			for(int i=0; i<causes.size(); i++){
+				azar.add(i);
+			}
+			Collections.shuffle(azar);
+		}
+		for(int i=0; i<5; i++){
+			ccc.add(causes.get(azar.get(i)));
+			if(repit.contains(azar.get(i))){
+				answers.add(3);
+			}else if(azar.get(i) < index){
+				answers.add(1);
+			}else if(azar.get(i) < other && other != -1){
+				answers.add(2);
+			}else{
+				answers.add(0);
+			}
+		}
+		
+		QuestionCause q = new QuestionCause(ccc, answers, questions);
+		return q;
+	}
+	
 	private static Variable findVar(ArrayList<Variable> variables, int id){
 		Variable variable = null;
 		int cont = 0;
