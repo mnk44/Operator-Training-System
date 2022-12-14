@@ -69,7 +69,6 @@ public class CauseEnlace {
 
 	QuestionCause questions;
 	ArrayList<JTextPane> view = new ArrayList<>();
-	ArrayList<String> trueAnswers = new ArrayList<>();
 	@SuppressWarnings("rawtypes")
 	ArrayList<JComboBox> viewAnswers = new ArrayList<>();
 	private JTextPane varA;
