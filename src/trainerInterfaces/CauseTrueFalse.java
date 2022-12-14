@@ -80,7 +80,7 @@ public class CauseTrueFalse {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize(final int timeFinal, final User operator, final Training train, final ProcessConfiguration cantInt) {
 		frmEtapa = new JFrame();
-		frmEtapa.setTitle("Etapa #1: Variables");
+		frmEtapa.setTitle("Etapa #2: Causas");
 		frmEtapa.setResizable(false);
 		frmEtapa.setIconImage(Toolkit.getDefaultToolkit().getImage(CauseTrueFalse.class.getResource("/images/icons8_Quiz_32.png")));
 		frmEtapa.getContentPane().setBackground(Color.WHITE);

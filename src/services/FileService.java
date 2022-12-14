@@ -303,6 +303,24 @@ public class FileService {
 		return variables;
 	}
 	
+	public static ArrayList<CauseRecomendation> getCauseRec(int process){
+		ArrayList<CauseRecomendation> variables = new ArrayList<>();
+		
+		try{
+			String sqlSentenc = "SELECT * FROM cause_recomendation WHERE process_id = ?;";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, process);
+			ResultSet rs = cs.executeQuery();
+			while(rs.next()){
+				CauseRecomendation v = new CauseRecomendation(rs.getInt("table_id"), rs.getInt("cause_id"), rs.getInt("rec_id"), rs.getInt("process_id"));
+				variables.add(v);
+			}
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		return variables;
+	}
+	
 	public static ArrayList<Variable> getVariables(int process){
 		ArrayList<Variable> variables = new ArrayList<>();
 		
@@ -332,6 +350,24 @@ public class FileService {
 			ResultSet rs = cs.executeQuery();
 			while(rs.next()){
 				Cause v = new Cause(rs.getInt("cause_id"), rs.getInt("process_id"), rs.getString("cause_name"));
+				cause.add(v);
+			}
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		return cause;
+	}
+	
+	public static ArrayList<Recomendation> getRec(int process){
+		ArrayList<Recomendation> cause = new ArrayList<>();
+		
+		try{
+			String sqlSentenc = "SELECT * FROM recomendation WHERE process_id = ?;";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, process);
+			ResultSet rs = cs.executeQuery();
+			while(rs.next()){
+				Recomendation v = new Recomendation(rs.getInt("rec_id"), rs.getInt("process_id"), rs.getString("rec_name"));
 				cause.add(v);
 			}
 		}catch (Exception e){

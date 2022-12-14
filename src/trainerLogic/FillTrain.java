@@ -6,7 +6,9 @@ import java.util.Collections;
 
 import services.FileService;
 import classes.Cause;
+import classes.CauseRecomendation;
 import classes.Process;
+import classes.Recomendation;
 import classes.Variable;
 import classes.VariableCause;
 
@@ -288,7 +290,7 @@ public class FillTrain {
 		ArrayList<String> questions = new ArrayList<>();
 		ArrayList<String> causes = new ArrayList<>();
 		ArrayList<String> ccc = new ArrayList<>();
-		
+
 		int index = -1;
 		int other = -1;
 		ArrayList<Integer> repit = new ArrayList<>();
@@ -321,7 +323,7 @@ public class FillTrain {
 				qt = qt + " en estado " + varCauses.get(position).getState_var();
 			}
 			questions.add(qt);
-			
+
 			for(int i=0; i<varCauses.size(); i++){
 				if(varCauses.get(i).getVar_id() == var.getVar_id()){
 					String caus = findCause(causeList, varCauses.get(i).getCause_id());
@@ -335,7 +337,7 @@ public class FillTrain {
 			}
 			System.out.println(index);
 		}
-		
+
 		if(causes.size() <= 5){
 			other = causes.size();
 			for(int i=(causes.size()-1); i<5; i++){
@@ -369,11 +371,11 @@ public class FillTrain {
 				answers.add(0);
 			}
 		}
-		
+
 		QuestionCause q = new QuestionCause(ccc, answers, questions);
 		return q;
 	}
-	
+
 	private static Variable findVar(ArrayList<Variable> variables, int id){
 		Variable variable = null;
 		int cont = 0;
@@ -397,6 +399,21 @@ public class FillTrain {
 			int idVar = variables.get(cont).getCause_id();
 			if(idVar == id){
 				variable = variables.get(cont).getCause_name();
+			}
+			cont = cont + 1;
+		}
+
+		return variable;
+	}
+	
+	private static String findRec(ArrayList<Recomendation> variables, int id){
+		String variable = null;
+		int cont = 0;
+
+		while(variable == null && cont < variables.size()){
+			int idVar = variables.get(cont).getRec_id();
+			if(idVar == id){
+				variable = variables.get(cont).getRec_name();
 			}
 			cont = cont + 1;
 		}
@@ -442,7 +459,7 @@ public class FillTrain {
 		QuestionVar2 q = new QuestionVar2(questions, answers);	
 		return q;
 	}
-	
+
 	public static QuestionCause fillQuestionCause3(Process process){
 		ArrayList<Integer> answers = new ArrayList<>();
 		ArrayList<String> questions = new ArrayList<>();
@@ -453,9 +470,9 @@ public class FillTrain {
 		ArrayList<VariableCause> varCauses = FileService.getVariableCause(process.getProcess_id());
 
 		ArrayList<Integer> azar = new ArrayList<>();
-		
+
 		DecimalFormat format = new DecimalFormat("#.00");
-		
+
 		for(int i=0; i<5; i++){
 			answers.add(-1);
 			questions.add("");
@@ -463,16 +480,16 @@ public class FillTrain {
 			azar.add(i);
 		}
 		Collections.shuffle(azar);
-		
+
 		int real = (int) getRandomIntegerBetweenRange(0, 5);
-		
+
 		int x = -1;
 		int y = -1;
 
 		for(int i=0; i<5; i++){
 			x = (int) getRandomIntegerBetweenRange(0, (varCauses.size() - 1));
 			y = (int) getRandomIntegerBetweenRange(0, (varCauses.size() - 1));
-			
+
 			Variable v = findVar(variables, varCauses.get(x).getVar_id());
 			String qt = v.getVar_name();
 			if(v.getVar_type().equals("Continua")){
@@ -490,7 +507,7 @@ public class FillTrain {
 				qt = qt + " en estado " + varCauses.get(x).getState_var();
 			}
 			questions.set(azar.get(i), qt);
-			
+
 			if(real > 0){
 				String cause = findCause(causeList, varCauses.get(x).getCause_id());
 				causes.set(azar.get(i), cause);
@@ -507,19 +524,80 @@ public class FillTrain {
 		QuestionCause q = new QuestionCause(causes, answers, questions);
 		return q;
 	}
-	
+
 	private static int isCause(int var, int cause, ArrayList<VariableCause> varCause){
 		int resp = 2;
 		int i = 0;
-		
+
 		while(resp == 2 && i < varCause.size()){
 			if(varCause.get(i).getVar_id() == var && varCause.get(i).getCause_id() == cause){
 				resp = 1;
 			}
 			i = i + 1;
 		}
-		
+
 		return resp;
+	}
+	
+	private static int isRec(int var, int cause, ArrayList<CauseRecomendation> varCause){
+		int resp = 2;
+		int i = 0;
+
+		while(resp == 2 && i < varCause.size()){
+			if(varCause.get(i).getRec_id() == var && varCause.get(i).getCause_id() == cause){
+				resp = 1;
+			}
+			i = i + 1;
+		}
+
+		return resp;
+	}
+
+	public static QuestionRec fillQuestionRec(Process p) {
+		ArrayList<Integer> answers = new ArrayList<>();
+		ArrayList<String> recomendations = new ArrayList<>();
+		ArrayList<String> causes = new ArrayList<>();
+
+		ArrayList<Recomendation> rec = FileService.getRec(p.getProcess_id());
+		ArrayList<Cause> causeList = FileService.getCauses(p.getProcess_id());
+		ArrayList<CauseRecomendation> causesRec = FileService.getCauseRec(p.getProcess_id());
+
+		ArrayList<Integer> azar = new ArrayList<>();
+
+		for(int i=0; i<5; i++){
+			answers.add(-1);
+			recomendations.add("");
+			causes.add("");
+			azar.add(i);
+		}
+		Collections.shuffle(azar);
+
+		int real = (int) getRandomIntegerBetweenRange(0, 5);
+		int x = -1;
+		int y = -1;
+		
+		for(int i=0; i<5; i++){
+			x = (int) getRandomIntegerBetweenRange(0, (causesRec.size() - 1));
+			y = (int) getRandomIntegerBetweenRange(0, (causesRec.size() - 1));
+
+			String v = findCause(causeList, causesRec.get(x).getCause_id());
+			causes.set(azar.get(i), v);
+
+			if(real > 0){
+				String re = findRec(rec, causesRec.get(x).getRec_id());
+				recomendations.set(azar.get(i), re);
+				answers.set(azar.get(i), 1);
+			}else{
+				int r = isRec(causesRec.get(x).getCause_id(), causesRec.get(y).getCause_id(), causesRec);
+				answers.set(azar.get(i), r);
+				String re = findRec(rec, causesRec.get(x).getRec_id());
+				recomendations.set(azar.get(i), re);
+			}
+			real = real - 1;
+		}
+
+		QuestionRec r = new QuestionRec(causes, answers, recomendations);
+		return r;
 	}
 
 }

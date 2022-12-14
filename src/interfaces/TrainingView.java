@@ -21,6 +21,7 @@ import trainerInterfaces.CauseEnlace;
 import trainerInterfaces.CauseMultipleSelection;
 import trainerInterfaces.CauseTrueFalse;
 import trainerInterfaces.CauseWhiteSpace;
+import trainerInterfaces.RecomTrueFalse;
 import trainerInterfaces.VariableEnlace;
 import trainerInterfaces.VariableMultipleSelection;
 import trainerInterfaces.VariableTrueFalse;
@@ -223,6 +224,13 @@ public class TrainingView extends JPanel{
 							PrincipalView.close();
 						}else{
 							CauseMultipleSelection cw = new CauseMultipleSelection(p, conf.getTime_limit(), operator, trainn, conf);
+							cw.frmEtapa.setLocationRelativeTo(null);
+							cw.frmEtapa.setVisible(true);
+							PrincipalView.close();
+						}
+					}else{
+						if(conf.getType_rec().equals("Verdadero o falso")){
+							RecomTrueFalse cw = new RecomTrueFalse(p, conf.getTime_limit(), operator, trainn, conf);
 							cw.frmEtapa.setLocationRelativeTo(null);
 							cw.frmEtapa.setVisible(true);
 							PrincipalView.close();
