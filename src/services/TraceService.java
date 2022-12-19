@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import classes.Trace;
 
 public class TraceService {
-	
-	public static Object getTraces() throws SQLException{
+
+	public static ArrayList<Trace> getTraces() throws SQLException{
 		ArrayList<Trace> tracesList = new ArrayList<Trace>();
 		try{
 			ResultSet rs = ConnectionService.getConnection().createStatement().executeQuery("SELECT * FROM trace");
@@ -18,7 +18,7 @@ public class TraceService {
 				tracesList.add(trace);
 			}
 		}catch (Exception e){
-			return e.getMessage();
+			e.getMessage();
 		}
 		return tracesList;
 	}

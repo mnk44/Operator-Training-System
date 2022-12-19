@@ -86,6 +86,10 @@ public class GeneralTrainingPanel extends JPanel {
 						trainning.setText("Iniciar entrenamiento");
 						trainning.setEnabled(true);
 						trainning.setBackground(new Color(255, 113, 19));
+					}else{
+						trainning.setText("Notas del entrenamiento");
+						trainning.setEnabled(true);
+						trainning.setBackground(new Color(255, 113, 19));
 					}
 				}else{
 					trainning.setEnabled(false);

@@ -348,10 +348,10 @@ public class TrainingView extends JPanel{
 		panel.add(prom_rec);
 
 		lblCantidadDeIntentos = new JLabel("Cantidad de intentos a aprobar:");
-		lblCantidadDeIntentos.setHorizontalAlignment(SwingConstants.LEFT);
+		lblCantidadDeIntentos.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblCantidadDeIntentos.setForeground(new Color(255, 113, 19));
 		lblCantidadDeIntentos.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 16));
-		lblCantidadDeIntentos.setBounds(0, 293, 300, 34);
+		lblCantidadDeIntentos.setBounds(0, 293, 285, 34);
 		panel.add(lblCantidadDeIntentos);
 
 		label = new JLabel();
@@ -373,6 +373,7 @@ public class TrainingView extends JPanel{
 				prom_rec.setText("-");
 				total2.setText("-");
 				total3.setText("-");
+				label.setText(Integer.toString(conf.getCant_aprov()-trainn.getCant_aprov()));
 			}else if(trainn.getCause_note() == -1){
 				total1.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
 				total1.setText("");
@@ -387,7 +388,8 @@ public class TrainingView extends JPanel{
 				prom_rec.setText("-");
 				total2.setText(Integer.toString(conf.getCant_questions()));
 				total3.setText("-");
-			}else{
+				label.setText(Integer.toString(conf.getCant_aprov()-trainn.getCant_aprov()));
+			}else if(trainn.getRec_note() == -1){
 				var.setVisible(false);
 				rec.setVisible(true);
 				var_int.setText("");
@@ -403,8 +405,28 @@ public class TrainingView extends JPanel{
 				prom_var.setText(format.format(trainn.getVar_note()));
 				prom_cause.setText(format.format(trainn.getCause_note()));
 				prom_rec.setText("-");
+				label.setText(Integer.toString(conf.getCant_aprov()-trainn.getCant_aprov()));
+			}else{
+				var.setVisible(false);
+				var_int.setText("");
+				var_int.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
+				cause_int.setText("");
+				cause_int.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
+				rec_int.setText("");
+				rec_int.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
+				total1.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
+				total1.setText("");
+				total2.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
+				total2.setText("");
+				total3.setIcon(new ImageIcon(TrainingView.class.getResource("/images/icons8_Checkmark_32.png")));
+				total3.setText("");
+				prom_var.setText(format.format(trainn.getVar_note()));
+				prom_cause.setText(format.format(trainn.getCause_note()));
+				prom_rec.setText(format.format(trainn.getRec_note()));
+				lblCantidadDeIntentos.setText("Nota general:");
+				label.setText(format.format(trainn.getGeneral_note()));
+				btnComenzarPrueba.setVisible(false);
 			}
-			label.setText(Integer.toString(conf.getCant_aprov()-trainn.getCant_aprov()));
 		}else{
 			total1.setText(Integer.toString(conf.getCant_questions()));
 			total2.setText("-");

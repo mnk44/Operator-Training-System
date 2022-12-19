@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import services.TraceService;
 import classes.Area;
+import classes.Trace;
 import classes.Training;
 import classes.TrainingPrepare;
 import classes.User;
@@ -55,37 +57,7 @@ public class DataTable {
 		date.addColumn("ID",process_id.toArray());
 		date.addColumn("Nombre",process_name.toArray());
 		table.setModel(date);
-	}
-//	
-//	@SuppressWarnings("deprecation")
-//	public static void getTraces(DefaultTableModel date, JTable table, ArrayList<Trace> traces, String fecha) throws SQLException{
-//		ArrayList<String> traceResp = new ArrayList<String>();
-//		ArrayList<String> accion = new ArrayList<String>();
-//		ArrayList<String> hora = new ArrayList<String>();
-//		
-//		for(int i=0; i<traces.size(); i++){
-//			if(traces.get(i).getTrace_date().toGMTString().substring(0, 11).equals(fecha)){
-//				traceResp.add(((User)UserService.findId(traces.get(i).getTrace_user())).getUser_nick());
-//				String act = traces.get(i).getTrace_accion().toString().replace("_", " ");
-//				accion.add(act.substring(0,1).toUpperCase() + act.substring(1).toLowerCase() + " " + traces.get(i).getTrace_class().toString() +
-//						" <" + traces.get(i).getTrace_class_id() + ">");
-//				hora.add(traces.get(i).getTrace_date().getHours() + ":" + traces.get(i).getTrace_date().getMinutes() + ":" + traces.get(i).getTrace_date().getSeconds());
-//			}
-//		}
-//
-//		date = new DefaultTableModel(){
-//			private static final long serialVersionUID = 1L;
-//			public boolean isCellEditable(int r,int c){
-//				return false;
-//			}
-//		};
-//
-//		date.addColumn("Usuario",traceResp.toArray());
-//		date.addColumn("Acción",accion.toArray());
-//		date.addColumn("Hora",hora.toArray());
-//		table.setModel(date);
-//	}
-//	
+	}	
 
 	public static void fillUsers(DefaultTableModel date, JTable table, ArrayList<User> users, ArrayList<Area> areas, int user_id) throws SQLException{
 		ArrayList<Integer> id_user = new ArrayList<Integer>();
@@ -153,6 +125,58 @@ public class DataTable {
 
 		date.addColumn("Proceso",train.getProcess().toArray());
 		date.addColumn("Estado",state.toArray());
+		table.setModel(date);
+	}
+	
+	public static void fillTraces(DefaultTableModel date, JTable table) throws SQLException{
+		ArrayList<Trace> t = TraceService.getTraces();
+		ArrayList<Integer> id = new ArrayList<Integer>();
+		ArrayList<String> action = new ArrayList<String>();
+		ArrayList<String> d = new ArrayList<String>();
+
+		for(int i=0; i<t.size(); i++){
+			id.add(t.get(i).getTrace_id());
+			action.add("El usuario <" + t.get(i).getUser_nick() + "> " + t.get(i).getTrace_accion() + " " + t.get(i).getChange_class());
+			d.add(t.get(i).getTrace_date().toString().substring(0, 10));
+		}
+
+		date = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int r,int c){
+				return false;
+			}
+		};
+
+		date.addColumn("ID",id.toArray());
+		date.addColumn("Acción",action.toArray());
+		date.addColumn("Fecha",d.toArray());
+		table.setModel(date);
+	}
+	
+	public static void fillNotes(DefaultTableModel date, JTable table, ArrayList<Process> processList, ArrayList<User> users) throws SQLException{
+		ArrayList<String> process = new ArrayList<String>();
+		ArrayList<String> nick = new ArrayList<>();
+		ArrayList<String> state = new ArrayList<String>();
+		ArrayList<String> note = new ArrayList<String>();
+
+		for(int i=0; i<processList.size(); i++){
+			process.add(processList.get(i).getProcess_name());
+			
+		}
+
+		date = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int r,int c){
+				return false;
+			}
+		};
+
+		date.addColumn("Proceso",process.toArray());
+		date.addColumn("Usuario",nick.toArray());
+		date.addColumn("Estado",state.toArray());
+		date.addColumn("Nota",note.toArray());
 		table.setModel(date);
 	}
 	

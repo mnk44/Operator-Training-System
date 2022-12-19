@@ -240,8 +240,7 @@ public class LoginView extends JDialog {
 								try {
 									new PrincipalView(user);
 								} catch (SQLException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
+									JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 								}
 								LoginView.this.setVisible(false);
 								PrincipalView.frame.setLocationRelativeTo(null);
@@ -253,8 +252,7 @@ public class LoginView extends JDialog {
 							error++;
 						}
 					} catch (HeadlessException | UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}else{
 					progressBar.setVisible(false);
@@ -271,8 +269,7 @@ public class LoginView extends JDialog {
 			try {
 				user = (User) UserService.searchNick(user_name.getText());
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		

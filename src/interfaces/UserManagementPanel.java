@@ -98,7 +98,7 @@ public class UserManagementPanel extends JPanel {
 					btnInactivarUsuario.setEnabled(true);
 					btnInactivarUsuario.setBackground(new Color(255, 113, 19));
 					if(usersList.get(selected).isUser_active()){
-						btnInactivarUsuario.setText("Inactivar usuario");
+						btnInactivarUsuario.setText("Desactivar usuario");
 						btnInactivarUsuario.setIcon(new ImageIcon(UserManagementPanel.class.getResource("/images/icons8_Delete_User_Male_16.png")));
 					}else{
 						btnInactivarUsuario.setText("Activar usuario");
@@ -243,7 +243,7 @@ public class UserManagementPanel extends JPanel {
 		btnReiniciarClave.setBounds(611, 249, 199, 37);
 		add(btnReiniciarClave);
 
-		btnInactivarUsuario = new JButton("Inactivar usuario");
+		btnInactivarUsuario = new JButton("Desactivar usuario");
 		btnInactivarUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				selected = table.getSelectedRow();

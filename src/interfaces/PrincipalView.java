@@ -71,6 +71,8 @@ public class PrincipalView {
 	private JMenu options;
 	private JMenuItem train;
 	private JMenu mnReportes;
+	private JMenuItem mntmAccionesDeLos;
+	private JMenuItem mntmNotasDeLos;
 
 	public PrincipalView(User uss) throws SQLException {
 		user_active = uss;
@@ -335,10 +337,63 @@ public class PrincipalView {
 		mnReportes.setForeground(Color.WHITE);
 		mnReportes.setFont(new Font("Dubai", Font.BOLD, 20));
 		menuBar.add(mnReportes);
+		
+		mntmAccionesDeLos = new JMenuItem("Acciones de los usuarios");
+		mntmAccionesDeLos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.remove(panel);
+				frame.remove(title);
+				frame.remove(title1);
+				frame.remove(title2);
+				frame.remove(title3);
+				panel = new JPanel();
+				try {
+					panel = new TracesPanel();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				frame.getContentPane().add(panel);
+				adjustPanel(panel);
+			}
+		});
+		mntmAccionesDeLos.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/icons8_File_16.png")));
+		mntmAccionesDeLos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.ALT_MASK));
+		mntmAccionesDeLos.setForeground(Color.WHITE);
+		mntmAccionesDeLos.setFont(new Font("Dubai", Font.BOLD, 19));
+		mntmAccionesDeLos.setBackground(new Color(255, 113, 19));
+		mnReportes.add(mntmAccionesDeLos);
+		
+		mntmNotasDeLos = new JMenuItem("Notas de los operarios");
+		mntmNotasDeLos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.remove(panel);
+				frame.remove(title);
+				frame.remove(title1);
+				frame.remove(title2);
+				frame.remove(title3);
+				panel = new JPanel();
+				try {
+					panel = new NotesPanel(processList, usersList);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				frame.getContentPane().add(panel);
+				adjustPanel(panel);
+			}
+		});
+		mntmNotasDeLos.setIcon(new ImageIcon(PrincipalView.class.getResource("/images/icons8_File_16.png")));
+		mntmNotasDeLos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.ALT_MASK));
+		mntmNotasDeLos.setForeground(Color.WHITE);
+		mntmNotasDeLos.setFont(new Font("Dubai", Font.BOLD, 19));
+		mntmNotasDeLos.setBackground(new Color(255, 113, 19));
+		mnReportes.add(mntmNotasDeLos);
 
 		if(user_active.getUser_rol() == 1){
 			processMana.setVisible(false);
 			train.setVisible(false);
+			mntmNotasDeLos.setVisible(false);
 		}else if(user_active.getUser_rol() == 2){
 			//charge info
 			ids = FileService.getIds();
@@ -349,6 +404,7 @@ public class PrincipalView {
 			userMana.setVisible(false);
 			areaMana.setVisible(false);
 			train.setVisible(false);
+			mnReportes.setVisible(false);
 		}else{
 			//charge info
 			processList = ProcessService.searchArea(user_active.getUser_area());
@@ -360,6 +416,7 @@ public class PrincipalView {
 			userMana.setVisible(false);
 			areaMana.setVisible(false);
 			processMana.setVisible(false);
+			mnReportes.setVisible(false);
 		}
 	}
 

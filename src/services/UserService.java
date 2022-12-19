@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import classes.User;
 
 public class UserService {
@@ -139,6 +141,7 @@ public class UserService {
 						rs.getString("user_pass"),rs.getBoolean("user_active"),rs.getInt("user_area"), rs.getInt("user_rol"));
 			}
 		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 			return e.getMessage();
 		}
 		return user;
