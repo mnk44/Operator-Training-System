@@ -38,7 +38,7 @@ public class LoginView extends JDialog {
 
 	public static void main(String[] args) {
 		try {
-			LoginView dialog = new LoginView();
+			LoginView dialog = new LoginView(0);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setLocationRelativeTo(null);
 			dialog.setVisible(true);
@@ -61,7 +61,7 @@ public class LoginView extends JDialog {
 	private int error = 0;
 	private JProgressBar progressBar;
 
-	public LoginView() {
+	public LoginView(int val) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/images/logo.png")));
 		setBackground(new Color(173, 216, 230));
 		setFont(new Font("Copperplate Gothic Light", Font.BOLD, 14));

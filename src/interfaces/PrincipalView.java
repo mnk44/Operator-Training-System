@@ -205,7 +205,7 @@ public class PrincipalView {
 		JMenuItem mntmCerrarSesin = new JMenuItem("Cerrar sesi\u00F3n");
 		mntmCerrarSesin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				LoginView log = new LoginView();
+				LoginView log = new LoginView(1);
 				log.setLocationRelativeTo(frame);
 				log.setVisible(true);
 				frame.setVisible(false);

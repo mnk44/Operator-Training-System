@@ -142,7 +142,6 @@ public class UserService {
 			}
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-			return e.getMessage();
 		}
 		return user;
 	}

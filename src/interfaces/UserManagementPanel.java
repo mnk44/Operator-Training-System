@@ -97,7 +97,7 @@ public class UserManagementPanel extends JPanel {
 					btnModificarUsuario.setBackground(new Color(255, 113, 19));
 					btnInactivarUsuario.setEnabled(true);
 					btnInactivarUsuario.setBackground(new Color(255, 113, 19));
-					if(usersList.get(selected).isUser_active()){
+					if(table.getValueAt(selected, 4).equals("sí")){
 						btnInactivarUsuario.setText("Desactivar usuario");
 						btnInactivarUsuario.setIcon(new ImageIcon(UserManagementPanel.class.getResource("/images/icons8_Delete_User_Male_16.png")));
 					}else{
@@ -248,17 +248,21 @@ public class UserManagementPanel extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				selected = table.getSelectedRow();
 				String result = null;
+				boolean valu = false;
 				try {
-					result = UserService.changeStatus((int) table.getValueAt(selected, 0), !usersList.get(selected).isUser_active(), user_act.getUser_nick(), (String) table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
+					if(table.getValueAt(selected, 4).equals("no")){
+						valu = true;
+					}else{
+						valu = false;
+					}
+					result = UserService.changeStatus((int) table.getValueAt(selected, 0), valu, user_act.getUser_nick(), (String) table.getValueAt(selected, 1), new Timestamp(Calendar.getInstance().getTime().getTime()));
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if(result == null){
 					JOptionPane.showMessageDialog(null, "Acción completada satisfactoriamente", "", JOptionPane.INFORMATION_MESSAGE);
-					User u = usersList.get(selected);
-					u.setUser_active(!u.isUser_active());
-					usersList.set(selected, u);
+					usersList.get(selected).setUser_active(valu);
 					try {
 						reload(usersList);
 					} catch (SQLException e) {
