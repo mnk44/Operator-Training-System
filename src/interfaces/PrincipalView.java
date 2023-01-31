@@ -32,6 +32,7 @@ import services.UserService;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -205,7 +206,13 @@ public class PrincipalView {
 		JMenuItem mntmCerrarSesin = new JMenuItem("Cerrar sesi\u00F3n");
 		mntmCerrarSesin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				LoginView log = new LoginView(1);
+				LoginView log = null;
+				try {
+					log = new LoginView(1);
+				} catch (ClassNotFoundException | IOException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				log.setLocationRelativeTo(frame);
 				log.setVisible(true);
 				frame.setVisible(false);

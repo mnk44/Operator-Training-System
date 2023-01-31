@@ -12,7 +12,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
@@ -28,6 +30,7 @@ import javax.swing.SwingConstants;
 
 import classes.User;
 import extras.Encrypting;
+import services.ConnectionService;
 import services.UserService;
 
 import javax.swing.JProgressBar;
@@ -46,22 +49,24 @@ public class LoginView extends JDialog {
 			e.printStackTrace();
 		}
 	}
-	
+
 	//Timer
 	Timer time;
-	
+
 	User user = null;
 	Thread n = null;
+	int val;
 
 	private JButton accept_button;
 	private JTextField user_name;
 	private JPasswordField user_pass;
 	private JLabel view_pass;
-	
+
 	private int error = 0;
 	private JProgressBar progressBar;
 
-	public LoginView(int val) {
+	public LoginView(final int v) throws ClassNotFoundException, IOException, SQLException {
+		val = v;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/images/logo.png")));
 		setBackground(new Color(173, 216, 230));
 		setFont(new Font("Copperplate Gothic Light", Font.BOLD, 14));
@@ -77,20 +82,20 @@ public class LoginView extends JDialog {
 				System.exit(0);
 			}
 		});
-		
+
 		JLabel title = new JLabel("Sistema de Experto para el Control de");
 		title.setBounds(450, 68, 445, 49);
 		getContentPane().add(title);
 		title.setForeground(new Color(99, 68, 55));
 		title.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		JLabel user_label = new JLabel("Usuario:");
 		user_label.setBounds(491, 157, 109, 37);
 		getContentPane().add(user_label);
 		user_label.setForeground(new Color(255, 113, 19));
 		user_label.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
-		
+
 		user_name = new JTextField();
 		user_name.setBounds(491, 197, 339, 29);
 		getContentPane().add(user_name);
@@ -98,6 +103,13 @@ public class LoginView extends JDialog {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char key = e.getKeyChar();
+
+				if(val == 0){
+					FirstRead f = new FirstRead();
+					n = new Thread(f);
+					n.start();
+					val = 1;
+				}
 
 				if(KeyEvent.VK_ENTER == key){
 					user_name.setFocusable(false);
@@ -110,19 +122,19 @@ public class LoginView extends JDialog {
 		});
 		user_name.setFont(new Font("Corbel", Font.PLAIN, 20));
 		user_name.setColumns(10);
-		
+
 		JLabel pass_label = new JLabel("Contrase\u00F1a:");
 		pass_label.setBounds(491, 242, 182, 37);
 		getContentPane().add(pass_label);
 		pass_label.setForeground(new Color(255, 113, 19));
 		pass_label.setFont(new Font("Copperplate Gothic Bold", Font.PLAIN, 20));
-		
+
 		user_pass = new JPasswordField();
 		user_pass.setBounds(491, 285, 339, 29);
 		getContentPane().add(user_pass);
 		user_pass.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent arg0) {
+			public void keyTyped(KeyEvent arg0) {				
 				if(KeyEvent.VK_ENTER == arg0.getKeyChar()){
 					accept_button.doClick();
 				}
@@ -130,7 +142,7 @@ public class LoginView extends JDialog {
 		});
 		user_pass.setEchoChar('*');
 		user_pass.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		
+
 		view_pass = new JLabel();
 		view_pass.setBounds(836, 285, 32, 29);
 		getContentPane().add(view_pass);
@@ -147,25 +159,58 @@ public class LoginView extends JDialog {
 			}
 		});
 		view_pass.setIcon(new ImageIcon(LoginView.class.getResource("/images/icons8_Eye_32.png")));
-		
+
 		accept_button = new JButton("Aceptar");
 		accept_button.setBounds(585, 374, 153, 37);
 		getContentPane().add(accept_button);
 		accept_button.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {				
 				if(user_name.getText().isEmpty() || user_pass.getText().isEmpty()){
 					JOptionPane.showMessageDialog(null, "Se deben completar todos los campos para continuar", "Error", JOptionPane.ERROR_MESSAGE);
 					error++;
 				}else{
 					try {
-						FirstRead f = new FirstRead();
-						n = new Thread(f);
-						n.start();
+						try {
+							user = (User) UserService.searchNick(user_name.getText());
+						} catch (SQLException e) {
+							JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+						}
 						progressBar.setVisible(true);
 						progressBar.setValue(0);
-						time = new Timer(1, new TimerListener());
-						time.start();
+						for(int i=0; i<101; i++){
+							progressBar.setValue(i);
+						}
+						if(user != null){
+							try {
+								if(user.getUser_pass().equals(Encrypting.getEncript(user_pass.getText()))){
+									if(!user.isUser_active()){
+										progressBar.setVisible(false);
+										JOptionPane.showMessageDialog(null, "Usuario desactivado", "Error", JOptionPane.ERROR_MESSAGE);
+										error++;
+									}else{
+										try {
+											new PrincipalView(user);
+										} catch (SQLException e) {
+											JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+										}
+										LoginView.this.setVisible(false);
+										PrincipalView.frame.setLocationRelativeTo(null);
+										PrincipalView.frame.setVisible(true);
+									}
+								}else{
+									progressBar.setVisible(false);
+									JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+									error++;
+								}
+							} catch (HeadlessException | UnsupportedEncodingException e) {
+								JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						}else{
+							progressBar.setVisible(false);
+							JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+							error++;
+						}
 					} catch (HeadlessException e) {
 						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
 					}
@@ -190,26 +235,26 @@ public class LoginView extends JDialog {
 		accept_button.setForeground(new Color(255, 255, 255));
 		accept_button.setFont(new Font("Segoe UI", Font.BOLD, 18));
 		accept_button.setBackground(new Color(255, 113, 19));
-		
+
 		JLabel lblNewLabel = new JLabel();
 		lblNewLabel.setIcon(new ImageIcon(LoginView.class.getResource("/images/secproit.png")));
 		lblNewLabel.setBounds(0, 0, 450, 450);
 		getContentPane().add(lblNewLabel);
-		
+
 		JLabel lblSecproit = new JLabel("SECPROIT");
 		lblSecproit.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSecproit.setForeground(new Color(255, 113, 19));
 		lblSecproit.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 30));
 		lblSecproit.setBounds(450, 38, 445, 49);
 		getContentPane().add(lblSecproit);
-		
+
 		JLabel lblProcesosQumicos = new JLabel("Procesos Qu\u00EDmicos");
 		lblProcesosQumicos.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProcesosQumicos.setForeground(new Color(99, 68, 55));
 		lblProcesosQumicos.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 18));
 		lblProcesosQumicos.setBounds(450, 92, 445, 49);
 		getContentPane().add(lblProcesosQumicos);
-		
+
 		progressBar = new JProgressBar();
 		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		progressBar.setStringPainted(true);
@@ -219,59 +264,30 @@ public class LoginView extends JDialog {
 		progressBar.setBounds(491, 333, 339, 14);
 		getContentPane().add(progressBar);
 	}
-	
-	public class TimerListener implements ActionListener{
-		int cont = 0;
-		
-		@SuppressWarnings("deprecation")
-		public void actionPerformed(ActionEvent arg0) {
-			cont = cont + 1;
-			progressBar.setValue(cont);
-			if(cont == 101){
-				time.stop();
-				if(user != null){
-					try {
-						if(user.getUser_pass().equals(Encrypting.getEncript(user_pass.getText()))){
-							if(!user.isUser_active()){
-								progressBar.setVisible(false);
-								JOptionPane.showMessageDialog(null, "Usuario desactivado", "Error", JOptionPane.ERROR_MESSAGE);
-								error++;
-							}else{
-								try {
-									new PrincipalView(user);
-								} catch (SQLException e) {
-									JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-								}
-								LoginView.this.setVisible(false);
-								PrincipalView.frame.setLocationRelativeTo(null);
-								PrincipalView.frame.setVisible(true);
-							}
-						}else{
-							progressBar.setVisible(false);
-							JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
-							error++;
-						}
-					} catch (HeadlessException | UnsupportedEncodingException e) {
-						JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-					}
-				}else{
-					progressBar.setVisible(false);
-					JOptionPane.showMessageDialog(null, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
-					error++;
-				}
-			}
-		}
-	}
-	
+
 	public class FirstRead implements Runnable{
 
 		public void run() {
+			Connection c = null;
 			try {
-				user = (User) UserService.searchNick(user_name.getText());
-			} catch (SQLException e) {
-				JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+				c = ConnectionService.getConnection();
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if(c == null){
+				val = 0;
+				JOptionPane.showMessageDialog(null, "Error de conexión con la base de datos", "Error", JOptionPane.ERROR_MESSAGE);
+			}else{
+				val = 1;
 			}
 		}
-		
+
 	}
 }
