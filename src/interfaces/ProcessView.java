@@ -594,11 +594,11 @@ public class ProcessView extends JDialog {
 		allOpers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(allOpers.isSelected()){
-					list1.setEnabled(false);
-					list_2.setEnabled(false);
+					list1.setVisible(false);
+					list_2.setVisible(false);
 				}else{
-					list1.setEnabled(true);
-					list_2.setEnabled(true);
+					list1.setVisible(true);
+					list_2.setVisible(true);
 				}
 			}
 		});
@@ -620,6 +620,7 @@ public class ProcessView extends JDialog {
 				return inautorized.get(i);
 			}
 		});
+		list1.setVisible(false);
 		list1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -633,7 +634,6 @@ public class ProcessView extends JDialog {
 			}
 		});
 		list1.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		list1.setEnabled(false);
 		list1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		list1.setBounds(21, 74, 258, 173);
 		panel_2.add(list1);
@@ -723,6 +723,7 @@ public class ProcessView extends JDialog {
 				return autorized.get(i);
 			}
 		});
+		list_2.setVisible(false);
 		list_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -736,7 +737,6 @@ public class ProcessView extends JDialog {
 			}
 		});
 		list_2.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		list_2.setEnabled(false);
 		list_2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		list_2.setBounds(359, 74, 252, 173);
 		panel_2.add(list_2);
