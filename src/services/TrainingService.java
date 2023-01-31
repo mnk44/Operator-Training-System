@@ -65,4 +65,24 @@ public class TrainingService {
 		}
 		return notes;
 	}
+	
+	public static ArrayList<Training> getTrains(int area){
+		ArrayList<Training> notes = new ArrayList<>();
+		try{
+			String sqlSentenc = "SELECT training.* "
+					+ " FROM training INNER JOIN process ON training.process_id = process.process_id"
+					+ " WHERE process.process_area = ?;";
+			CallableStatement cs = ConnectionService.getConnection().prepareCall(sqlSentenc);
+			cs.setInt(1, area);
+			ResultSet rs = cs.executeQuery();
+			while(rs.next()){
+				Training t = new Training(rs.getInt("train_id"), rs.getInt("process_id"), rs.getInt("operator_id"), rs.getInt("cant_try"),
+						rs.getDouble("var_note"), rs.getDouble("cause_note"), rs.getDouble("rec_note"), rs.getDouble("general_note"), rs.getInt("cant_aprov"));
+				notes.add(t);
+			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		return notes;
+	}
 }

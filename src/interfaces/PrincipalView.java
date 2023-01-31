@@ -381,7 +381,7 @@ public class PrincipalView {
 				frame.remove(title3);
 				panel = new JPanel();
 				try {
-					panel = new NotesPanel(processList, usersList);
+					panel = new BossTracesPanel(user_active.getUser_area());
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -411,7 +411,8 @@ public class PrincipalView {
 			userMana.setVisible(false);
 			areaMana.setVisible(false);
 			train.setVisible(false);
-			mnReportes.setVisible(false);
+			mnReportes.setVisible(true);
+			mntmAccionesDeLos.setVisible(false);
 		}else{
 			//charge info
 			processList = ProcessService.searchArea(user_active.getUser_area());

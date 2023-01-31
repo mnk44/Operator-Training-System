@@ -1,12 +1,16 @@
 package extras;
 
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import services.ProcessService;
 import services.TraceService;
+import services.TrainingService;
+import services.UserService;
 import classes.Area;
 import classes.Trace;
 import classes.Training;
@@ -151,6 +155,50 @@ public class DataTable {
 		date.addColumn("ID",id.toArray());
 		date.addColumn("Acción",action.toArray());
 		date.addColumn("Fecha",d.toArray());
+		table.setModel(date);
+	}
+	
+	public static void fillTracesOp(DefaultTableModel date, JTable table, int area) throws SQLException{
+		ArrayList<Training> t = TrainingService.getTrains(area);
+		ArrayList<String> proceso = new ArrayList<String>();
+		ArrayList<String> operator = new ArrayList<String>();
+		ArrayList<String> state = new ArrayList<String>();
+		ArrayList<String> note = new ArrayList<String>();
+		String aux;
+		String n;
+
+		for(int i=0; i<t.size(); i++){
+			proceso.add(ProcessService.searchId(t.get(i).getProcess_id()).getProcess_name());
+			operator.add(((User)UserService.searchId(t.get(i).getOperator())).getUser_nick());
+			if(t.get(i).getVar_note() == -1){
+				aux = "No iniciado";
+				n = "-";
+			}else if(t.get(i).getRec_note() == -1){
+				aux = "Iniciado";
+				n = "-";
+			}else{
+				aux = "Terminado";
+				double x = t.get(i).getGeneral_note();
+				DecimalFormat format = new DecimalFormat("#.00");
+				n = format.format(x);
+			}
+			
+			state.add(aux);
+			note.add(n);
+		}
+
+		date = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int r,int c){
+				return false;
+			}
+		};
+
+		date.addColumn("Proceso",proceso.toArray());
+		date.addColumn("Operario",operator.toArray());
+		date.addColumn("Estado",state.toArray());
+		date.addColumn("Nota",note.toArray());
 		table.setModel(date);
 	}
 	
