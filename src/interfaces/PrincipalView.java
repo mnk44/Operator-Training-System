@@ -70,7 +70,7 @@ public class PrincipalView {
 	private JMenuItem userMana;
 	private JMenuItem areaMana;
 	private JMenu options;
-	private JMenuItem train;
+	public static JMenuItem train;
 	private JMenu mnReportes;
 	private JMenuItem mntmAccionesDeLos;
 	private JMenuItem mntmNotasDeLos;

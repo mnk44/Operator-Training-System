@@ -43,7 +43,7 @@ public class ResultView extends JDialog {
 	double noteF;
 
 	public ResultView(final int cantAprove, final int cantQ, final double time, final int totalTime, final JFrame frame, 
-			final User uss, final Training train, final String type, final ProcessConfiguration config) {
+			final User uss, final Training train, final String type, final ProcessConfiguration config, final JDialog dg) {
 		setModal(true);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ResultView.class.getResource("/images/icons8_Grades_32.png")));
 		setTitle("Resultado");
@@ -70,7 +70,11 @@ public class ResultView extends JDialog {
 				}
 				dispose();
 				frame.setVisible(false);
+				if(dg != null){
+					dg.setVisible(false);
+				}
 				PrincipalView.frame.setLocationRelativeTo(null);
+				PrincipalView.train.doClick();
 				PrincipalView.frame.setVisible(true);
 			}
 		});
