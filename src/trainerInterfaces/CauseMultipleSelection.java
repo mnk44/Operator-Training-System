@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,7 +36,10 @@ import classes.User;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JCheckBox;
+
+import extras.Convert;
 
 public class CauseMultipleSelection {
 
@@ -44,6 +48,7 @@ public class CauseMultipleSelection {
 
 	Timer timer;
 	int sec;
+	private ImageCharge img = null;
 	int min;
 
 	private JButton finish;
@@ -65,11 +70,22 @@ public class CauseMultipleSelection {
 
 	public CauseMultipleSelection(Process p, int timeFinal, User operator, Training train, ProcessConfiguration cantInte) {
 		questions = FillTrain.fillQuestionCause3(p);
-		initialize(timeFinal, operator, train, cantInte);
+		initialize(p, timeFinal, operator, train, cantInte);
 	}
 
 	@SuppressWarnings({ })
-	private void initialize(final int timeFinal, final User operator, final Training train, final ProcessConfiguration cantInt) {
+	private void initialize(Process p, final int timeFinal, final User operator, final Training train, final ProcessConfiguration cantInt) {
+		if(p.getProcess_img() != null){
+			try {
+				img = new ImageCharge(Convert.toObject(p.getProcess_img()));
+			} catch (ClassNotFoundException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			img.setVisible(true);
+		}
+
+		
 		frmEtapa = new JFrame();
 		frmEtapa.setTitle("Etapa #2: Causas");
 		frmEtapa.setResizable(false);
@@ -226,7 +242,7 @@ public class CauseMultipleSelection {
 					String tiempo = min + "." + sec;
 					double t = Double.parseDouble(tiempo);
 
-					ResultView rs = new ResultView(cant, 5, t, timeFinal, frmEtapa, operator, train, "causa", cantInt);
+					ResultView rs = new ResultView(cant, 5, t, timeFinal, frmEtapa, operator, train, "causa", cantInt, img);
 					rs.setLocationRelativeTo(frmEtapa);
 					rs.setVisible(true);
 				}

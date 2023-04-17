@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,6 +36,7 @@ import classes.Process;
 import classes.ProcessConfiguration;
 import classes.Training;
 import classes.User;
+import extras.Convert;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -66,6 +68,7 @@ public class CauseTrueFalse {
 	private JTextPane var3;
 	private JTextPane var4;
 	private JTextPane var5;
+	private ImageCharge img = null;
 
 	QuestionCause questions;
 	ArrayList<JTextPane> view = new ArrayList<>();
@@ -74,6 +77,15 @@ public class CauseTrueFalse {
 
 	public CauseTrueFalse(Process p, int timeFinal, User operator, Training train, ProcessConfiguration cantInte) {
 		questions = FillTrain.fillQuestionCause3(p);
+		if(p.getProcess_img() != null){
+			try {
+				img = new ImageCharge(Convert.toObject(p.getProcess_img()));
+			} catch (ClassNotFoundException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			img.setVisible(true);
+		}
 		initialize(timeFinal, operator, train, cantInte);
 	}
 
@@ -233,7 +245,7 @@ public class CauseTrueFalse {
 					String tiempo = min + "." + sec;
 					double t = Double.parseDouble(tiempo);
 
-					ResultView rs = new ResultView(cant, 5, t, timeFinal, frmEtapa, operator, train, "causa", cantInt);
+					ResultView rs = new ResultView(cant, 5, t, timeFinal, frmEtapa, operator, train, "causa", cantInt, img);
 					rs.setLocationRelativeTo(frmEtapa);
 					rs.setVisible(true);
 				}

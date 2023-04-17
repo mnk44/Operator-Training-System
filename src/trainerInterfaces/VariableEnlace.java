@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,6 +36,7 @@ import classes.Process;
 import classes.ProcessConfiguration;
 import classes.Training;
 import classes.User;
+import extras.Convert;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -48,6 +50,7 @@ public class VariableEnlace {
 	int sec;
 	int min;
 
+	private ImageCharge img = null;
 	private JButton finish;
 	private JLabel label_1;
 	private JTextPane txtpnSeleccioneLasVariables;
@@ -91,6 +94,15 @@ public class VariableEnlace {
 
 	public VariableEnlace(Process p, int timeFinal, User operator, Training train, ProcessConfiguration cantInte) {
 		questions = FillTrain.fillQuestionVar2(p);
+		if(p.getProcess_img() != null){
+			try {
+				img = new ImageCharge(Convert.toObject(p.getProcess_img()));
+			} catch (ClassNotFoundException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			img.setVisible(true);
+		}
 		initialize(timeFinal, operator, train, cantInte);
 	}
 
@@ -353,7 +365,7 @@ public class VariableEnlace {
 					String tiempo = min + "." + sec;
 					double t = Double.parseDouble(tiempo);
 					
-					ResultView rs = new ResultView(cant, 10, t, timeFinal, frmEtapa, operator, train, "variable", cantInt);
+					ResultView rs = new ResultView(cant, 10, t, timeFinal, frmEtapa, operator, train, "variable", cantInt, img);
 					rs.setLocationRelativeTo(frmEtapa);
 					rs.setVisible(true);
 				}

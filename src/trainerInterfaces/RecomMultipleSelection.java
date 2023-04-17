@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,7 +36,10 @@ import classes.User;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JCheckBox;
+
+import extras.Convert;
 
 public class RecomMultipleSelection {
 
@@ -54,6 +58,7 @@ public class RecomMultipleSelection {
 	private JTextPane var3;
 	private JTextPane var4;
 	private JTextPane var5;
+	private ImageCharge img = null;
 
 	QuestionRec questions;
 	ArrayList<JTextPane> view = new ArrayList<>();
@@ -65,6 +70,15 @@ public class RecomMultipleSelection {
 
 	public RecomMultipleSelection(Process p, int timeFinal, User operator, Training train, ProcessConfiguration cantInte) {
 		questions = FillTrain.fillQuestionRec(p);
+		if(p.getProcess_img() != null){
+			try {
+				img = new ImageCharge(Convert.toObject(p.getProcess_img()));
+			} catch (ClassNotFoundException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			img.setVisible(true);
+		}
 		initialize(timeFinal, operator, train, cantInte);
 	}
 
@@ -105,9 +119,9 @@ public class RecomMultipleSelection {
 		txtpnSeleccioneLasVariables.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		txtpnSeleccioneLasVariables.setFont(new Font("Copperplate Gothic Bold", Font.BOLD, 18));
 		txtpnSeleccioneLasVariables.setForeground(new Color(255, 113, 19));
-		txtpnSeleccioneLasVariables.setText("Seleccione verdadero o falso si la recomendaci\u00F3n corresponde a la causa:");
+		txtpnSeleccioneLasVariables.setText("Seleccione solo las recomendaciones que se encuentren con sus causas:");
 		txtpnSeleccioneLasVariables.setEditable(false);
-		txtpnSeleccioneLasVariables.setBounds(15, 0, 649, 58);
+		txtpnSeleccioneLasVariables.setBounds(15, 0, 684, 58);
 		panel.add(txtpnSeleccioneLasVariables);
 
 		var1 = new JTextPane();
@@ -222,7 +236,7 @@ public class RecomMultipleSelection {
 					String tiempo = min + "." + sec;
 					double t = Double.parseDouble(tiempo);
 
-					ResultView rs = new ResultView(cant, 5, t, timeFinal, frmEtapa, operator, train, "recomendaciones", cantInt);
+					ResultView rs = new ResultView(cant, 5, t, timeFinal, frmEtapa, operator, train, "recomendaciones", cantInt, img);
 					rs.setLocationRelativeTo(frmEtapa);
 					rs.setVisible(true);
 				}
