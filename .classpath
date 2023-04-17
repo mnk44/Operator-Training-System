@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.datatools.connectivity.jdt.DRIVERLIBRARY/PostgreSQL JDBC Driver 14"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="E:/Escuela/Practicas/tesis elena/Tesis Elena todo lo necesario/Librerias/externas/jcalendar.jar"/>
 	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
+	<classpathentry kind="lib" path="E:/Proyecto de Tesis/lib/jcalendar.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
